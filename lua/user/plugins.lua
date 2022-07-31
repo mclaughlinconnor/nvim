@@ -46,6 +46,11 @@ return packer.startup(function(use)
   use { "nvim-treesitter/nvim-treesitter", commit = "518e27589c0463af15463c9d675c65e464efc2fe" }
   use 'shaunsingh/nord.nvim'
   use 'nvim-treesitter/playground'
+  use 'hrsh7th/nvim-cmp'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-cmdline'
+  use 'hrsh7th/cmp-nvim-lsp'
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
