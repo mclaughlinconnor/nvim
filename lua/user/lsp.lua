@@ -48,7 +48,6 @@ require("mason-lspconfig").setup()
 require("mason-lspconfig").setup_handlers {
   -- handle all servers without specific handlers
   function(server_name)
-    print(server_name)
     require("lspconfig")[server_name].setup {}
   end,
   ['sumneko_lua'] = function()
