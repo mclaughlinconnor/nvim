@@ -36,20 +36,20 @@ end
 local mason = require("mason")
 mason.setup {}
 
+-- I don't use the angularls installed by mason
+require('lspconfig').angularls.setup {
+  on_attach = on_attach,
+  capabilities = lsp_status.capabilities,
+  filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "pug" },
+}
+
 require("mason").setup()
 require("mason-lspconfig").setup()
 require("mason-lspconfig").setup_handlers {
   -- handle all servers without specific handlers
   function(server_name)
+    print(server_name)
     require("lspconfig")[server_name].setup {}
-  end,
-  ['angularls'] = function()
-    require("lspconfig")['angularls'].setup {
-      on_attach = on_attach,
-      capabilities = lsp_status.capabilities,
-      -- add pug so my patched lang server will get called
-      filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "pug" },
-    }
   end,
   ['sumneko_lua'] = function()
     require('lspconfig')['sumneko_lua'].setup {
