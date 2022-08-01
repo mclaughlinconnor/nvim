@@ -17,7 +17,7 @@ local options = {
   -- swapfile = false,                        -- creates a swapfile
   -- makes colours funny
   -- termguicolors = true,                    -- set term gui colors (most terminals support this)
-  timeoutlen = 100,                        -- time to wait for a mapped sequence to complete (in milliseconds)
+  timeoutlen = 500,                        -- time to wait for a mapped sequence to complete (in milliseconds)
   undofile = true,                         -- enable persistent undo
   updatetime = 300,                        -- faster completion (4000ms default)
   -- Dangerous? Can result in deleted files
