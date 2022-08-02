@@ -59,6 +59,11 @@ return packer.startup(function(use)
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
   use 'ludovicchabant/vim-gutentags'
   use { 'numToStr/Comment.nvim' }
+  use {
+  'nvim-lualine/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+  }
+  use 'arkav/lualine-lsp-progress'
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
