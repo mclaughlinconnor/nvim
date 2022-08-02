@@ -54,6 +54,7 @@ require("mason-lspconfig").setup_handlers {
   ['sumneko_lua'] = function()
     require('lspconfig')['sumneko_lua'].setup {
       capabilities = lsp_status.capabilities,
+      on_attach = on_attach,
       settings = {
         Lua = {
           -- Setup tailored for lua in neovim
