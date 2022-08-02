@@ -64,6 +64,7 @@ return packer.startup(function(use)
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
   use 'arkav/lualine-lsp-progress'
+  use 'mbbill/undotree'
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
