@@ -1,0 +1,1 @@
+--regex-TypeScript=/selector: '(.*)'/\1/c/
