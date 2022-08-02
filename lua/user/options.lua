@@ -1,48 +1,35 @@
 local options = {
   completeopt = { "menuone", "noselect" }, -- mostly just for cmp
-  -- conceallevel = 0,                        -- so that `` is visible in markdown files
-  ignorecase = true,                       -- ignore case in search patterns
-  smartcase = true,                        -- smart case
-  -- Maybe remove
-  mouse = "a",                             -- allow the mouse to be used in neovim
-  pumheight = 10,                          -- pop up menu height, is unlimited by default
-  -- Yes we do?
-  -- showmode = false,                        -- we don't need to see things like -- INSERT -- anymore
+  ignorecase = true, -- ignore case in search
+  smartcase = true, -- smart case in search
+  mouse = "a", -- enable mouse everywhere
+  pumheight = 10, -- pop up menu height, is unlimited by default
   -- Do I need a tabline?
-  -- showtabline = 2,                         -- always show tabs
-  smartindent = true,                      -- make indenting smarter again
-  splitbelow = true,                       -- force all horizontal splits to go below current window
-  splitright = true,                       -- force all vertical splits to go to the right of current window
-  -- I think I want this
-  -- swapfile = false,                        -- creates a swapfile
-  -- makes colours funny
-  -- termguicolors = true,                    -- set term gui colors (most terminals support this)
-  timeoutlen = 500,                        -- time to wait for a mapped sequence to complete (in milliseconds)
-  undofile = true,                         -- enable persistent undo
-  updatetime = 300,                        -- faster completion (4000ms default)
-  -- Dangerous? Can result in deleted files
-  -- writebackup = false,                     -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
-  expandtab = true,                        -- convert tabs to spaces
-  shiftwidth = 2,                          -- the number of spaces inserted for each indentation
-  tabstop = 2,                             -- insert 2 spaces for a tab
-  cursorline = true,                       -- highlight the current line
-  number = true,                           -- set numbered lines
-  relativenumber = true,                   -- set relative numbered lines
-  -- Why change this?
-  -- numberwidth = 4,                         -- set number column width to 2 {default 4}
-  signcolumn = "yes",                      -- always show the sign column, otherwise it would shift the text each time
-  wrap = false,                            -- display lines as one long line
-  scrolloff = 8,                           -- is one of my fav
-  sidescrolloff = 8,
+  -- showtabline = 2, -- always show tabs
+  smartindent = true, -- make indenting smarter again
+  autoindent = true, -- auto indent
+  splitbelow = true, -- split down
+  splitright = true,-- split to right
+  undofile = true, -- persistent undo
+  updatetime = 300, -- faster completion (4000ms default)
+  expandtab = true, -- tabs -> spaces
+  shiftwidth = 2, -- two spaces for each indent
+  tabstop = 2, -- insert 2 spaces for a tab
+  cursorline = true, -- highlight current line
+  number = true, -- numbered lines
+  relativenumber = true, -- relative numbered lines
+  signcolumn = "yes", -- always show the sign column. flickers otherwise
+  wrap = false, -- show big lines as big lines
+  scrolloff = 8, -- always show 8 charcters to bottom
+  sidescrolloff = 8, -- always show 8 characters to side of cursor
+  laststatus = 3, -- Global statusline
+  lazyredraw = true, -- Don't redraw when executing macros
+  magic = true, -- Make vim regex more regex-y
 }
 
-vim.opt.shortmess:append "c"
+vim.opt.shortmess:append "c" -- don't need extra verbose autocomplete
+vim.cmd "set whichwrap+=<,>,[,],h,l" -- movements can wrap over lines
 
 for k, v in pairs(options) do
   vim.opt[k] = v
 end
-
--- What do these do?
--- vim.cmd "set whichwrap+=<,>,[,],h,l"
--- vim.cmd [[set iskeyword+=-]]
--- vim.cmd [[set formatoptions-=cro]] -- TODO: this doesn't seem to work
