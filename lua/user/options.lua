@@ -26,6 +26,7 @@ local options = {
   laststatus = 3, -- Global statusline
   lazyredraw = true, -- Don't redraw when executing macros
   magic = true, -- Make vim regex more regex-y
+  autoread = true, -- re-read files if they are changed
 }
 
 vim.opt.shortmess:append "c" -- don't need extra verbose autocomplete

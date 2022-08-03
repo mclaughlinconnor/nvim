@@ -69,6 +69,8 @@ return packer.startup(function(use)
   use "p00f/nvim-ts-rainbow"
   use "machakann/vim-sandwich"
   use "norcalli/nvim-colorizer.lua"
+  use "lewis6991/gitsigns.nvim"
+  use "kdheepak/lazygit.nvim"
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
