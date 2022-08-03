@@ -14,6 +14,12 @@ configs.setup({
 		enable = true,
 	},
 	indent = { enable = true, disable = { "python", "css" } },
+  rainbow = {
+    enable = true,
+    disable = { },
+    extended_mode = true,
+    max_file_lines = nil,
+  },
   playground = {
     enable = true,
     disable = {},

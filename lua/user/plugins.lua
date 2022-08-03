@@ -65,6 +65,9 @@ return packer.startup(function(use)
   }
   use 'arkav/lualine-lsp-progress'
   use 'mbbill/undotree'
+  use "windwp/nvim-autopairs"
+  use "p00f/nvim-ts-rainbow"
+  use "machakann/vim-sandwich"
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
