@@ -3,6 +3,18 @@ if not status_ok then
 	return
 end
 
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.pug = {
+    install_info = {
+      url = "~/Python/lsp/tree-sitter-pug",
+      files = { "src/parser.c", "src/scanner.cc" },
+      -- location = "tree-sitter-lua_neo/lua",
+      revision = "8e5071f",
+    },
+    filetype = "pug",
+    maintainers = { "@mclaughlinconnor" },
+  }
+
 configs.setup({
 	ensure_installed = "all", -- one of "all" or a list of languages
 	ignore_install = { "phpdoc" }, -- List of parsers to ignore installing
