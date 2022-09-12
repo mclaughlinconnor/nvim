@@ -62,35 +62,36 @@ telescope.load_extension('fzf')
 -- TODO: add nvim-telescope/telescope-symbols.nvim source for work icons
 
 local bufopts = { noremap = true, silent = true }
--- do I want find_files or git_files?
-vim.keymap.set('n', 'gla', builtin.oldfiles, bufopts)
 vim.keymap.set('n', 'glb', builtin.buffers, bufopts)
-vim.keymap.set('n', 'glff', builtin.git_files, bufopts)
-vim.keymap.set('n', 'glfg', builtin.find_files, bufopts)
-vim.keymap.set('n', 'glg', builtin.live_grep, bufopts)
-vim.keymap.set('n', 'glh', builtin.help_tags, bufopts)
+vim.keymap.set('n', 'glB', builtin.oldfiles, bufopts)
+
+vim.keymap.set('n', 'glf', builtin.git_files, bufopts)
+vim.keymap.set('n', 'glF', builtin.find_files, bufopts)
+
 vim.keymap.set('n', 'glj', builtin.resume, bufopts)
-vim.keymap.set('n', 'glk', builtin.current_buffer_fuzzy_find, bufopts)
-vim.keymap.set('n', 'gll', builtin.current_buffer_tags, bufopts)
-vim.keymap.set('n', 'glp', builtin.pickers, bufopts)
+
+vim.keymap.set('n', 'glg', builtin.live_grep, bufopts)
+vim.keymap.set('n', 'glG', builtin.current_buffer_fuzzy_find, bufopts)
+vim.keymap.set('n', 'glt', builtin.tags, bufopts)
+vim.keymap.set('n', 'glT', builtin.current_buffer_tags, bufopts)
+
 vim.keymap.set('n', 'glq', builtin.quickfix, bufopts)
 vim.keymap.set('n', 'glr', builtin.registers, bufopts)
 vim.keymap.set('n', 'gls', builtin.spell_suggest, bufopts)
-vim.keymap.set('n', 'glt', builtin.tags, bufopts)
 
 vim.keymap.set('n', 'gloc', builtin.git_commits, bufopts)
 vim.keymap.set('n', 'glod', builtin.git_bcommits, bufopts)
 vim.keymap.set('n', 'glob', builtin.git_branches, bufopts)
-vim.keymap.set('n', 'glos', builtin.git_status, bufopts)
 vim.keymap.set('n', 'glot', builtin.git_stash, bufopts)
 
 vim.keymap.set('n', 'gld', builtin.diagnostics, bufopts) -- gives diagnostics for whole workspace
-vim.keymap.set('n', 'glii', builtin.lsp_incoming_calls, bufopts) -- no typescript/angular
-vim.keymap.set('n', 'glio', builtin.lsp_outgoing_calls, bufopts) -- no typescript/angular
 vim.keymap.set('n', 'glyt', builtin.treesitter, bufopts)
-vim.keymap.set('n', 'glyl', builtin.lsp_document_symbols, bufopts) -- no typescipt/angular
 vim.keymap.set('n', 'glmt', builtin.lsp_type_definitions, bufopts)
 vim.keymap.set('n', 'glmd', builtin.lsp_definitions, bufopts)
+
+vim.keymap.set('n', 'glii', builtin.lsp_incoming_calls, bufopts) -- no typescript/angular
+vim.keymap.set('n', 'glio', builtin.lsp_outgoing_calls, bufopts) -- no typescript/angular
+vim.keymap.set('n', 'glyl', builtin.lsp_document_symbols, bufopts) -- no typescipt/angular
 vim.keymap.set('n', 'glmi', builtin.lsp_implementations, bufopts) -- no typescript/angular
 
 vim.keymap.set('i', '<M-p>', function () vim.cmd('stopinsert') end, bufopts)
