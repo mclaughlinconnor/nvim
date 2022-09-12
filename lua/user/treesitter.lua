@@ -17,10 +17,12 @@ parser_config.pug = {
 
 configs.setup({
 	ensure_installed = "all", -- one of "all" or a list of languages
-	ignore_install = { "phpdoc" }, -- List of parsers to ignore installing
+  -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
+	ignore_install = { "phpdoc", "latex" }, -- List of parsers to ignore installing
 	highlight = {
 		enable = true, -- false will disable the whole extension
-		disable = { "css" }, -- list of language that will be disabled
+    -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
+		disable = { "css", "latex" }, -- list of language that will be disabled
 	},
 	autopairs = {
 		enable = true,

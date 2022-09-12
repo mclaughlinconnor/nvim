@@ -11,3 +11,6 @@ require "user.lualine"
 require "user.undotree"
 require "user.brackets"
 require "user.git"
+require "user.snippets"
+
+vim.cmd("source ~/.config/nvim/vim/tex.vim")

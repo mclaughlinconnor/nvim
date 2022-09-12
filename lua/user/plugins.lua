@@ -73,6 +73,12 @@ return packer.startup(function(use)
   use "kdheepak/lazygit.nvim"
   use "AndrewRadev/switch.vim"
 
+  use "saadparwaiz1/cmp_luasnip"
+  -- jsregexp needed for lsp snippet transforms
+  use {"L3MON4D3/LuaSnip", run = "make install_jsregexp"}
+  -- use my fork to include code highlighting for `code` environments
+  use 'mclaughlinconnor/vimtex'
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
