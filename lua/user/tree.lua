@@ -7,7 +7,7 @@ require("nvim-tree").setup({
     adaptive_size = true,
   },
   renderer = {
-    highlight_opened_files = true,
+    highlight_opened_files = "name",
     indent_markers = {
       enable = true,
     },
