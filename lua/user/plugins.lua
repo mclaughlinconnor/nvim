@@ -59,6 +59,7 @@ return packer.startup(function(use)
   use { "lewis6991/gitsigns.nvim", commit = "d7e0bcb" }
   use { "shaunsingh/nord.nvim", commit = "209e9b3" }
   use { "kyazdani42/nvim-web-devicons", commit = "2d02a56" }
+  use { "kyazdani42/nvim-tree.lua", requires = { 'kyazdani42/nvim-web-devicons' }, commit = "fb8735e" }
   use { "hrsh7th/cmp-nvim-lsp", commit = "affe808" }
   use { "hrsh7th/nvim-cmp", commit = "913eb85" }
   use { "nvim-treesitter/playground", commit = "bcfab84" }
