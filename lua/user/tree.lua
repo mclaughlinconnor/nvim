@@ -13,3 +13,5 @@ require("nvim-tree").setup({
     },
   },
 })
+
+vim.keymap.set('n', '<leader>f', vim.lsp.buf.declaration, { noremap = true, silent = true })
