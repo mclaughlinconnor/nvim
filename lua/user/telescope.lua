@@ -47,15 +47,17 @@ telescope.setup{
     },
     git_files = {
       show_untracked = true,
-    }
+    },
+    buffers = {
+      sort_mru = true,
+      ignore_current_buffer = true,
+      mappings = {
+        n = {
+          ["<M-d>"] = actions.delete_buffer,
+        }
+      }
+    },
   },
-  extensions = {
-    -- Your extension configuration goes here:
-    -- extension_name = {
-    --   extension_config_key = value,
-    -- }
-    -- please take a look at the readme of the extension you want to configure
-  }
 }
 
 telescope.load_extension('fzf')
