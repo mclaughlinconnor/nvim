@@ -81,6 +81,7 @@ return packer.startup(function(use)
   use { "p00f/nvim-ts-rainbow", commit = "620a24f" }
   use { "hrsh7th/cmp-path", commit = "447c87c" }
   use { "hrsh7th/cmp-buffer", commit = "3022dbc" }
+  use { "jose-elias-alvarez/null-ls.nvim", requires = { "nvim-lua/plenary.nvim" }, commit = "4342844" }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
