@@ -45,9 +45,17 @@ return packer.startup(function(use)
   use { "mclaughlinconnor/vimtex", commit = "cff605f4" }
   use { "mbbill/undotree", commit = "bf76bf2" }
   use { "saadparwaiz1/cmp_luasnip", commit = "a9de941" }
-  use { "williamboman/mason.nvim", commit = "b56ea0b" }
+  use { "williamboman/mason.nvim", commit = "134c4d9" }
   use { "norcalli/nvim-colorizer.lua", commit = "36c610a" }
-  use { "nvim-telescope/telescope-fzf-native.nvim", commit = "65c0ee3", run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+  use {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    commit = "65c0ee3",
+    run = [[
+      cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release \
+        && cmake --build build --config Release \
+        && cmake --install build --prefix build
+    ]]
+  }
   use { "L3MON4D3/LuaSnip", run = "make install_jsregexp", commit = "6e506ce" }
   use { "wbthomason/packer.nvim", commit = "00ec5ad" }
   use { "windwp/nvim-autopairs", commit = "5fe2441" }
@@ -65,7 +73,7 @@ return packer.startup(function(use)
   use { "nvim-treesitter/playground", commit = "bcfab84" }
   use { "hrsh7th/cmp-cmdline", commit = "9c0e331" }
   use { "machakann/vim-sandwich", commit = "74898e6" }
-  use { "nvim-treesitter/nvim-treesitter", commit = "518e2758" }
+  use { "nvim-treesitter/nvim-treesitter", commit = "2eaf188" }
   use { "nvim-telescope/telescope.nvim", commit = "2584ff3" }
   use { "nvim-lua/lsp-status.nvim", commit = "54f48eb" }
   use { "williamboman/mason-lspconfig.nvim", commit = "1534b61" }
