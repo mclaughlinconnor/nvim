@@ -14,5 +14,6 @@ require("user.git")
 require("user.snippets")
 require("user.tree")
 require("user.utils.trevj")
+require("user.utils.template-string")
 
 vim.cmd("source ~/.config/nvim/vim/tex.vim")
