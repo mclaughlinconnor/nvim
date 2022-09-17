@@ -66,7 +66,7 @@ require("null-ls").setup({
     require("null-ls").builtins.formatting.latexindent.with({
       filetypes = { "tex", "latex" },
     }),
-    require("null-ls").builtins.diagnostics.eslint,
+    require("null-ls").builtins.diagnostics.eslint_d,
     require("null-ls").builtins.formatting.fixjson,
     require("null-ls").builtins.diagnostics.luacheck,
     require("null-ls").builtins.diagnostics.proselint,
