@@ -13,5 +13,6 @@ require "user.brackets"
 require "user.git"
 require "user.snippets"
 require "user.tree"
+require "user.utils.trevj"
 
 vim.cmd("source ~/.config/nvim/vim/tex.vim")
