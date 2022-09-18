@@ -9,7 +9,7 @@ local options = {
   smartindent = true, -- make indenting smarter again
   autoindent = true, -- auto indent
   splitbelow = true, -- split down
-  splitright = true,-- split to right
+  splitright = true, -- split to right
   undolevels = 10000, -- big undo
   history = 10000, -- big undo
   updatetime = 300, -- faster completion (4000ms default)
@@ -29,8 +29,8 @@ local options = {
   autoread = true, -- re-read files if they are changed
 }
 
-vim.opt.shortmess:append "c" -- don't need extra verbose autocomplete
-vim.cmd "set whichwrap+=<,>,[,],h,l" -- movements can wrap over lines
+vim.opt.shortmess:append("c") -- don't need extra verbose autocomplete
+vim.cmd("set whichwrap+=<,>,[,],h,l") -- movements can wrap over lines
 vim.g.mapleader = ","
 
 for k, v in pairs(options) do
