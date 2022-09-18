@@ -1,4 +1,37 @@
 std = "min"
+files["luasnippets/*.lua"] = {
+  read_globals = {
+    "ai",
+    "c",
+    "d",
+    "dl",
+    "events",
+    "f",
+    "fmt",
+    "fmta",
+    "i",
+    "ins_generate",
+    "isn",
+    "l",
+    "ls",
+    "m",
+    "multiline_visual_wrap",
+    "n",
+    "p",
+    "parse",
+    "r",
+    "rep",
+    "s",
+    "sn",
+    "t",
+    "types",
+    "util",
+    "visual_wrap",
+  }
+}
+
+
+
 files["lua/user/**/*.lua"] = {
   read_globals = {
     vim = {
@@ -23,7 +56,7 @@ files["lua/user/**/*.lua"] = {
           read_only = false,
         },
         inspect = {
-          other_fields = true,
+          other_fields = false,
         },
         keymap = {
           other_fields = true,
