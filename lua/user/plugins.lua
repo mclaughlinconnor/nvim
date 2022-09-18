@@ -85,6 +85,8 @@ return packer.startup(function(use)
   use({ "AckslD/nvim-trevJ.lua", commit = "7363619" })
   use({ "nicwest/vim-camelsnek", commit = "3fef4df" })
   use({ "axelvc/template-string.nvim", commit = "84e50b8" })
+  use({ "nvim-treesitter/nvim-treesitter-textobjects", commit = "e63c2ff" })
+  use({ "mizlan/iswap.nvim", commit = "a21edee" })
   -- Maybe use gv.vim and vim-fugitive for Vim
 
   -- Automatically set up your configuration after cloning packer.nvim
