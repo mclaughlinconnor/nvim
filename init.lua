@@ -15,5 +15,6 @@ require("user.snippets")
 require("user.tree")
 require("user.utils.trevj")
 require("user.utils.template-string")
+require("user.utils.range-highlight")
 
 vim.cmd("source ~/.config/nvim/vim/tex.vim")
