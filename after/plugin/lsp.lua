@@ -62,7 +62,7 @@ require("null-ls").setup({
   debug = true,
   sources = {
     require("null-ls").builtins.completion.spell,
-    require("null-ls").builtins.diagnostics.chktex,
+    -- require("null-ls").builtins.diagnostics.chktex,
     require("null-ls").builtins.formatting.latexindent.with({
       filetypes = { "tex", "latex" },
     }),
