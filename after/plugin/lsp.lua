@@ -92,7 +92,9 @@ require("mason-lspconfig").setup()
 require("mason-lspconfig").setup_handlers({
   -- handle all servers without specific handlers
   function(server_name)
-    require("lspconfig")[server_name].setup({})
+    require("lspconfig")[server_name].setup({
+      on_attach = on_attach,
+    })
   end,
   ["sumneko_lua"] = function()
     require("lspconfig")["sumneko_lua"].setup({
