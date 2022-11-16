@@ -2,6 +2,7 @@ vim.g.gutentags_add_default_project_roots = 0
 vim.g.gutentags_project_root = { "package.json", ".git" }
 
 vim.g.gutentags_exclude_filetypes = { "html" }
+vim.g.gutentags_exclude_project_root = { "/usr/local", "/home/connor", "/home/connorm", "/home/connor/Python", "/" }
 
 vim.g.gutentags_cache_dir = vim.fn.expand("~/.cache/vim/ctags/")
 
