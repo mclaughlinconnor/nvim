@@ -90,6 +90,7 @@ return packer.startup(function(use)
   use({ "winston0410/range-highlight.nvim", requires = { "winston0410/cmd-parser.nvim" }, commit = "8b5e8cc" })
   use({ "winston0410/cmd-parser.nvim", commit = "6363b8b" })
   use({ "ldelossa/buffertag", commit = "0322abc" })
+  use({ "mclaughlinconnor/diffview.nvim", requires = "nvim-lua/plenary.nvim", rocks = { "diff" } })
   -- Maybe use gv.vim and vim-fugitive for Vim
 
   -- Automatically set up your configuration after cloning packer.nvim
