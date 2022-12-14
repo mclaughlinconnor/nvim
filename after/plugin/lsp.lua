@@ -50,7 +50,6 @@ require("lspconfig").angularls.setup({
 })
 
 require("null-ls").setup({
-  -- you can reuse a shared lspconfig on_attach callback here
   on_attach = on_attach,
   debug = true,
   sources = {
