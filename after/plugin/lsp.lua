@@ -46,6 +46,7 @@ require("lspconfig").angularls.setup({
   on_attach = on_attach,
   capabilities = lsp_status.capabilities,
   filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "pug" },
+  cmd = { "ngserverPUG", "--stdio", "--tsProbeLocations", "", "--ngProbeLocations", "" }
 })
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
