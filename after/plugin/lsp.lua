@@ -41,12 +41,23 @@ end
 local mason = require("mason")
 mason.setup({})
 
+local cmd = {
+  "node_modules/.bin/ngserverPUG",
+  "--stdio",
+  "--tsProbeLocations",
+  "node_modules/",
+  "--ngProbeLocations",
+  "node_modules",
+}
 -- I don't use the angularls installed by mason
 require("lspconfig").angularls.setup({
   on_attach = on_attach,
   capabilities = lsp_status.capabilities,
   filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "pug" },
-  cmd = { "ngserverPUG", "--stdio", "--tsProbeLocations", "", "--ngProbeLocations", "" }
+  cmd = cmd,
+  on_new_config = function(new_config)
+    new_config.cmd = cmd
+  end,
 })
 
 require("null-ls").setup({
