@@ -12,10 +12,6 @@ vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 local on_attach = function(client, bufnr)
   lsp_status.on_attach(client)
 
-  if client.name == "tsserver" then
-    client.server_capabilities.document_formatting = false
-  end
-
   -- lsp specific mappings
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
@@ -92,17 +88,6 @@ require("null-ls").setup({
   },
 })
 
-require("typescript").setup({
-  server = {
-    on_attach = on_attach,
-    capabilities = lsp_status.capabilities,
-    init_options = {
-      preferences = {
-        importModuleSpecifierPreference = "relative",
-      },
-    },
-  },
-})
 require("mason").setup()
 require("mason-lspconfig").setup()
 require("mason-lspconfig").setup_handlers({
@@ -113,7 +98,24 @@ require("mason-lspconfig").setup_handlers({
     })
   end,
   ["tsserver"] = function()
-    require("lspconfig").tsserver.setup({})
+    require("typescript").setup({
+      server = {
+        on_attach = on_attach,
+        capabilities = lsp_status.capabilities,
+        settings = {
+          typescript = {
+            format = {
+              insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
+            },
+          },
+        },
+        init_options = {
+          preferences = {
+            importModuleSpecifierPreference = "relative",
+          },
+        },
+      },
+    })
   end,
   ["sumneko_lua"] = function()
     require("lspconfig")["sumneko_lua"].setup({
