@@ -13,8 +13,8 @@ local on_attach = function(client, bufnr)
   lsp_status.on_attach(client)
 
   if client.name == "tsserver" then
-		client.server_capabilities.document_formatting = false
-	end
+    client.server_capabilities.document_formatting = false
+  end
 
   -- lsp specific mappings
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -88,9 +88,21 @@ require("null-ls").setup({
     }),
     -- require("null-ls").builtins.formatting.yamlfmt,
     require("null-ls").builtins.formatting.stylua.with({ extra_args = { "--indent-type", "Spaces" } }),
+    require("typescript.extensions.null-ls.code-actions"),
   },
 })
 
+require("typescript").setup({
+  server = {
+    on_attach = on_attach,
+    capabilities = lsp_status.capabilities,
+    init_options = {
+      preferences = {
+        importModuleSpecifierPreference = "relative",
+      },
+    },
+  },
+})
 require("mason").setup()
 require("mason-lspconfig").setup()
 require("mason-lspconfig").setup_handlers({
@@ -101,15 +113,7 @@ require("mason-lspconfig").setup_handlers({
     })
   end,
   ["tsserver"] = function()
-    require("lspconfig").tsserver.setup({
-      on_attach = on_attach,
-      capabilities = lsp_status.capabilities,
-      init_options = {
-        preferences = {
-          importModuleSpecifierPreference = "relative",
-        },
-      },
-    })
+    require("lspconfig").tsserver.setup({})
   end,
   ["sumneko_lua"] = function()
     require("lspconfig")["sumneko_lua"].setup({
