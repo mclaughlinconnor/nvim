@@ -6,10 +6,9 @@ end
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.pug = {
     install_info = {
-        url = "~/Python/lsp/tree-sitter-pug",
+        url = "github.com/Pug-Angular-Editor-Tools/tree-sitter-pug",
         files = { "src/parser.c", "src/scanner.cc" },
-        -- location = "tree-sitter-lua_neo/lua",
-        revision = "8e5071f",
+        revision = "44dc68c226278bcb6b311d",
     },
     filetype = "pug",
     maintainers = { "@mclaughlinconnor" },
