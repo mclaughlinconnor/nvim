@@ -60,7 +60,6 @@ require("null-ls").setup({
   on_attach = on_attach,
   debug = true,
   sources = {
-    require("null-ls").builtins.completion.spell,
     require("null-ls").builtins.formatting.latexindent.with({
       filetypes = { "tex", "latex" },
     }),
