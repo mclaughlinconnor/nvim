@@ -99,6 +99,7 @@ return packer.startup(function(use)
   use({ "mclaughlinconnor/diffview.nvim", requires = "nvim-lua/plenary.nvim", rocks = { "diff" } })
   use({ "jose-elias-alvarez/typescript.nvim", commit = "b96b3f8" })
   -- Maybe use gv.vim and vim-fugitive for Vim
+  use({ "stevearc/dressing.nvim", commit = "4436d6f" })
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

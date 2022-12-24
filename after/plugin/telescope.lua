@@ -3,6 +3,8 @@ local actions_layout = require("telescope.actions.layout")
 local builtin = require("telescope.builtin")
 local telescope = require("telescope")
 
+-- require('dressing').setup({})
+
 local project_files = function()
   local opts = {} -- define here if you want to define something
   local ok = pcall(require("telescope.builtin").git_files, opts)
@@ -99,13 +101,10 @@ vim.keymap.set("n", "<leader>lot", builtin.git_stash, bufopts)
 
 vim.keymap.set("n", "<leader>d", builtin.diagnostics, bufopts) -- gives diagnostics for whole workspace
 vim.keymap.set("n", "<leader>tr", builtin.treesitter, bufopts)
-vim.keymap.set("n", "<leader>tmt", builtin.lsp_type_definitions, bufopts)
-vim.keymap.set("n", "<leader>tmd", builtin.lsp_definitions, bufopts)
 
 vim.keymap.set("n", "<leader>lii", builtin.lsp_incoming_calls, bufopts) -- no typescript/angular
 vim.keymap.set("n", "<leader>lio", builtin.lsp_outgoing_calls, bufopts) -- no typescript/angular
 vim.keymap.set("n", "<leader>lyl", builtin.lsp_document_symbols, bufopts) -- no typescipt/angular
-vim.keymap.set("n", "<leader>lmi", builtin.lsp_implementations, bufopts) -- no typescript/angular
 
 vim.keymap.set("i", "<M-p>", function()
   vim.cmd("stopinsert")

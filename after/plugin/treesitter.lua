@@ -19,9 +19,16 @@ configs.setup({
     -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
     ignore_install = { "phpdoc" }, -- List of parsers to ignore installing
     highlight = {
-        enable = true, -- false will disable the whole extension
-        -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
-        disable = { "css", "latex" }, -- list of language that will be disabled
+        enable = true,
+        disable = function(lang, bufnr) -- Disable in large C++ buffers
+            -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
+            if lang == 'latex' or lang == 'css' then
+                return false
+            end
+
+            -- Disable for large files
+            return vim.api.nvim_buf_line_count(bufnr) > 1500
+        end,
     },
     autopairs = {
         enable = true,
