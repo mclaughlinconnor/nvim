@@ -5,6 +5,13 @@ local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
 cmp.setup({
+  enabled = function()
+    local buftype = vim.api.nvim_buf_get_option(0, "buftype")
+    if buftype == "prompt" then
+      return false
+    end
+    return true
+  end,
   preselect = cmp.PreselectMode.None,
   completion = {
     keyword_length = 0,
