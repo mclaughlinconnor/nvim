@@ -8,7 +8,7 @@ parser_config.pug = {
   install_info = {
     url = "github.com/Pug-Angular-Editor-Tools/tree-sitter-pug",
     files = { "src/parser.c", "src/scanner.cc" },
-    revision = "44dc68c226278bcb6b311d",
+    revision = "81f89bfc74e56157206cce7c7f272275e9d1c6e5",
   },
   filetype = "pug",
   maintainers = { "@mclaughlinconnor" },
