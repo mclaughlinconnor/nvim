@@ -15,6 +15,19 @@ end
 
 telescope.setup({
   defaults = {
+    layout_strategy = "flex",
+    layout_config = {
+      horizontal = {
+        width = 0.95,
+        height = 0.95,
+        preview_width = 0.4,
+      },
+      vertical = {
+        width = 0.95,
+        height = 0.95,
+        preview_height = 0.4,
+      },
+    },
     -- Default configuration for telescope goes here:
     -- config_key = value,
     path_display = { "smart" },
