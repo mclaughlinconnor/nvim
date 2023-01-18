@@ -64,7 +64,18 @@ require("null-ls").setup({
     require("null-ls").builtins.formatting.latexindent.with({
       filetypes = { "tex", "latex" },
     }),
-    require("null-ls").builtins.diagnostics.eslint_d,
+    require("null-ls").builtins.diagnostics.eslint_d.with({
+      condition = function(utils)
+        return utils.root_has_file({
+          ".eslintrc.js",
+          ".eslintrc.cjs",
+          ".eslintrc.cjs",
+          ".eslintrc.yaml",
+          ".eslintrc.yml",
+          ".eslintrc.json",
+        })
+      end,
+    }),
     require("null-ls").builtins.code_actions.eslint_d,
     require("null-ls").builtins.formatting.eslint_d,
     require("null-ls").builtins.formatting.fixjson,
