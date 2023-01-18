@@ -94,7 +94,9 @@ require("null-ls").setup({
       },
     }),
     -- require("null-ls").builtins.formatting.yamlfmt,
-    require("null-ls").builtins.formatting.stylua.with({ extra_args = { "--indent-type", "Spaces" } }),
+    require("null-ls").builtins.formatting.stylua.with({
+      extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
+    }),
     require("typescript.extensions.null-ls.code-actions"),
   },
 })
