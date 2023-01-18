@@ -99,7 +99,7 @@ vim.keymap.set("n", "<leader>lod", builtin.git_bcommits, bufopts)
 vim.keymap.set("n", "<leader>lob", builtin.git_branches, bufopts)
 vim.keymap.set("n", "<leader>lot", builtin.git_stash, bufopts)
 
-vim.keymap.set("n", "<leader>d", builtin.diagnostics, bufopts) -- gives diagnostics for whole workspace
+vim.keymap.set("n", "<leader>dg", builtin.diagnostics, bufopts) -- gives diagnostics for whole workspace
 vim.keymap.set("n", "<leader>tr", builtin.treesitter, bufopts)
 
 vim.keymap.set("n", "<leader>lii", builtin.lsp_incoming_calls, bufopts) -- no typescript/angular

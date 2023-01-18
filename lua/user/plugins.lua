@@ -87,6 +87,7 @@ return packer.startup(function(use)
   use({ "ray-x/cmp-treesitter", commit = "b40178b" })
   use({ "doxnit/cmp-luasnip-choice", commit = "97a3678" })
   use({ "amarakon/nvim-cmp-buffer-lines", commit = "2036e6f" })
+  use({ "rcarriga/cmp-dap", commit = "d16f14a" })
   use({ "jose-elias-alvarez/null-ls.nvim", requires = { "nvim-lua/plenary.nvim" }, commit = "4342844" })
   use({ "AckslD/nvim-trevJ.lua", commit = "7363619" })
   use({ "nicwest/vim-camelsnek", commit = "3fef4df" })
@@ -101,6 +102,16 @@ return packer.startup(function(use)
   -- Maybe use gv.vim and vim-fugitive for Vim
   use({ "lewis6991/impatient.nvim", commit = "9f7eed8" }) -- Maybe use gv.vim and vim-fugitive for Vim
   use({ "stevearc/dressing.nvim", commit = "4436d6f" })
+
+  use({ "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" }, commit = "e7c0549" })
+  use({
+    "microsoft/vscode-js-debug",
+    opt = true,
+    run = "npm install --legacy-peer-deps && npm run compile",
+    tag = "v1.*",
+  })
+  use({ "mfussenegger/nvim-dap", commit = "5a1479c", requires = { { "rcarriga/nvim-dap-ui", commit = "b80227e" } } })
+  use({ "theHamsta/nvim-dap-virtual-text", commit = "1913459" })
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

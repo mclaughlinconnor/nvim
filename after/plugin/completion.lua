@@ -7,10 +7,7 @@ cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 cmp.setup({
   enabled = function()
     local buftype = vim.api.nvim_buf_get_option(0, "buftype")
-    if buftype == "prompt" then
-      return false
-    end
-    return true
+    return buftype ~= "prompt" or require("cmp_dap").is_dap_buffer()
   end,
   preselect = cmp.PreselectMode.None,
   completion = {
@@ -83,6 +80,12 @@ cmp.setup({
     },
     { name = "buffer" },
   }),
+})
+
+cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+  sources = {
+    { name = "dap" },
+  },
 })
 
 -- Set configuration for specific filetype.
