@@ -169,7 +169,7 @@ require("mason-lspconfig").setup_handlers({
               "multiline_visual_wrap",
             },
           },
-          workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+          workspace = { library = vim.api.nvim_get_runtime_file("", true), checkThirdParty = false },
           telemetry = { enable = false },
         },
       },
