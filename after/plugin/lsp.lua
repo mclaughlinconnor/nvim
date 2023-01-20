@@ -12,6 +12,10 @@ vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 local on_attach = function(client, bufnr)
   lsp_status.on_attach(client)
 
+  if client.name == "tsserver" then
+		client.server_capabilities.document_formatting = false
+	end
+
   -- lsp specific mappings
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
@@ -46,19 +50,21 @@ require("lspconfig").angularls.setup({
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 require("null-ls").setup({
+  debug = true,
   -- you can reuse a shared lspconfig on_attach callback here
-  on_attach = function(client, bufnr)
-    if client.supports_method("textDocument/formatting") then
-      vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = augroup,
-        buffer = bufnr,
-        callback = function()
-          vim.lsp.buf.format({ bufnr = bufnr })
-        end,
-      })
-    end
-  end,
+  on_attach = on_attach,
+  -- on_attach = function(client, bufnr)
+  --   if client.supports_method("textDocument/formatting") then
+  --     vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+  --     vim.api.nvim_create_autocmd("BufWritePre", {
+  --       group = augroup,
+  --       buffer = bufnr,
+  --       callback = function()
+  --         vim.lsp.buf.format({ bufnr = bufnr })
+  --       end,
+  --     })
+  --   end
+  -- end,
   debug = true,
   sources = {
     require("null-ls").builtins.completion.spell,
@@ -67,6 +73,8 @@ require("null-ls").setup({
       filetypes = { "tex", "latex" },
     }),
     require("null-ls").builtins.diagnostics.eslint_d,
+    require("null-ls").builtins.code_actions.eslint_d,
+    require("null-ls").builtins.formatting.eslint_d,
     require("null-ls").builtins.formatting.fixjson,
     require("null-ls").builtins.diagnostics.luacheck,
     require("null-ls").builtins.diagnostics.proselint,
@@ -94,6 +102,17 @@ require("mason-lspconfig").setup_handlers({
   function(server_name)
     require("lspconfig")[server_name].setup({
       on_attach = on_attach,
+    })
+  end,
+  ["tsserver"] = function()
+    require("lspconfig").tsserver.setup({
+      on_attach = on_attach,
+      capabilities = lsp_status.capabilities,
+      init_options = {
+        preferences = {
+          importModuleSpecifierPreference = "relative",
+        },
+      },
     })
   end,
   ["sumneko_lua"] = function()
