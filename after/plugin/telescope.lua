@@ -58,6 +58,7 @@ telescope.setup({
         ["<M-;>"] = actions_layout.toggle_preview,
         ["<M-m>"] = actions.cycle_previewers_next,
         ["<M-n>"] = actions.cycle_previewers_prev,
+        ['<M-q>'] = actions.smart_add_to_qflist + actions.open_qflist,
       },
       i = {
         ["<M-j>"] = actions.move_selection_next,
@@ -71,6 +72,7 @@ telescope.setup({
         ["<M-;>"] = actions_layout.toggle_preview,
         ["<M-m>"] = actions.cycle_previewers_next,
         ["<M-n>"] = actions.cycle_previewers_prev,
+        ['<M-q>'] = actions.smart_add_to_qflist + actions.open_qflist,
       },
     },
   },
