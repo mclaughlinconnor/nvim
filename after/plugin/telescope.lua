@@ -82,9 +82,6 @@ telescope.setup({
     -- }
     -- Now the picker_config_key will be applied every time you call this
     -- builtin picker
-    find_files = {
-      find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
-    },
     git_files = {
       show_untracked = true,
     },
