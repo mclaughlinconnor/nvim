@@ -150,6 +150,7 @@ require("null-ls").setup({
     require("null-ls").builtins.diagnostics.proselint,
     require("null-ls").builtins.diagnostics.puglint,
     require("null-ls").builtins.diagnostics.shellcheck,
+    require("null-ls").builtins.diagnostics.stylelint,
     require("null-ls").builtins.diagnostics.todo_comments,
     require("null-ls").builtins.diagnostics.trail_space,
     require("null-ls").builtins.diagnostics.tsc,
