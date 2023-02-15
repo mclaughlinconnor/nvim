@@ -91,7 +91,7 @@ telescope.setup({
       sort_mru = true,
       ignore_current_buffer = true,
       mappings = {
-        n = {
+        i = {
           ["<M-d>"] = actions.delete_buffer,
         },
       },
