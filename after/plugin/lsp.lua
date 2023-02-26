@@ -85,6 +85,7 @@ require("null-ls").setup({
     require("null-ls").builtins.diagnostics.shellcheck,
     require("null-ls").builtins.diagnostics.todo_comments,
     require("null-ls").builtins.diagnostics.trail_space,
+    require("null-ls").builtins.diagnostics.tsc,
     require("null-ls").builtins.formatting.trim_whitespace,
     require("null-ls").builtins.diagnostics.yamllint.with({
       extra_args = {
