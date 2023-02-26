@@ -23,7 +23,7 @@ configs.setup({
     disable = function(lang, bufnr) -- Disable in large C++ buffers
       -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
       if lang == "latex" or lang == "css" then
-        return false
+        return true
       end
 
       -- Disable for large files return vim.api.nvim_buf_line_count(bufnr) > 1500
