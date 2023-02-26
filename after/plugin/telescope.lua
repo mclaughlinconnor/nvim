@@ -146,30 +146,37 @@ local translationPicker = function(opts)
               return {}
             end
 
-            local ymlKeys = {}
-            local ymlValues = {}
+            local yml_keys = {}
+            local yml_values = {}
+
+            local prompt_filter = prompt
+            if opts.strict_value then
+              -- prompt_filter = ":.*" .. prompt_filter
+              prompt_filter = ":.*key"
+            end
+          print(prompt_filter)
 
             Job:new({
               command = "rg",
               interactive = false,
-              args = { "-i", "--color", "never", "--type", "yaml", "--no-heading", prompt },
+              args = { "-i", "--color", "never", "--type", "yaml", "--no-heading", prompt_filter },
               on_stdout = function(_, line)
                 local split = splitByColon(line)
-                print(vim.inspect(split))
+              print(line)
                 local key = split[2]
                 local value = split[3]
-                table.insert(ymlKeys, key)
-                table.insert(ymlValues, value)
+                table.insert(yml_keys, key)
+                table.insert(yml_values, value)
               end,
             }):sync()
 
-            if #ymlKeys == 0 then
+            if #yml_keys == 0 then
               return {}
             end
 
-            local translationValues = {}
+            local translation_values = {}
 
-            for i, key in ipairs(ymlKeys) do
+            for i, key in ipairs(yml_keys) do
               Job
                   :new({
                     command = "rg",
@@ -192,15 +199,15 @@ local translationPicker = function(opts)
                       local line_number = split[2] or "none"
                       local column_number = split[3] or "none"
                       table.insert(
-                        translationValues,
-                        { key = key, translation = ymlValues[i], path = path, line = line_number, column = column_number }
+                        translation_values,
+                        { key = key, translation = yml_values[i], path = path, line = line_number, column = column_number }
                       )
                     end,
                   })
                   :sync()
             end
 
-            return translationValues or {}
+            return translation_values or {}
           end,
           entry_maker = function(entry)
             local value = entry.path
@@ -233,5 +240,9 @@ local translationPicker = function(opts)
 end
 
 vim.keymap.set("n", "<leader>tp", function()
-  translationPicker({})
+  translationPicker({strict_value = true})
+end, bufopts)
+
+vim.keymap.set("n", "<leader>tP", function()
+  translationPicker({strict_value = false})
 end, bufopts)
