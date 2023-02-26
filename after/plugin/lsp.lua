@@ -110,6 +110,24 @@ require("mason-lspconfig").setup_handlers({
       on_attach = on_attach,
     })
   end,
+  ["ltex"] = function()
+    require("lspconfig")["ltex"].setup({
+      on_attach = on_attach,
+      settings = {
+        ltex = {
+          language = "en-GB",
+          additionalRules = {
+            enablePickyRules = true,
+            motherTongue = "en-GB",
+          },
+          disabledRules = {
+            ["en-GB"] = { "OXFORD_SPELLING_NOUNS" },
+          },
+          checkFrequency = "save",
+        },
+      },
+    })
+  end,
   ["tsserver"] = function()
     require("typescript").setup({
       server = {
