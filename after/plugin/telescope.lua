@@ -1,9 +1,22 @@
+local Job = require("plenary.job")
 local actions = require("telescope.actions")
 local actions_layout = require("telescope.actions.layout")
 local builtin = require("telescope.builtin")
+local conf = require("telescope.config").values
+local finders = require("telescope.finders")
+local pickers = require("telescope.pickers")
 local telescope = require("telescope")
 
--- require('dressing').setup({})
+local splitByColon = function(str)
+  local results = {}
+
+  for word in str:gmatch("[^:]+") do
+    local stripped = string.gsub(word, "^%s*(.-)%s*$", "%1")
+    table.insert(results, stripped)
+  end
+
+  return results
+end
 
 local project_files = function()
   local opts = {} -- define here if you want to define something
@@ -121,4 +134,104 @@ vim.keymap.set("n", "<leader>lyl", builtin.lsp_document_symbols, bufopts) -- no 
 
 vim.keymap.set("i", "<M-p>", function()
   vim.cmd("stopinsert")
+end, bufopts)
+
+local translationPicker = function(opts)
+  pickers
+      .new(opts, {
+        prompt_title = "Translation Grep",
+        finder = finders.new_dynamic({
+          fn = function(prompt)
+            if not prompt or prompt == "" then
+              return {}
+            end
+
+            local ymlKeys = {}
+            local ymlValues = {}
+
+            Job:new({
+              command = "rg",
+              interactive = false,
+              args = { "-i", "--color", "never", "--type", "yaml", "--no-heading", prompt },
+              on_stdout = function(_, line)
+                local split = splitByColon(line)
+                print(vim.inspect(split))
+                local key = split[2]
+                local value = split[3]
+                table.insert(ymlKeys, key)
+                table.insert(ymlValues, value)
+              end,
+            }):sync()
+
+            if #ymlKeys == 0 then
+              return {}
+            end
+
+            local translationValues = {}
+
+            for i, key in ipairs(ymlKeys) do
+              Job
+                  :new({
+                    command = "rg",
+                    interactive = false,
+                    args = {
+                      "-i",
+                      "--color",
+                      "never",
+                      "-g",
+                      "*.pug",
+                      "--no-heading",
+                      "--line-number",
+                      "--column",
+                      "--case-sensitive",
+                      "\\b" .. key .. "\\b",
+                    },
+                    on_stdout = function(_, line)
+                      local split = splitByColon(line)
+                      local path = split[1] or "none"
+                      local line_number = split[2] or "none"
+                      local column_number = split[3] or "none"
+                      table.insert(
+                        translationValues,
+                        { key = key, translation = ymlValues[i], path = path, line = line_number, column = column_number }
+                      )
+                    end,
+                  })
+                  :sync()
+            end
+
+            return translationValues or {}
+          end,
+          entry_maker = function(entry)
+            local value = entry.path
+                .. ":"
+                .. entry.line
+                .. ":"
+                .. entry.column
+                .. ":"
+                .. entry.key
+                .. ":"
+                .. entry.translation
+            return {
+              value = entry.key,
+              display = value,
+              ordinal = value,
+              filename = entry.path,
+              lnum = tonumber(entry.line),
+              col = tonumber(entry.column),
+            }
+          end,
+        }),
+        previewer = conf.qflist_previewer(opts),
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(_, map)
+          map("i", "<c-space>", actions.to_fuzzy_refine)
+          return true
+        end,
+      })
+      :find()
+end
+
+vim.keymap.set("n", "<leader>tp", function()
+  translationPicker({})
 end, bufopts)
