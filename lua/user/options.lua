@@ -45,3 +45,5 @@ autocmd!
 au TextYankPost * silent! lua vim.highlight.on_yank({higroup="IncSearch", timeout=200})
 augroup END
 ]])
+
+vim.keymap.set("n", "<esc>", "<cmd>noh<cr>", { noremap = true, silent = true })
