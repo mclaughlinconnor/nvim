@@ -15,7 +15,8 @@ require("lir").setup({
     ["<CR>"] = actions.edit,
     ["l"] = actions.edit,
     ["h"] = actions.up,
-    ["<bs>"] = actions.up,
+    ["<space>"] = actions.up,
+    ["<bs>"] = actions.edit,
 
     ["<esc>"] = function()
       local files = lir.get_context().files
