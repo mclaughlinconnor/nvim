@@ -112,6 +112,7 @@ return packer.startup(function(use)
   })
   use({ "mfussenegger/nvim-dap", commit = "5a1479c", requires = { { "rcarriga/nvim-dap-ui", commit = "b80227e" } } })
   use({ "theHamsta/nvim-dap-virtual-text", commit = "1913459" })
+  use({ "ton/vim-alternate", commit = "57a6d27" })
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
