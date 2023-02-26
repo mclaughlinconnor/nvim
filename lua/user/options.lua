@@ -11,6 +11,7 @@ local options = {
   splitbelow = true, -- split down
   splitright = true, -- split to right
   undolevels = 10000, -- big undo
+  undofile = true,
   history = 10000, -- big undo
   updatetime = 300, -- faster completion (4000ms default)
   expandtab = true, -- tabs -> spaces
