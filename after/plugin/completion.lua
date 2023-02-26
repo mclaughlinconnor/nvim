@@ -101,25 +101,26 @@ cmp.setup.filetype("gitcommit", {
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline("/", {
   mapping = cmp.mapping.preset.cmdline({
-    ["<M-j>"] = function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      else
-        fallback()
-      end
-    end,
-    ["<M-k>"] = function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      else
-        fallback()
-      end
-    end,
+    ["<M-j>"] = {
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        else
+          fallback()
+        end
+      end,
+    },
+    ["<M-k>"] = {
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        else
+          fallback()
+        end
+      end,
+    },
   }),
-  sources = {
-    { name = "cmdline_history" },
-    { name = "buffer" },
-  },
+  sources = cmp.config.sources({ { name = "cmdline_history" } }, { { name = "buffer" } }),
 })
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
