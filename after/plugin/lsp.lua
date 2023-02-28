@@ -186,6 +186,7 @@ require("mason-lspconfig").setup_handlers({
               "ai",
               "visual_wrap",
               "multiline_visual_wrap",
+              "postfix",
             },
           },
           workspace = { library = vim.api.nvim_get_runtime_file("", true), checkThirdParty = false },

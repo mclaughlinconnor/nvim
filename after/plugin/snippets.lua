@@ -5,274 +5,118 @@ local util = require("luasnip.util.util")
 local node_util = require("luasnip.nodes.util")
 
 ls.config.setup({
-	history = true,
-	update_events = "InsertLeave,TextChangedI",
-	enable_autosnippets = true,
-	region_check_events = "CursorHold,InsertLeave",
-	delete_check_events = "TextChanged,InsertEnter",
-	store_selection_keys = "<Tab>",
-	ext_opts = {
-		[types.insertNode] = {
-			active = {
-				virt_text = {{"●", "Comment"}},
-				priority = 0
-			},
-		},
-		[types.choiceNode] = {
-			active = {
-				virt_text = {{"●", "InactiveComment"}},
-				priority = 0
-			},
-		},
-	},
-	ft_func = require("luasnip.extras.filetype_functions").from_pos_or_filetype,
-	load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft({
-		markdown = {"lua", "json"}
-	}),
-	snip_env = {
-		s = ls.s,
-		sn = ls.sn,
-		t = ls.t,
-		i = ls.i,
-		f = function(func, argnodes, ...)
-			return ls.f(function(args, imm_parent, user_args)
-				return func(args, imm_parent.snippet, user_args)
-			end, argnodes, ...)
-		end,
-		-- override to enable restore_cursor.
-		c = function(pos, nodes, opts)
-			opts = opts or {}
-			opts.restore_cursor = true
-			return ls.c(pos, nodes, opts)
-		end,
-		d = function(pos, func, argnodes, ...)
-			return ls.d(pos, function(args, imm_parent, old_state, ...)
-				return func(args, imm_parent.snippet, old_state, ...)
-			end, argnodes, ...)
-		end,
-		isn = require("luasnip.nodes.snippet").ISN,
-		l = require'luasnip.extras'.lambda,
-		dl = require'luasnip.extras'.dynamic_lambda,
-		rep = require'luasnip.extras'.rep,
-		r = ls.restore_node,
-		p = require("luasnip.extras").partial,
-		types = require("luasnip.util.types"),
-		events = require("luasnip.util.events"),
-		util = require("luasnip.util.util"),
-		fmt = require("luasnip.extras.fmt").fmt,
-		fmta = require("luasnip.extras.fmt").fmta,
-		ls = ls,
-		ins_generate = function(nodes)
-			return setmetatable(nodes or {}, {
-			__index = function(table, key)
-				local indx = tonumber(key)
-				if indx then
-					local val = ls.i(indx)
-					rawset(table, key, val)
-					return val
-				end
-			end})
-		end,
-		parse = function(trig, body, opts)
+  history = true,
+  update_events = "InsertLeave,TextChangedI",
+  enable_autosnippets = true,
+  region_check_events = "CursorHold,InsertLeave",
+  delete_check_events = "TextChanged,InsertEnter",
+  store_selection_keys = "<Tab>",
+  ext_opts = {
+    [types.insertNode] = {
+      active = {
+        virt_text = { { "●", "Comment" } },
+        priority = 0,
+      },
+    },
+    [types.choiceNode] = {
+      active = {
+        virt_text = { { "●", "InactiveComment" } },
+        priority = 0,
+      },
+    },
+  },
+  ft_func = require("luasnip.extras.filetype_functions").from_pos_or_filetype,
+  load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft({
+    markdown = { "lua", "json" },
+  }),
+  snip_env = {
+    s = ls.s,
+    sn = ls.sn,
+    t = ls.t,
+    i = ls.i,
+    f = function(func, argnodes, ...)
+      return ls.f(function(args, imm_parent, user_args)
+        return func(args, imm_parent.snippet, user_args)
+      end, argnodes, ...)
+    end,
+    -- override to enable restore_cursor.
+    c = function(pos, nodes, opts)
       opts = opts or {}
-			return ls.parser.parse_snippet(
+      opts.restore_cursor = true
+      return ls.c(pos, nodes, opts)
+    end,
+    d = function(pos, func, argnodes, ...)
+      return ls.d(pos, function(args, imm_parent, old_state, ...)
+        return func(args, imm_parent.snippet, old_state, ...)
+      end, argnodes, ...)
+    end,
+    isn = require("luasnip.nodes.snippet").ISN,
+    l = require("luasnip.extras").lambda,
+    dl = require("luasnip.extras").dynamic_lambda,
+    rep = require("luasnip.extras").rep,
+    r = ls.restore_node,
+    p = require("luasnip.extras").partial,
+    types = require("luasnip.util.types"),
+    events = require("luasnip.util.events"),
+    util = require("luasnip.util.util"),
+    fmt = require("luasnip.extras.fmt").fmt,
+    fmta = require("luasnip.extras.fmt").fmta,
+    ls = ls,
+    ins_generate = function(nodes)
+      return setmetatable(nodes or {}, {
+        __index = function(table, key)
+          local indx = tonumber(key)
+          if indx then
+            local val = ls.i(indx)
+            rawset(table, key, val)
+            return val
+          end
+        end,
+      })
+    end,
+    parse = function(trig, body, opts)
+      opts = opts or {}
+      return ls.parser.parse_snippet(
         trig,
         body,
-        vim.tbl_extend(
-          "force",
-          {
-            dedent = true,
-            trim_empty = true
-          },
-          opts
-        )
-      )
-		end,
-		n = require("luasnip.extras").nonempty,
-		m = require("luasnip.extras").match,
-		ai = require("luasnip.nodes.absolute_indexer"),
-    visual_wrap = function (trigger, start_text, end_text, opts)
-			opts = opts or {}
-      return ls.s(
-        trigger,
-        {
-          ls.t({start_text}),
-          ls.d(
-            1,
-            function(_, snip)
-              local res, env = {}, snip.env
-              if (vim.tbl_count(env.LS_SELECT_RAW) > 0) then
-                return ls.sn(nil, {ls.f(
-                  function()
-                    for _, ele in ipairs(env.LS_SELECT_RAW) do
-                      table.insert(res, ele)
-                    end
-
-                    return res
-                  end,
-                  {}
-                )})
-              else
-                return ls.sn(nil, {ls.i(1)})
-              end
-            end
-          ),
-          ls.t({end_text}),
-        },
-        opts
+        vim.tbl_extend("force", {
+          dedent = true,
+          trim_empty = true,
+        }, opts)
       )
     end,
-    multiline_visual_wrap = function (trigger, start_text, end_text)
-      return ls.s(
-        trigger,
-        {
-          ls.t({start_text, ""}),
-          ls.d(
-            1,
-            function(_args, snip)
-              local res, env = {}, snip.env
-              if (vim.tbl_count(env.LS_SELECT_RAW) > 0) then
-                return ls.sn(nil, {ls.f(
-                  function()
-                    for _, ele in ipairs(env.LS_SELECT_RAW) do
-                      table.insert(res, "  " .. ele)
-                    end
-
-                    return res
-                  end,
-                  {}
-                )})
-              else
-                return ls.sn(nil, {ls.t("  "), ls.i(1)})
-              end
-            end
-          ),
-          ls.t({"", end_text, ""}),
-        }
-      )
-    end
-	}
+    n = require("luasnip.extras").nonempty,
+    m = require("luasnip.extras").match,
+    ai = require("luasnip.nodes.absolute_indexer"),
+    postfix = require("luasnip.extras.postfix").postfix,
+  },
 })
 
-local function find_dynamic_node(node)
-	-- the dynamicNode-key is set on snippets generated by a dynamicNode only (its'
-	-- actual use is to refer to the dynamicNode that generated the snippet).
-	while not node.dynamicNode do
-		node = node.parent
-	end
-	return node.dynamicNode
-end
+ls.filetype_extend("latex", { "tex" })
 
-local external_update_id = 0
-
--- func_indx to update the dynamicNode with different functions.
-function dynamic_node_external_update(func_indx)
-	-- most of this function is about restoring the cursor to the correct
-	-- position+mode, the important part are the few lines from
-	-- `dynamic_node.snip:store()`.
-
-
-	-- find current node and the innermost dynamicNode it is inside.
-	local current_node = ls.session.current_nodes[vim.api.nvim_get_current_buf()]
-
-  if not current_node then
-    return
-  end
-
-	local dynamic_node = find_dynamic_node(current_node)
-
-	-- to identify current node in new snippet, if it is available.
-	external_update_id = external_update_id + 1
-	current_node.external_update_id = external_update_id
-
-	-- store which mode we're in to restore later.
-	local insert_pre_call = vim.fn.mode() == "i"
-	-- is byte-indexed! Doesn't matter here, but important to be aware of.
-	local cursor_pos_pre_relative = util.pos_sub(
-		util.get_cursor_0ind(),
-		current_node.mark:pos_begin_raw()
-	)
-
-	-- store and leave current generated snippet.
-	dynamic_node.snip:store()
-	node_util.leave_nodes_between(dynamic_node.snip, current_node)
-
-	-- call update-function.
-	local func = dynamic_node.user_args[func_indx]
-	if func then
-		-- the same snippet passed to the dynamicNode-function. Any output from func
-		-- should be stored in it under some unused key.
-		func(dynamic_node.parent.snippet)
-	end
-
-	-- last_args is used to store the last args that were used to generate the
-	-- snippet. If this function is called, these will most probably not have
-	-- changed, so they are set to nil, which will force an update.
-	dynamic_node.last_args = nil
-	dynamic_node:update()
-
-	-- everything below here isn't strictly necessary, but it's pretty nice to have.
-
-
-	-- try to find the node we marked earlier.
-	local target_node = dynamic_node:find_node(function(test_node)
-		return test_node.external_update_id == external_update_id
-	end)
-
-	if target_node then
-		-- the node that the cursor was in when changeChoice was called exists
-		-- in the active choice! Enter it and all nodes between it and this choiceNode,
-		-- then set the cursor.
-		node_util.enter_nodes_between(dynamic_node, target_node)
-
-		if insert_pre_call then
-			util.set_cursor_0ind(
-				util.pos_add(
-					target_node.mark:pos_begin_raw(),
-					cursor_pos_pre_relative
-				)
-			)
-		else
-			node_util.select_node(target_node)
-		end
-		-- set the new current node correctly.
-		ls.session.current_nodes[vim.api.nvim_get_current_buf()] = target_node
-	else
-		-- the marked node wasn't found, just jump into the new snippet noremally.
-		ls.session.current_nodes[vim.api.nvim_get_current_buf()] = dynamic_node.snip:jump_into(1)
-	end
-end
-
-ls.filetype_extend("latex", {"tex"})
-ls.filetype_extend("glsl", {"c"})
-
-vim.cmd [[command! LuaSnipEdit :lua require("luasnip.loaders").edit_snippet_files()]]
-vim.cmd [[
+vim.cmd([[command! LuaSnipEdit :lua require("luasnip.loaders").edit_snippet_files()]])
+vim.cmd([[
   " to expand
-	inoremap <silent> <C-K> <cmd>lua ls.expand()<Cr>
+	inoremap <silent> <C-L> <cmd>lua ls.expand()<Cr>
+
   " to move forward a stop
-	inoremap <silent> <C-L> <cmd>lua ls.jump(1)<Cr>
+	inoremap <silent> <C-J> <cmd>lua ls.jump(1)<Cr>
   " to move back a stop
-	inoremap <silent> <C-J> <cmd>lua ls.jump(-1)<Cr>
+	inoremap <silent> <C-K> <cmd>lua ls.jump(-1)<Cr>
+
   " move forward a stop
-	snoremap <silent> <C-L> <cmd>lua ls.jump(1)<Cr>
+	snoremap <silent> <C-J> <cmd>lua ls.jump(1)<Cr>
   " move back a stop
-	snoremap <silent> <C-J> <cmd>lua ls.jump(-1)<Cr>
-	imap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : ''
-	smap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : ''
-	imap <silent><expr> <C-S-E> luasnip#choice_active() ? '<Plug>luasnip-prev-choice' : ''
-	smap <silent><expr> <C-S-E> luasnip#choice_active() ? '<Plug>luasnip-prev-choice' : ''
+	snoremap <silent> <C-K> <cmd>lua ls.jump(-1)<Cr>
 
-  inoremap <silent> <C-t> <cmd>lua _G.dynamic_node_external_update(1)<Cr>
-  snoremap <silent> <C-t> <cmd>lua _G.dynamic_node_external_update(1)<Cr>
+	imap <silent><expr> <C-H> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : ''
+	smap <silent><expr> <C-H> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : ''
+	imap <silent><expr> <C-Y> luasnip#choice_active() ? '<Plug>luasnip-prev-choice' : ''
+	smap <silent><expr> <C-Y> luasnip#choice_active() ? '<Plug>luasnip-prev-choice' : ''
+]])
 
-  inoremap <silent> <C-g> <cmd>lua _G.dynamic_node_external_update(2)<Cr>
-  snoremap <silent> <C-g> <cmd>lua _G.dynamic_node_external_update(2)<Cr>
-]]
-
--- shorcut to source my luasnips file again, which will reload my snippets
-vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/lua/user/snippets.lua<CR>")
+-- reload snippets
+vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/after/plugin/snippets.lua<CR>")
 
 require("luasnip.loaders.from_lua").lazy_load()
-require("luasnip.loaders.from_lua").load({paths = {vim.fn.getcwd() .. "/.luasnippets/"}})
-
+require("luasnip.loaders.from_lua").load({ paths = { vim.fn.getcwd() .. "/.luasnippets/" } })

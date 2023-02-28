@@ -6,13 +6,50 @@ tex.in_text = function()
   return not tex.in_mathzone()
 end
 
-local rec_ls
-rec_ls = function()
-  return sn(nil, {
-    c(1, {
-      t({ "" }),
-      sn(nil, { t({ "", "\t\\item " }), i(1), d(2, rec_ls, {}) }),
-    }),
+local visual_wrap = function(trigger, start_text, end_text, opts)
+  opts = opts or {}
+  return ls.s(trigger, {
+    ls.t({ start_text }),
+    ls.d(1, function(_, snip)
+      local res, env = {}, snip.env
+      if vim.tbl_count(env.LS_SELECT_RAW) > 0 then
+        return ls.sn(nil, {
+          ls.f(function()
+            for _, ele in ipairs(env.LS_SELECT_RAW) do
+              table.insert(res, ele)
+            end
+
+            return res
+          end, {}),
+        })
+      else
+        return ls.sn(nil, { ls.i(1) })
+      end
+    end),
+    ls.t({ end_text }),
+  }, opts)
+end
+
+local multiline_visual_wrap = function(trigger, start_text, end_text)
+  return ls.s(trigger, {
+    ls.t({ start_text, "" }),
+    ls.d(1, function(_, snip)
+      local res, env = {}, snip.env
+      if vim.tbl_count(env.LS_SELECT_RAW) > 0 then
+        return ls.sn(nil, {
+          ls.f(function()
+            for _, ele in ipairs(env.LS_SELECT_RAW) do
+              table.insert(res, "  " .. ele)
+            end
+
+            return res
+          end, {}),
+        })
+      else
+        return ls.sn(nil, { ls.t("  "), ls.i(1) })
+      end
+    end),
+    ls.t({ "", end_text, "" }),
   })
 end
 
@@ -65,28 +102,25 @@ return {
     { trig = "b", wordTrig = true },
     fmta(
       [[
-          \begin{<>}
-            <>
-          \end{<>}
+        \begin{<>}
+          <>
+        \end{<>}
 
-        ]],
+      ]],
       {
         i(1),
         d(2, function(_, snip)
           local res, env = {}, snip.env
           if vim.tbl_count(env.LS_SELECT_RAW) > 0 then
-            return ls.sn(
-              nil,
-              {
-                ls.f(function()
-                  for _, ele in ipairs(env.LS_SELECT_RAW) do
-                    table.insert(res, ele)
-                  end
+            return ls.sn(nil, {
+              ls.f(function()
+                for _, ele in ipairs(env.LS_SELECT_RAW) do
+                  table.insert(res, ele)
+                end
 
-                  return res
-                end, {}),
-              }
-            )
+                return res
+              end, {}),
+            })
           else
             return sn(nil, { i(1) })
           end
@@ -192,7 +226,6 @@ return {
     }),
     t({ "}", "\t\\item " }),
     i(2),
-    d(3, rec_ls, {}),
     t({ "", "\\end{" }),
     rep(1),
     t({ "}", "" }),
@@ -202,10 +235,10 @@ return {
     "tab",
     fmta(
       [[
-          \begin{tabular}{<>}
-            <>
-          \end{tabular}
-        ]],
+        \begin{tabular}{<>}
+          <>
+        \end{tabular}
+      ]],
       {
         i(1, "c"),
         d(2, tab, { 1 }, {
@@ -265,273 +298,261 @@ return {
     fmta([[\left\lfloor <> \right\rfloor ]], { i(1) }),
     { condition = tex.in_mathzone }
   ),
-},
-    {
-      parse(
-        "note",
-        [[
-        \begin{note}
-          $1
-        \end{note}
-      ]]
-      ),
+}, {
+  parse(
+    "note",
+    [[
+      \begin{note}
+        $1
+      \end{note}
+    ]]
+  ),
 
-      parse("mk", [[\($1\) ]]),
-      s({ trig = "xt", wordTrig = false }, fmta([[\times 10^{<>} ]], { i(1) }), { condition = tex.in_mathzone }),
-      s("pt", t([[\propto ]]), { condition = tex.in_mathzone }),
-      s("dbd", fmta([[\frac{\dif <>}{\dif <>} ]], { i(1), i(2) }), { condition = tex.in_mathzone }),
-      s("ibd", fmta([[\Int{<>}{<>}<> ]], { i(1), i(2), i(3) }), { condition = tex.in_mathzone }),
+  parse("mk", [[\($1\) ]]),
+  s({ trig = "xt", wordTrig = false }, fmta([[\times 10^{<>} ]], { i(1) }), { condition = tex.in_mathzone }),
+  s("pt", t([[\propto ]]), { condition = tex.in_mathzone }),
+  s("dbd", fmta([[\frac{\dif <>}{\dif <>} ]], { i(1), i(2) }), { condition = tex.in_mathzone }),
+  s("ibd", fmta([[\Int{<>}{<>}<> ]], { i(1), i(2), i(3) }), { condition = tex.in_mathzone }),
 
-      parse("midnode", [[($($1)!.5!($2)$) ]]),
+  parse("midnode", [[($($1)!.5!($2)$) ]]),
 
-      parse("imint", [[\mintinline{$1}{$2} ]]),
-      parse("ptcd", [[\mintinline{text}{$1} ]]),
-      parse("sqlc", [[\mintinline{sql}{$1} ]]),
-      parse("ccd", [[\mintinline{c}{$1} ]]),
-      parse("pycd", [[\mintinline{python}{$1} ]]),
-      parse("asmcd", [[\mintinline{asm}{$1} ]]),
-      parse("jcd", [[\mintinline{java}{$1} ]]),
+  parse("imint", [[\mintinline{$1}{$2} ]]),
+  parse("ptcd", [[\mintinline{text}{$1} ]]),
+  parse("sqlc", [[\mintinline{sql}{$1} ]]),
+  parse("ccd", [[\mintinline{c}{$1} ]]),
+  parse("pycd", [[\mintinline{python}{$1} ]]),
+  parse("asmcd", [[\mintinline{asm}{$1} ]]),
+  parse("jcd", [[\mintinline{java}{$1} ]]),
 
-      s("trm", fmta([[\textrm{<>} ]], i(1)), { condition = tex.in_mathzone }),
-      s("mrm", fmta([[\mathrm{<>} ]], i(1)), { condition = tex.in_mathzone }),
+  s("trm", fmta([[\textrm{<>} ]], i(1)), { condition = tex.in_mathzone }),
+  s("mrm", fmta([[\mathrm{<>} ]], i(1)), { condition = tex.in_mathzone }),
 
-      parse(
-        "eqninfo",
-        [[
-        \item \( $1 \) = \( $2 \) \( $3 \)
-        $4
-      ]]
-      ),
-      parse(
-        "exmleqn",
-        [[
-        \begin{minipage}{0.49\linewidth}
-            \begin{itemize}
-                \item \( $1 \) = \( $2 \) \( $3 \)
-                $4
-            \end{itemize}
-        \end{minipage}
-        \hfill
-        \begin{minipage}{0.49\linewidth}
-            \centering
-            \begin{align*}
-                $5
-            \end{align*}
-        \end{minipage}
-      ]]
-      ),
-      parse(
-        "eqndef",
-        [[
-        \smallskip
-        \begin{minipage}{0.4\linewidth}
-            \centering
-            \scalebox{2}{
-              \begin{math}
-                $1 = $2
-              \end{math}
-            }
-        \end{minipage}
-        \hfill
-        \begin{minipage}{0.55\linewidth}
-            Where:
-            \begin{itemize}
-              \item \( $3 \) = $4 ($5)
-              $6
-            \end{itemize}
-        \end{minipage}
+  parse(
+    "eqninfo",
+    [[
+      \item \( $1 \) = \( $2 \) \( $3 \)
+      $4
+    ]]
+  ),
+  parse(
+    "exmleqn",
+    [[
+      \begin{minipage}{0.49\linewidth}
+          \begin{itemize}
+              \item \( $1 \) = \( $2 \) \( $3 \)
+              $4
+          \end{itemize}
+      \end{minipage}
+      \hfill
+      \begin{minipage}{0.49\linewidth}
+          \centering
+          \begin{align*}
+              $5
+          \end{align*}
+      \end{minipage}
+    ]]
+  ),
+  parse(
+    "eqndef",
+    [[
+      \smallskip
+      \begin{minipage}{0.4\linewidth}
+          \centering
+          \scalebox{2}{
+            \begin{math}
+              $1 = $2
+            \end{math}
+          }
+      \end{minipage}
+      \hfill
+      \begin{minipage}{0.55\linewidth}
+          Where:
+          \begin{itemize}
+            \item \( $3 \) = $4 ($5)
+            $6
+          \end{itemize}
+      \end{minipage}
 
-        $7
-      ]]
-      ),
-      s(
-        "eqnitem",
-        fmta(
-          [[
-        \item \( <> \) = <> (<>)
+      $7
+    ]]
+  ),
+  s(
+    "eqnitem",
+    fmta(
+      [[
+      \item \( <> \) = <> (<>)
 
-      ]]   ,
-          { i(1), i(2), i(3) }
-        )
-      ),
-      s(
-        "exml",
-        fmta(
-          [[
-        \begin{example}
-            \begin{enumerate}
-              \item[<>] <>
-            \end{enumerate}
-        \end{example}
-      ]]   ,
-          { i(1), i(2) }
-        )
-      ),
-      parse("subexml", [[\item[$1)] $2]]),
+    ]] ,
+      { i(1), i(2), i(3) }
+    )
+  ),
+  s(
+    "exml",
+    fmta(
+      [[
+      \begin{example}
+          \begin{enumerate}
+            \item[<>] <>
+          \end{enumerate}
+      \end{example}
+    ]] ,
+      { i(1), i(2) }
+    )
+  ),
+  parse("subexml", [[\item[$1)] $2]]),
 
-      s(
-        "2mini",
-        fmta(
-          [[
-        \begin{minipage}{0.45\linewidth}
-            <>
-        \end{minipage}
-      ]]   ,
-          { i(1) }
-        )
-      ),
-      s(
-        "3mini",
-        fmta(
-          [[
-        \begin{minipage}{0.30\linewidth}
-            <>
-        \end{minipage}
-      ]]   ,
-          { i(1) }
-        )
-      ),
-      s(
-        "4mini",
-        fmta(
-          [[
-        \begin{minipage}{0.20\linewidth}
-            <>
-        \end{minipage}
-      ]]   ,
-          { i(1) }
-        )
-      ),
+  s(
+    "2mini",
+    fmta(
+      [[
+      \begin{minipage}{0.45\linewidth}
+          <>
+      \end{minipage}
+    ]] ,
+      { i(1) }
+    )
+  ),
+  s(
+    "3mini",
+    fmta(
+      [[
+      \begin{minipage}{0.30\linewidth}
+          <>
+      \end{minipage}
+    ]] ,
+      { i(1) }
+    )
+  ),
+  s(
+    "4mini",
+    fmta(
+      [[
+      \begin{minipage}{0.20\linewidth}
+          <>
+      \end{minipage}
+    ]] ,
+      { i(1) }
+    )
+  ),
 
-      s("...", t([[\ldots]]), { condition = tex.in_mathzone }),
+  s("...", t([[\ldots]]), { condition = tex.in_mathzone }),
 
-      s({ trig = "land", wordTrig = true }, t([[\land ]]), { condition = tex.in_mathzone }),
-      s({ trig = "lor", wordTrig = true }, t([[\lor ]]), { condition = tex.in_mathzone }),
+  s({ trig = "land", wordTrig = true }, t([[\land ]]), { condition = tex.in_mathzone }),
+  s({ trig = "lor", wordTrig = true }, t([[\lor ]]), { condition = tex.in_mathzone }),
 
-      s({ trig = "impl", wordTrig = true }, t([[\implies]]), { condition = tex.in_mathzone }),
+  s({ trig = "impl", wordTrig = true }, t([[\implies]]), { condition = tex.in_mathzone }),
 
-      s("iff", t([[\iff]]), { condition = tex.in_mathzone }),
+  s("iff", t([[\iff]]), { condition = tex.in_mathzone }),
 
-      multiline_visual_wrap({ trig = "dm", wordTrig = true }, "\\[", "\\]"),
+  multiline_visual_wrap({ trig = "dm", wordTrig = true }, "\\[", "\\]"),
 
-      multiline_visual_wrap({ trig = "ali", wordTrig = true }, [[\begin{align*}]], [[\end{align*}]]),
+  multiline_visual_wrap({ trig = "ali", wordTrig = true }, [[\begin{align*}]], [[\end{align*}]]),
 
-      s("//", {
-        t([[\\frac{]]),
-        d(1, function(_, snip)
-          local res, env = {}, snip.env
-          if vim.tbl_count(env.LS_SELECT_RAW) > 0 then
-            return ls.sn(
-              nil,
-              {
-                ls.f(function()
-                  for _, ele in ipairs(env.LS_SELECT_RAW) do
-                    table.insert(res, ele)
-                  end
+  s("//", {
+    t([[\\frac{]]),
+    d(1, function(_, snip)
+      local res, env = {}, snip.env
+      if vim.tbl_count(env.LS_SELECT_RAW) > 0 then
+        return ls.sn(nil, {
+          ls.f(function()
+            for _, ele in ipairs(env.LS_SELECT_RAW) do
+              table.insert(res, ele)
+            end
 
-                  return res
-                end, {}),
-              }
-            )
-          else
-            return sn(nil, { i(1) })
-          end
-        end),
-        t([[{]]),
-        i(2),
-        t([[}]]),
-      }, { condition = tex.in_mathzone }),
+            return res
+          end, {}),
+        })
+      else
+        return sn(nil, { i(1) })
+      end
+    end),
+    t([[{]]),
+    i(2),
+    t([[}]]),
+  }, { condition = tex.in_mathzone }),
 
-      s(
-        { trig = [[((%d*)\?([A-Za-z]+)[_^]?{%d+})/]], regTrig = true },
-        d(1, fraction, {}),
-        { condition = tex.in_mathzone }
-      ), -- 2\sigma_{2}
-      s(
-        { trig = [[((%d*)\?([A-Za-z]+)[_^]?%d+)/]], regTrig = true },
-        d(1, fraction, {}),
-        { condition = tex.in_mathzone }
-      ), -- 2\sigma_2
-      s({ trig = [[(\?([A-Za-z]+)[_^]%d)/]], regTrig = true }, d(1, fraction, {}), { condition = tex.in_mathzone }), -- \sigma_2
-      s(
-        { trig = [[(\?([A-Za-z]+)[_^]{%d+})/]], regTrig = true },
-        d(1, fraction, {}),
-        { condition = tex.in_mathzone }
-      ), -- \sigma_{2}
-      s({ trig = [[(\?[A-Za-z]+)/]], regTrig = true }, d(1, fraction, {}), { condition = tex.in_mathzone }), -- \sigma
-      s({ trig = "(%d+)/", regTrig = true }, d(1, fraction, {}), { condition = tex.in_mathzone }), -- 2
+  s(
+    { trig = [[((%d*)\?([A-Za-z]+)[_^]?{%d+})/]], regTrig = true },
+    d(1, fraction, {}),
+    { condition = tex.in_mathzone }
+  ), -- 2\sigma_{2}
+  s({ trig = [[((%d*)\?([A-Za-z]+)[_^]?%d+)/]], regTrig = true }, d(1, fraction, {}), { condition = tex.in_mathzone }), -- 2\sigma_2
+  s({ trig = [[(\?([A-Za-z]+)[_^]%d)/]], regTrig = true }, d(1, fraction, {}), { condition = tex.in_mathzone }), -- \sigma_2
+  s({ trig = [[(\?([A-Za-z]+)[_^]{%d+})/]], regTrig = true }, d(1, fraction, {}), { condition = tex.in_mathzone }), -- \sigma_{2}
+  s({ trig = [[(\?[A-Za-z]+)/]], regTrig = true }, d(1, fraction, {}), { condition = tex.in_mathzone }), -- \sigma
+  s({ trig = "(%d+)/", regTrig = true }, d(1, fraction, {}), { condition = tex.in_mathzone }), -- 2
 
-      s(
-        { trig = "==", wordTrig = true },
-        fmta(
-          [[
-          &= <> \\\\
+  s(
+    { trig = "==", wordTrig = true },
+    fmta(
+      [[
+        &= <> \\\\
 
-        ]] ,
-          { i(1) }
-        ),
-        { condition = tex.in_mathzone }
-      ),
+      ]],
+      { i(1) }
+    ),
+    { condition = tex.in_mathzone }
+  ),
 
-      s({ trig = "e=", wordTrig = true }, t([[&= ]])),
+  s({ trig = "e=", wordTrig = true }, t([[&= ]])),
 
-      s({ trig = "neq", wordTrig = true }, t([[\neq ]]), { condition = tex.in_mathzone }),
+  s({ trig = "neq", wordTrig = true }, t([[\neq ]]), { condition = tex.in_mathzone }),
 
-      visual_wrap("()", [[\left( ]], [[ \right) ]], { condition = tex.in_mathzone }),
-      visual_wrap("lr", [[\left( ]], [[ \right) ]], { condition = tex.in_mathzone }),
-      visual_wrap("lr(", [[\left( ]], [[ \right) ]], { condition = tex.in_mathzone }),
-      visual_wrap("lr|", [[\left| ]], [[ \right| ]], { condition = tex.in_mathzone }),
-      visual_wrap("lr{", [[\left\\{ ]], [[ \right\\} ]], { condition = tex.in_mathzone }),
-      visual_wrap("lrb", [[\left\\{ ]], [[ \right\\} ]], { condition = tex.in_mathzone }),
-      visual_wrap("lr[", [[\left[ ]], [[ \right]  ]], { condition = tex.in_mathzone }),
-      visual_wrap("lra", [[\left<]], [[ \right>]], { condition = tex.in_mathzone }),
+  visual_wrap("()", [[\left( ]], [[ \right) ]], { condition = tex.in_mathzone }),
+  visual_wrap("lr", [[\left( ]], [[ \right) ]], { condition = tex.in_mathzone }),
+  visual_wrap("lr(", [[\left( ]], [[ \right) ]], { condition = tex.in_mathzone }),
+  visual_wrap("lr|", [[\left| ]], [[ \right| ]], { condition = tex.in_mathzone }),
+  visual_wrap("lr{", [[\left\\{ ]], [[ \right\\} ]], { condition = tex.in_mathzone }),
+  visual_wrap("lrb", [[\left\\{ ]], [[ \right\\} ]], { condition = tex.in_mathzone }),
+  visual_wrap("lr[", [[\left[ ]], [[ \right]  ]], { condition = tex.in_mathzone }),
+  visual_wrap("lra", [[\left<]], [[ \right>]], { condition = tex.in_mathzone }),
 
-      visual_wrap("sqr", [[\sqrt{]], [[} ]], { condition = tex.in_mathzone }),
+  visual_wrap("sqr", [[\sqrt{]], [[} ]], { condition = tex.in_mathzone }),
 
-      s({ trig = "sr", wordTrig = false }, t([[^2]]), { condition = tex.in_mathzone }),
-      s({ trig = "cb", wordTrig = false }, t([[^3]]), { condition = tex.in_mathzone }),
-      s({ trig = "td", wordTrig = false }, fmta([[^{<>} ]], { i(1) }), { condition = tex.in_mathzone }),
-      s({ trig = "__", wordTrig = false }, fmta([[_{<>} ]], { i(1) }), { condition = tex.in_mathzone }),
+  s({ trig = "sr", wordTrig = false }, t([[^2]]), { condition = tex.in_mathzone }),
+  s({ trig = "cb", wordTrig = false }, t([[^3]]), { condition = tex.in_mathzone }),
+  s({ trig = "td", wordTrig = false }, fmta([[^{<>} ]], { i(1) }), { condition = tex.in_mathzone }),
+  s({ trig = "__", wordTrig = false }, fmta([[_{<>} ]], { i(1) }), { condition = tex.in_mathzone }),
 
-      parse("ooo", [[\infty]]),
+  parse("ooo", [[\infty]]),
 
-      parse("xnn", [[x_{n}]]),
-      parse("ynn", [[y_{n}]]),
+  parse("xnn", [[x_{n}]]),
+  parse("ynn", [[y_{n}]]),
 
-      s({ trig = "xx", wordTrig = false }, t([[\times ]]), { condition = tex.in_mathzone }),
-      s({ trig = "**", wordTrig = false }, t([[\cdot ]]), { condition = tex.in_mathzone }),
-      s("norm", fmta([[\|<>\| ]], { i(1) }), { condition = tex.in_mathzone }),
-      s({ trig = "invs", wordTrig = false }, t([[^{-1} ]]), { condition = tex.in_mathzone }),
-      s({ trig = "||", wordTrig = false }, t([[ \mid ]]), { condition = tex.in_mathzone }),
+  s({ trig = "xx", wordTrig = false }, t([[\times ]]), { condition = tex.in_mathzone }),
+  s({ trig = "**", wordTrig = false }, t([[\cdot ]]), { condition = tex.in_mathzone }),
+  s("norm", fmta([[\|<>\| ]], { i(1) }), { condition = tex.in_mathzone }),
+  s({ trig = "invs", wordTrig = false }, t([[^{-1} ]]), { condition = tex.in_mathzone }),
+  s({ trig = "||", wordTrig = false }, t([[ \mid ]]), { condition = tex.in_mathzone }),
 
-      s("EE", t([[\exists ]]), { condition = tex.in_mathzone }),
-      s("AA", t([[\forall ]]), { condition = tex.in_mathzone }),
-      s("cc", t([[\subset ]]), { condition = tex.in_mathzone }),
-      s("nquiv", t([[\not\equiv ]]), { condition = tex.in_mathzone }),
-      s("notin", t([[\not\in ]]), { condition = tex.in_mathzone }),
-      s("inn", t([[\in ]]), { condition = tex.in_mathzone }),
-      s("NN", t([[\N ]]), { condition = tex.in_mathzone }),
-      s("Nn", t([[\cap ]]), { condition = tex.in_mathzone }),
-      s("UU", t([[\cup ]]), { condition = tex.in_mathzone }),
-      s("OO", t([[\O ]]), { condition = tex.in_mathzone }),
-      s("RR", t([[\R ]]), { condition = tex.in_mathzone }),
-      s("QQ", t([[\Q ]]), { condition = tex.in_mathzone }),
-      s("ZZ", t([[\Z ]]), { condition = tex.in_mathzone }),
-      s("HH", t([[\mathbb{H} ]]), { condition = tex.in_mathzone }),
-      s("Uu", t([[\mathbb{U} ]]), { condition = tex.in_mathzone }),
-      s("DD", t([[\mathbb{D} ]]), { condition = tex.in_mathzone }),
+  s("EE", t([[\exists ]]), { condition = tex.in_mathzone }),
+  s("AA", t([[\forall ]]), { condition = tex.in_mathzone }),
+  s("cc", t([[\subset ]]), { condition = tex.in_mathzone }),
+  s("nquiv", t([[\not\equiv ]]), { condition = tex.in_mathzone }),
+  s("notin", t([[\not\in ]]), { condition = tex.in_mathzone }),
+  s("inn", t([[\in ]]), { condition = tex.in_mathzone }),
+  s("NN", t([[\N ]]), { condition = tex.in_mathzone }),
+  s("Nn", t([[\cap ]]), { condition = tex.in_mathzone }),
+  s("UU", t([[\cup ]]), { condition = tex.in_mathzone }),
+  s("OO", t([[\O ]]), { condition = tex.in_mathzone }),
+  s("RR", t([[\R ]]), { condition = tex.in_mathzone }),
+  s("QQ", t([[\Q ]]), { condition = tex.in_mathzone }),
+  s("ZZ", t([[\Z ]]), { condition = tex.in_mathzone }),
+  s("HH", t([[\mathbb{H} ]]), { condition = tex.in_mathzone }),
+  s("Uu", t([[\mathbb{U} ]]), { condition = tex.in_mathzone }),
+  s("DD", t([[\mathbb{D} ]]), { condition = tex.in_mathzone }),
 
-      s("equiv", t([[\equiv ]]), { condition = tex.in_mathzone }),
-      s("neg", t([[\neg ]]), { condition = tex.in_mathzone }),
+  s("equiv", t([[\equiv ]]), { condition = tex.in_mathzone }),
+  s("neg", t([[\neg ]]), { condition = tex.in_mathzone }),
 
-      s("tt", fmta([[\text{<>} ]], { i(1) }), { condition = tex.in_mathzone }),
-      s("bf", fmta([[\textbf{<>} ]], { i(1) })),
+  s("tt", fmta([[\text{<>} ]], { i(1) }), { condition = tex.in_mathzone }),
+  s("bf", fmta([[\textbf{<>} ]], { i(1) })),
 
-      s("bar", fmta([[\overline{<>} ]], { i(1) })),
-      s("hat", fmta([[\hat{<>} ]], { i(1) })),
+  s("bar", fmta([[\overline{<>} ]], { i(1) })),
+  s("hat", fmta([[\hat{<>} ]], { i(1) })),
 
-      visual_wrap({ trig = "emp", wordTrig = true }, [[\emph{]], [[} ]]),
-    }
+  visual_wrap({ trig = "emp", wordTrig = true }, [[\emph{]], [[} ]]),
+}
 
 -- todo better sub/super script
 -- also spaces after exiting math mode optionally
