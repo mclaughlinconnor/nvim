@@ -2,7 +2,7 @@ local widgets = require('dap.ui.widgets')
 local dapui = require('dapui')
 local dap = require('dap')
 
-require("nvim-dap-virtual-text").setup()
+require("nvim-dap-virtual-text").setup({})
 
 require("dap-vscode-js").setup({
   adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" }, -- which adapters to register in nvim-dap
