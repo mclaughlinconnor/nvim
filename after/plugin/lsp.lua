@@ -42,57 +42,15 @@ end
 local mason = require("mason")
 mason.setup({})
 
-local cmd = {
-  "node_modules/.bin/ngserverPUG",
-  "--stdio",
-  "--tsProbeLocations",
-  "node_modules/",
-  "--ngProbeLocations",
-  "node_modules",
-}
 -- I don't use the angularls installed by mason
 -- Ref: https://github.com/williamboman/mason.nvim/blob/4f5de77fab742ab2ca5512e7f3c9881cacdaf8eb/lua/nvim-lsp-installer/servers/angularls/init.lua
 
-function get_npm_root()
+local function get_npm_root()
   return vim.fn.system('npm root'):gsub("\n", "")
 end
 
-function get_npm_global_root()
+local function get_npm_global_root()
   return vim.fn.system('npm root -g'):gsub("\n", "")
-end
-
----@generic T, U
----@param fn fun(item: T): U
----@param list T[]
----@return U[]
-function map(fn, list)
-    local result = {}
-    for i = 1, #list do
-        result[#result + 1] = fn(list[i], i)
-    end
-    return result
-end
-
-function npm_executable(root_dir, executable)
-    return table.concat({
-        root_dir,
-        "node_modules",
-        ".bin",
-        executable,
-    }, "/") -- will probably cause problems on windows
-end
-
-local function append_node_modules(dir)
-  return table.concat({ dir, "node_modules" }, "/") -- will probably cause problems on windows
-end
-
-function npm_executable(root_dir, executable)
-    return table.concat({
-        root_dir,
-        "node_modules",
-        ".bin",
-        executable,
-    }, "/") -- will probably cause problems on windows
 end
 
 local function append_node_modules(dir)
