@@ -18,9 +18,9 @@ local splitByColon = function(str)
   return results
 end
 
-local project_files = function()
-  local opts = {} -- define here if you want to define something
-  local ok = pcall(require("telescope.builtin").git_files, opts)
+local project_files = function(default_text)
+  local opts = { default_text = default_text }
+  local ok = pcall(require("telescope.builtin").git_files(), opts)
   if not ok then
     require("telescope.builtin").find_files(opts)
   end
@@ -58,7 +58,7 @@ telescope.setup({
         ["<M-;>"] = actions_layout.toggle_preview,
         ["<M-m>"] = actions.cycle_previewers_next,
         ["<M-n>"] = actions.cycle_previewers_prev,
-        ['<M-q>'] = actions.smart_add_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.smart_add_to_qflist + actions.open_qflist,
       },
       i = {
         ["<M-j>"] = actions.move_selection_next,
@@ -72,7 +72,7 @@ telescope.setup({
         ["<M-;>"] = actions_layout.toggle_preview,
         ["<M-m>"] = actions.cycle_previewers_next,
         ["<M-n>"] = actions.cycle_previewers_prev,
-        ['<M-q>'] = actions.smart_add_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.smart_add_to_qflist + actions.open_qflist,
       },
     },
   },
@@ -107,13 +107,22 @@ vim.keymap.set("n", "<leader>b", builtin.buffers, bufopts)
 vim.keymap.set("n", "<leader>B", builtin.oldfiles, bufopts)
 
 vim.keymap.set("n", "<leader>f", project_files, bufopts)
+vim.keymap.set("n", "<leader>F", function()
+  project_files(vim.fn.expand("<cword>"))
+end, bufopts)
 
 vim.keymap.set("n", "<leader>tj", builtin.resume, bufopts)
 
 vim.keymap.set("n", "<leader>g", builtin.live_grep, bufopts)
-vim.keymap.set("n", "<leader>G", builtin.current_buffer_fuzzy_find, bufopts)
+vim.keymap.set("n", "<leader>G", function()
+  builtin.live_grep({ default_text = vim.fn.expand("<cword>") })
+end, bufopts)
+vim.keymap.set("n", "<leader>tg", builtin.current_buffer_fuzzy_find, bufopts)
 vim.keymap.set("n", "<leader>tt", builtin.tags, bufopts)
-vim.keymap.set("n", "<leader>tT", builtin.current_buffer_tags, bufopts)
+vim.keymap.set("n", "<leader>tT", function()
+  builtin.tags({ default_text = vim.fn.expand("<cword>") })
+end, bufopts)
+vim.keymap.set("n", "<leader>tC", builtin.current_buffer_tags, bufopts)
 
 vim.keymap.set("n", "<leader>tq", builtin.quickfix, bufopts)
 vim.keymap.set("n", "<leader>tr", builtin.registers, bufopts)
@@ -153,7 +162,7 @@ local translationPicker = function(opts)
               -- prompt_filter = ":.*" .. prompt_filter
               prompt_filter = ":.*key"
             end
-          print(prompt_filter)
+            print(prompt_filter)
 
             Job:new({
               command = "rg",
@@ -161,7 +170,7 @@ local translationPicker = function(opts)
               args = { "-i", "--color", "never", "--type", "yaml", "--no-heading", prompt_filter },
               on_stdout = function(_, line)
                 local split = splitByColon(line)
-              print(line)
+                print(line)
                 local key = split[2]
                 local value = split[3]
                 table.insert(yml_keys, key)
@@ -239,9 +248,9 @@ local translationPicker = function(opts)
 end
 
 vim.keymap.set("n", "<leader>tp", function()
-  translationPicker({strict_value = true})
+  translationPicker({ strict_value = true })
 end, bufopts)
 
 vim.keymap.set("n", "<leader>tP", function()
-  translationPicker({strict_value = false})
+  translationPicker({ strict_value = false })
 end, bufopts)
