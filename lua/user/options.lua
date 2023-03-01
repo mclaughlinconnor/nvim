@@ -33,6 +33,7 @@ local options = {
 
 vim.opt.shortmess:append("c") -- don't need extra verbose autocomplete
 vim.cmd("set whichwrap+=<,>,[,],h,l") -- movements can wrap over lines
+vim.cmd("set iskeyword+=-") -- make - part of word
 vim.g.mapleader = ","
 
 for k, v in pairs(options) do
