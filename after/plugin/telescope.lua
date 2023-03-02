@@ -20,9 +20,9 @@ end
 
 local project_files = function(default_text)
   local opts = { default_text = default_text }
-  local ok = pcall(require("telescope.builtin").git_files(), opts)
+  local ok = pcall(builtin.git_files, opts)
   if not ok then
-    require("telescope.builtin").find_files(opts)
+    builtin.find_files(opts)
   end
 end
 
