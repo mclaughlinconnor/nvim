@@ -150,7 +150,7 @@ local translationPicker = function(opts)
         prompt_title = "Translation Grep",
         finder = finders.new_dynamic({
           fn = function(prompt)
-            if not prompt or prompt == "" then
+            if not prompt or #prompt < 5 then
               return {}
             end
 
@@ -184,8 +184,25 @@ local translationPicker = function(opts)
 
             local translation_values = {}
 
+
             for i, key in ipairs(yml_keys) do
-              Job
+          print(vim.inspect(
+
+                    {
+                      "-i",
+                      "--color",
+                      "never",
+                      "-g",
+                      "*.pug",
+                      "--no-heading",
+                      "--line-number",
+                      "--column",
+                      "--case-sensitive",
+                      -- "\\b" .. key .. "\\b",
+                      [[(('|")]].. key ..[[(('|")|\|tr))]],
+                    }
+          ))
+            Job
                   :new({
                     command = "rg",
                     interactive = false,
@@ -199,7 +216,8 @@ local translationPicker = function(opts)
                       "--line-number",
                       "--column",
                       "--case-sensitive",
-                      "\\b" .. key .. "\\b",
+                      -- "\\b" .. key .. "\\b",
+                      [[(('|")]].. key ..[[(('|")|\|tr))]],
                     },
                     on_stdout = function(_, line)
                       local split = splitByColon(line)
@@ -218,7 +236,7 @@ local translationPicker = function(opts)
             return translation_values or {}
           end,
           entry_maker = function(entry)
-            local value = entry.path
+            local display = vim.fn.fnamemodify(entry.path, ':t')
                 .. ":"
                 .. entry.line
                 .. ":"
@@ -229,8 +247,8 @@ local translationPicker = function(opts)
                 .. entry.translation
             return {
               value = entry.key,
-              display = value,
-              ordinal = value,
+              display = display,
+              ordinal = display,
               filename = entry.path,
               lnum = tonumber(entry.line),
               col = tonumber(entry.column),
