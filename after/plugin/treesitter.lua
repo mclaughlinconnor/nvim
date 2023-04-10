@@ -6,9 +6,9 @@ end
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.pug = {
   install_info = {
-    url = "github.com/Pug-Angular-Editor-Tools/tree-sitter-pug",
+    url = "github.com/mclaughlinconnor/tree-sitter-pug",
     files = { "src/parser.c", "src/scanner.cc" },
-    revision = "81f89bfc74e56157206cce7c7f272275e9d1c6e5",
+    revision = "1fee024cf7803464108cc05e770da395b9e2f91b",
   },
   filetype = "pug",
   maintainers = { "@mclaughlinconnor" },
@@ -22,11 +22,12 @@ configs.setup({
     enable = true,
     disable = function(lang, bufnr) -- Disable in large C++ buffers
       -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
-      if lang == "latex" or lang == "css" then
+      if lang == "latex" or lang == "css" or lang == "yaml" then
         return true
       end
 
-      -- Disable for large files return vim.api.nvim_buf_line_count(bufnr) > 1500
+      -- Disable for large files
+      return vim.api.nvim_buf_line_count(bufnr) > 2000
     end,
   },
   autopairs = {
