@@ -114,6 +114,8 @@ return packer.startup(function(use)
   use({ "theHamsta/nvim-dap-virtual-text", commit = "1913459" })
   use({ "ton/vim-alternate", commit = "57a6d27" })
 
+  use({ "lukas-reineke/indent-blankline.nvim", commit = "018bd04" })
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
