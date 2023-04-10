@@ -118,10 +118,6 @@ vim.keymap.set("n", "<leader>G", function()
   builtin.live_grep({ default_text = vim.fn.expand("<cword>") })
 end, bufopts)
 vim.keymap.set("n", "<leader>tg", builtin.current_buffer_fuzzy_find, bufopts)
-vim.keymap.set("n", "<leader>tt", builtin.tags, bufopts)
-vim.keymap.set("n", "<leader>tT", function()
-  builtin.tags({ default_text = vim.fn.expand("<cword>") })
-end, bufopts)
 vim.keymap.set("n", "<leader>tc", builtin.current_buffer_tags, bufopts)
 
 vim.keymap.set("n", "<leader>tq", builtin.quickfix, bufopts)
@@ -265,10 +261,68 @@ local translationPicker = function(opts)
       :find()
 end
 
+local live_tags = function(opts)
+  local tag_grep_command = { "rg", "--color=never", "--no-heading", "--smart-case" }
+  opts.bufnr = 0 -- TODO: dirty hack to leverage make_entry.gen_from_ctags()
+
+  local tagfiles = opts.ctags_file and { opts.ctags_file } or vim.fn.tagfiles()
+  if vim.tbl_isempty(tagfiles) then
+    utils.notify("builtin.tags", {
+      msg = "No tags file found. Create one with ctags -R",
+      level = "ERROR",
+    })
+    return
+  end
+
+  local live_grepper = finders.new_job(function(prompt)
+    if not prompt or prompt == "" then
+      return nil
+    end
+    return vim.tbl_flatten { tag_grep_command, "--", prompt, tagfiles }
+  end, opts.entry_maker or make_entry.gen_from_ctags(opts), opts.max_results, opts.cwd)
+
+  pickers.new(opts, {
+    prompt_title = "Live Tags",
+    finder = live_grepper,
+    previewer = previewers.ctags.new(opts),
+    sorter = sorters.highlighter_only(opts),
+    attach_mappings = function()
+      action_set.select:enhance {
+        post = function()
+          local selection = action_state.get_selected_entry()
+
+          if selection.scode then
+            -- un-escape / then escape required
+            -- special chars for vim.fn.search()
+            -- ] ~ *
+            local scode = selection.scode:gsub([[\/]], "/"):gsub("[%]~*]", function(x)
+              return "\\" .. x
+            end)
+
+            vim.cmd "norm! gg"
+            vim.fn.search(scode)
+            vim.cmd "norm! zz"
+          else
+            vim.api.nvim_win_set_cursor(0, { selection.lnum, 0 })
+          end
+        end,
+      }
+      return true
+    end,
+  }):find()
+end
+
 vim.keymap.set("n", "<leader>tp", function()
   translationPicker({ strict_value = true })
 end, bufopts)
 
 vim.keymap.set("n", "<leader>tP", function()
   translationPicker({ strict_value = false })
+end, bufopts)
+
+vim.keymap.set("n", "<leader>tt", function()
+  live_tags({})
+end, bufopts)
+vim.keymap.set("n", "<leader>tT", function()
+  builtin.tags({ default_text = vim.fn.expand("<cword>") })
 end, bufopts)

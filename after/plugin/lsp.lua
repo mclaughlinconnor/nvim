@@ -161,6 +161,9 @@ require("mason-lspconfig").setup_handlers({
         on_attach = on_attach,
         capabilities = lsp_status.capabilities,
         settings = {
+          completions = {
+            completeFunctionCalls = true
+          },
           typescript = {
             format = {
               insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
