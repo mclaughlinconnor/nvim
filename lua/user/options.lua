@@ -60,3 +60,12 @@ vim.keymap.set("n", "<esc>", "<cmd>noh<cr>", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
 vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
+
+vim.api.nvim_create_user_command("GenId", function()
+  vim.api.nvim_command("silent write")
+  vim.cmd(
+    [[silent !awk -i inplace '/---/{"xxd -l 12 -p /dev/urandom" | getline uuid; close("xxd -l 12 -p /dev/urandom"); gsub(/---/, uuid)};{print}' %]]
+  )
+end, {})
+
+vim.keymap.set("n", "<leader>vg", "<cmd>GenId<cr>", opts)
