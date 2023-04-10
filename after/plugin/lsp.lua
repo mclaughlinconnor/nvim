@@ -111,7 +111,12 @@ require("null-ls").setup({
     require("null-ls").builtins.diagnostics.stylelint,
     require("null-ls").builtins.diagnostics.todo_comments,
     require("null-ls").builtins.diagnostics.trail_space,
-    require("null-ls").builtins.diagnostics.tsc,
+    require("null-ls").builtins.diagnostics.tsc.with({
+      condition = function()
+        return false
+      end,
+      prefer_local = "node_modules/.bin",
+    }),
     require("null-ls").builtins.formatting.trim_whitespace,
     require("null-ls").builtins.diagnostics.yamllint.with({
       extra_args = {
@@ -127,6 +132,13 @@ require("null-ls").setup({
     require("typescript.extensions.null-ls.code-actions"),
   },
 })
+
+vim.api.nvim_create_user_command('DisableTsc', function()
+  require("null-ls").disable({"tsc"})
+end,{})
+vim.api.nvim_create_user_command('EnableTsc', function()
+  require("null-ls").enable({"tsc"})
+end,{})
 
 require("mason").setup()
 require("mason-lspconfig").setup()
