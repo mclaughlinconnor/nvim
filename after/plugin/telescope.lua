@@ -122,7 +122,7 @@ vim.keymap.set("n", "<leader>tt", builtin.tags, bufopts)
 vim.keymap.set("n", "<leader>tT", function()
   builtin.tags({ default_text = vim.fn.expand("<cword>") })
 end, bufopts)
-vim.keymap.set("n", "<leader>tC", builtin.current_buffer_tags, bufopts)
+vim.keymap.set("n", "<leader>tc", builtin.current_buffer_tags, bufopts)
 
 vim.keymap.set("n", "<leader>tq", builtin.quickfix, bufopts)
 vim.keymap.set("n", "<leader>tr", builtin.registers, bufopts)
