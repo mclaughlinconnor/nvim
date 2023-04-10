@@ -47,6 +47,15 @@ au TextYankPost * silent! lua vim.highlight.on_yank({higroup="IncSearch", timeou
 augroup END
 ]])
 
+local typeScriptIndentOnPaste = vim.api.nvim_create_augroup("TypeScriptIndentOnPaste", {})
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    vim.keymap.set("n", "p", "p`[v`]=", opts)
+  end,
+  group = typeScriptIndentOnPaste,
+  pattern = "*.ts",
+})
+
 vim.keymap.set("n", "<esc>", "<cmd>noh<cr>", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
