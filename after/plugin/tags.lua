@@ -1,3 +1,5 @@
+vim.g.gutentags_trace = 0
+
 vim.g.gutentags_add_default_project_roots = 0
 vim.g.gutentags_project_root = { "package.json", ".git" }
 
@@ -21,8 +23,11 @@ vim.g.gutentags_generate_on_empty_buffer = 0
 
 vim.g.gutentags_ctags_extra_args = {
   "--tag-relative=yes",
-  "--fields=+aiklmnS",
+  "--fields=*",
+  "--extras-all=*",
   "--options=" .. vim.fn.expand("<sfile>:h") .. "/../../options.ctags",
+  "--kinds-Typescript=Gacfgimnpz",
+  "--quiet=yes",
 }
 
 vim.g.gutentags_ctags_exclude = {
