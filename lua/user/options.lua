@@ -61,6 +61,9 @@ vim.keymap.set("n", "<esc>", "<cmd>noh<cr>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
 vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
 
+vim.keymap.set("n", "va'", "v2i'", opts)
+vim.keymap.set("n", 'va"', 'v2i"', opts)
+
 vim.api.nvim_create_user_command("GenId", function()
   vim.api.nvim_command("silent write")
   vim.cmd(
