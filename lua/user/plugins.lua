@@ -116,6 +116,8 @@ return packer.startup(function(use)
 
   use({ "lukas-reineke/indent-blankline.nvim", commit = "018bd04" })
 
+  use({ "folke/tokyonight.nvim", commit = "1b0c880" })
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
