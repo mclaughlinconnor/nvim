@@ -35,5 +35,5 @@ require("diffview").setup({
   },
 })
 
-vim.keymap.set("n", ",dv", "<cmd> DiffviewOpen <CR>", bufopts)
-vim.keymap.set("n", ",dV", "<cmd> DiffviewClose <CR>", bufopts)
+vim.keymap.set("n", "<leader>co", "<cmd> DiffviewOpen <CR>", bufopts)
+vim.keymap.set("n", "<leader>cO", "<cmd> DiffviewClose <CR>", bufopts)
