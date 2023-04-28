@@ -103,15 +103,15 @@ return packer.startup(function(use)
   use({ "lewis6991/impatient.nvim", commit = "9f7eed8" }) -- Maybe use gv.vim and vim-fugitive for Vim
   use({ "stevearc/dressing.nvim", commit = "4436d6f" })
 
-  use({ "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" }, commit = "e7c0549" })
+  use({ "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" }, commit = "03bd296" })
   use({
     "microsoft/vscode-js-debug",
+    commit = "52b31fc",
     opt = true,
-    run = "npm install --legacy-peer-deps && npm run compile",
-    tag = "v1.*",
+    run = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
   })
-  use({ "mfussenegger/nvim-dap", commit = "5a1479c", requires = { { "rcarriga/nvim-dap-ui", commit = "b80227e" } } })
-  use({ "theHamsta/nvim-dap-virtual-text", commit = "1913459" })
+  use({ "mfussenegger/nvim-dap", commit = "55e3a7f", requires = { { "rcarriga/nvim-dap-ui", commit = "286f682" } } })
+  use({ "theHamsta/nvim-dap-virtual-text", commit = "ab988db" })
   use({ "ton/vim-alternate", commit = "57a6d27" })
 
   use({ "lukas-reineke/indent-blankline.nvim", commit = "018bd04" })
