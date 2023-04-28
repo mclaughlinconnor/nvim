@@ -9,6 +9,14 @@ local widgets = require("dap.ui.widgets")
 local dapui = require("dapui")
 local dap = require("dap")
 
+local firefoxPath = vim.fn.stdpath("data") .. "/mason/packages/firefox-debug-adapter"
+
+dap.adapters.firefox = {
+  type = "executable",
+  command = "node",
+  args = { firefoxPath .. "/dist/adapter.bundle.js" },
+}
+
 require("dap-vscode-js").setup({
   adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" }, -- which adapters to register in nvim-dap
 })
@@ -16,32 +24,53 @@ require("dap-vscode-js").setup({
 for _, language in ipairs({ "typescript", "javascript" }) do
   dap.configurations[language] = {
     {
-      name = "Launch Chrome",
+      name = "Chrome",
       type = "pwa-chrome",
       request = "launch",
-      url = "http://localhost:4200/#",
+      url = "http://localhost:4200/",
       webRoot = "${workspaceFolder}",
     },
     {
-      name = "Attach Chrome",
-      type = "pwa-chrome",
-      request = "attach",
-      url = "http://localhost:4200/#",
+      keepProfileChanges = true,
+      name = "Firefox",
+      pathMappings = {
+        {
+          url = "webpack:///assets",
+          path = "${workspaceFolder}/assets",
+        },
+      },
+      profileDir = "/home/connorm/snap/firefox/common/.cache/mozilla/firefox/debug/", -- platform specific :(
+      request = "launch",
+      skipFiles = {
+        "<node_internals>/**",
+      },
+      timeout = 20,
+      tmpDir = firefoxPath .. "/temp",
+      type = "firefox",
+      url = "http://localhost:4200/",
       webRoot = "${workspaceFolder}",
     },
     {
-      type = "pwa-node",
+      continueOnAttach = true,
+      cwd = "${workspaceFolder}",
+      name = "Server",
+      outputCapture = "std",
+      port = 9229,
       request = "launch",
-      name = "Launch file",
-      program = "${file}",
-      cwd = "${workspaceFolder}",
-    },
-    {
+      resolveSourceMapLocations = {
+        "${workspaceFolder}/**",
+        "!**/node_modules/**",
+      },
+      runtimeArgs = {
+        "run-script",
+        "debug",
+      },
+      runtimeExecutable = "npm",
+      skipFiles = {
+        "<node_internals>/**",
+      },
+      smartStep = true,
       type = "pwa-node",
-      request = "attach",
-      name = "Attach",
-      processId = require("dap.utils").pick_process,
-      cwd = "${workspaceFolder}",
     },
   }
 end
