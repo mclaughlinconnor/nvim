@@ -47,16 +47,27 @@ au TextYankPost * silent! lua vim.highlight.on_yank({higroup="IncSearch", timeou
 augroup END
 ]])
 
+local opts = { noremap = true, silent = true }
+
 local typeScriptIndentOnPaste = vim.api.nvim_create_augroup("TypeScriptIndentOnPaste", {})
-vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   callback = function()
-    vim.api.nvim_buf_set_keymap(0, "n", "p", "p`[v`]=", { noremap = true, silent = true })
+    vim.api.nvim_buf_set_keymap(0, "n", "p", "p`[v`]=", opts)
   end,
   group = typeScriptIndentOnPaste,
   pattern = "*.ts",
 })
 
-vim.keymap.set("n", "<esc>", "<cmd>noh<cr>", { noremap = true, silent = true })
+vim.keymap.set("n", "<esc>", "<cmd>noh<cr>", opts)
+
+vim.keymap.set("n", "n", "nzz", opts)
+vim.keymap.set("n", "N", "Nzz", opts)
+vim.keymap.set("n", "*", "*zz", opts)
+vim.keymap.set("n", "#", "#zz", opts)
+vim.keymap.set("n", "*", "*zz", opts)
+vim.keymap.set("n", "#", "#zz", opts)
+
+vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
 
 vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
 vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
