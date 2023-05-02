@@ -147,3 +147,19 @@ cmp.setup.cmdline(":", {
   }),
   sources = cmp.config.sources({ { name = "cmdline" } }, { { name = "path" } }),
 })
+
+local jsonDisableTS = vim.api.nvim_create_augroup("JsonDisableTS", {})
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  callback = function()
+    local sources = cmp.get_config().sources
+    for i = #sources, 1, -1 do
+      if sources[i].name == "treesitter" then
+        table.remove(sources, i)
+        break
+      end
+    end
+    cmp.setup.buffer({ sources = sources })
+  end,
+  group = jsonDisableTS,
+  pattern = "*.json",
+})
