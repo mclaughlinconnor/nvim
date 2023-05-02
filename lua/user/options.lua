@@ -48,7 +48,7 @@ augroup END
 ]])
 
 local typeScriptIndentOnPaste = vim.api.nvim_create_augroup("TypeScriptIndentOnPaste", {})
-vim.api.nvim_create_autocmd("BufEnter", {
+vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
   callback = function()
     vim.api.nvim_buf_set_keymap(0, "n", "p", "p`[v`]=", { noremap = true, silent = true })
   end,
