@@ -155,10 +155,8 @@ local translationPicker = function(opts)
 
             local prompt_filter = prompt
             if opts.strict_value then
-              -- prompt_filter = ":.*" .. prompt_filter
-              prompt_filter = ":.*key"
+              prompt_filter = ":.*" .. prompt_filter
             end
-            print(prompt_filter)
 
             Job:new({
               command = "rg",
@@ -166,11 +164,8 @@ local translationPicker = function(opts)
               args = { "-i", "--color", "never", "--type", "yaml", "--no-heading", prompt_filter },
               on_stdout = function(_, line)
                 local split = splitByColon(line)
-                print(line)
-                local key = split[2]
-                local value = split[3]
-                table.insert(yml_keys, key)
-                table.insert(yml_values, value)
+                table.insert(yml_keys, split[2])
+                table.insert(yml_values, split[3])
               end,
             }):sync()
 
@@ -180,25 +175,8 @@ local translationPicker = function(opts)
 
             local translation_values = {}
 
-
             for i, key in ipairs(yml_keys) do
-          print(vim.inspect(
-
-                    {
-                      "-i",
-                      "--color",
-                      "never",
-                      "-g",
-                      "*.pug",
-                      "--no-heading",
-                      "--line-number",
-                      "--column",
-                      "--case-sensitive",
-                      -- "\\b" .. key .. "\\b",
-                      [[(('|")]].. key ..[[(('|")|\|tr))]],
-                    }
-          ))
-            Job
+              Job
                   :new({
                     command = "rg",
                     interactive = false,
@@ -212,8 +190,9 @@ local translationPicker = function(opts)
                       "--line-number",
                       "--column",
                       "--case-sensitive",
-                      -- "\\b" .. key .. "\\b",
-                      [[(('|")]].. key ..[[(('|")|\|tr))]],
+                      [[(('|")]]
+                      .. key
+                      .. [[(('|")|\|tr))]],
                     },
                     on_stdout = function(_, line)
                       local split = splitByColon(line)
@@ -232,7 +211,7 @@ local translationPicker = function(opts)
             return translation_values or {}
           end,
           entry_maker = function(entry)
-            local display = vim.fn.fnamemodify(entry.path, ':t')
+            local display = vim.fn.fnamemodify(entry.path, ":t")
                 .. ":"
                 .. entry.line
                 .. ":"
@@ -321,8 +300,9 @@ vim.keymap.set("n", "<leader>tP", function()
 end, bufopts)
 
 vim.keymap.set("n", "<leader>tt", function()
-  live_tags({})
+  builtin.tags({})
 end, bufopts)
+
 vim.keymap.set("n", "<leader>tT", function()
   builtin.tags({ default_text = vim.fn.expand("<cword>") })
 end, bufopts)
