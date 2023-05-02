@@ -118,6 +118,15 @@ return packer.startup(function(use)
 
   use({ "folke/tokyonight.nvim", commit = "1b0c880" })
 
+  use({
+    "nvim-neotest/neotest",
+    requires = {
+      { "mclaughlinconnor/neotest-mocha",             commit = "deefd41" },
+      { "jbyuki/one-small-step-for-vimkind", commit = "27e5f59" },
+    },
+    commit = "972a7dc",
+  })
+
   use({ "folke/neodev.nvim", commit = "7e3f718" })
 
   -- Automatically set up your configuration after cloning packer.nvim
