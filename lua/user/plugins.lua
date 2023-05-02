@@ -118,6 +118,8 @@ return packer.startup(function(use)
 
   use({ "folke/tokyonight.nvim", commit = "1b0c880" })
 
+  use({ "folke/neodev.nvim", commit = "7e3f718" })
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then

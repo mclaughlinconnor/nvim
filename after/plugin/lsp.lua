@@ -1,3 +1,7 @@
+require("neodev").setup({
+  library = { plugins = { "nvim-dap-ui" }, types = true },
+})
+
 local lsp_status = require("lsp-status")
 local telescope = require("telescope.builtin")
 lsp_status.register_progress()
@@ -196,42 +200,10 @@ require("mason-lspconfig").setup_handlers({
       on_attach = on_attach,
       settings = {
         Lua = {
-          -- Setup tailored for lua in neovim
+          completion = { callSnippet = "Replace" },
           runtime = { version = "LuaJIT" },
-          diagnostics = {
-            globals = {
-              "vim",
-              "s",
-              "sn",
-              "t",
-              "i",
-              "f",
-              "c",
-              "d",
-              "isn",
-              "l",
-              "dl",
-              "rep",
-              "r",
-              "p",
-              "types",
-              "events",
-              "util",
-              "fmt",
-              "fmta",
-              "ls",
-              "ins_generate",
-              "parse",
-              "n",
-              "m",
-              "ai",
-              "visual_wrap",
-              "multiline_visual_wrap",
-              "postfix",
-            },
-          },
-          workspace = { library = vim.api.nvim_get_runtime_file("", true), checkThirdParty = false },
           telemetry = { enable = false },
+          workspace = { library = vim.api.nvim_get_runtime_file("", true), checkThirdParty = false },
         },
       },
     })
