@@ -18,8 +18,8 @@ local on_attach = function(client, bufnr)
   lsp_status.on_attach(client)
 
   if client.name == "tsserver" then
-		client.server_capabilities.document_formatting = false
-	end
+    client.server_capabilities.document_formatting = false
+  end
 
   -- lsp specific mappings
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -50,11 +50,11 @@ mason.setup({})
 -- Ref: https://github.com/williamboman/mason.nvim/blob/4f5de77fab742ab2ca5512e7f3c9881cacdaf8eb/lua/nvim-lsp-installer/servers/angularls/init.lua
 
 local function get_npm_root()
-  return vim.fn.system('npm root'):gsub("\n", "")
+  return vim.fn.system("npm root"):gsub("\n", "")
 end
 
 local function get_npm_global_root()
-  return vim.fn.system('npm root -g'):gsub("\n", "")
+  return vim.fn.system("npm root -g"):gsub("\n", "")
 end
 
 local function append_node_modules(dir)
@@ -62,8 +62,11 @@ local function append_node_modules(dir)
 end
 
 local function angularls_config(workspace_dir)
-  local root_dir = vim.loop.fs_realpath('.')
-  local locations = table.concat({ get_npm_global_root(), get_npm_root(), append_node_modules(root_dir), append_node_modules(workspace_dir)}, ",")
+  local root_dir = vim.loop.fs_realpath(".")
+  local locations = table.concat(
+    { get_npm_global_root(), get_npm_root(), append_node_modules(root_dir), append_node_modules(workspace_dir) },
+    ","
+  )
   -- local locations = table.concat({ get_npm_global_root(), get_npm_root(), append_node_modules(root_dir), append_node_modules(workspace_dir)}, " ")
 
   return {
@@ -82,7 +85,7 @@ require("lspconfig").angularls.setup({
   filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "pug" },
   cmd = angularls_config(vim.loop.fs_realpath(".")),
   on_new_config = function(new_config, new_root_dir)
-      new_config.cmd = angularls_config(new_root_dir)
+    new_config.cmd = angularls_config(new_root_dir)
   end,
 })
 
@@ -137,12 +140,12 @@ require("null-ls").setup({
   },
 })
 
-vim.api.nvim_create_user_command('DisableTsc', function()
-  require("null-ls").disable({"tsc"})
-end,{})
-vim.api.nvim_create_user_command('EnableTsc', function()
-  require("null-ls").enable({"tsc"})
-end,{})
+vim.api.nvim_create_user_command("DisableTsc", function()
+  require("null-ls").disable({ "tsc" })
+end, {})
+vim.api.nvim_create_user_command("EnableTsc", function()
+  require("null-ls").enable({ "tsc" })
+end, {})
 
 require("mason").setup()
 require("mason-lspconfig").setup()
@@ -178,7 +181,7 @@ require("mason-lspconfig").setup_handlers({
         capabilities = lsp_status.capabilities,
         settings = {
           completions = {
-            completeFunctionCalls = true
+            completeFunctionCalls = true,
           },
           typescript = {
             format = {
