@@ -23,6 +23,10 @@ let g:vimtex_compiler_latexmk = {
     \   '-interaction=nonstopmode' ,
     \ ],
     \}
+let g:vimtex_grammar_textidote = {
+    \ 'jar': '/usr/share/java/textidote.jar',
+    \ 'args': '',
+    \}
 
 function! LatexSurround()
     let b:surround_{char2nr("e")}
