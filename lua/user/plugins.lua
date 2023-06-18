@@ -105,6 +105,7 @@ return packer.startup(function(use)
   use({ "doxnit/cmp-luasnip-choice", commit = "97a3678" })
   use({ "amarakon/nvim-cmp-buffer-lines", commit = "2036e6f" })
   use({ "rcarriga/cmp-dap", commit = "d16f14a" })
+  use({ "hrsh7th/cmp-omni", commit = "8457e41" })
 
   -- Plugin management
   use({ "williamboman/mason.nvim", commit = "057ac5c" })

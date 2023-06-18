@@ -39,6 +39,7 @@ cmp.setup({
         luasnip_choice = "[LSC]",
         nvim_lsp = "[LSP]",
         nvim_lua = "[L]",
+        omni = (vim.inspect(vim_item.menu):gsub('%"', "")),
         path = "[P]",
         treesitter = "[TS]",
         spell = "[S]",
