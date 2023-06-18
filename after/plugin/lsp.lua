@@ -67,7 +67,6 @@ local function angularls_config(workspace_dir)
     { get_npm_global_root(), get_npm_root(), append_node_modules(root_dir), append_node_modules(workspace_dir) },
     ","
   )
-  -- local locations = table.concat({ get_npm_global_root(), get_npm_root(), append_node_modules(root_dir), append_node_modules(workspace_dir)}, " ")
 
   return {
     "ngserverPUG",
@@ -112,40 +111,17 @@ require("null-ls").setup({
     require("null-ls").builtins.formatting.eslint_d,
     require("null-ls").builtins.formatting.fixjson,
     require("null-ls").builtins.diagnostics.luacheck,
-    require("null-ls").builtins.diagnostics.proselint,
-    require("null-ls").builtins.diagnostics.puglint,
     require("null-ls").builtins.diagnostics.shellcheck,
     require("null-ls").builtins.diagnostics.stylelint,
     require("null-ls").builtins.diagnostics.todo_comments,
     require("null-ls").builtins.diagnostics.trail_space,
-    require("null-ls").builtins.diagnostics.tsc.with({
-      condition = function()
-        return false
-      end,
-      prefer_local = "node_modules/.bin",
-    }),
     require("null-ls").builtins.formatting.trim_whitespace,
-    require("null-ls").builtins.diagnostics.yamllint.with({
-      extra_args = {
-        -- we don't need --- at document start
-        "-d",
-        "{rules: {line-length: disable, document-start: disable}}",
-      },
-    }),
-    -- require("null-ls").builtins.formatting.yamlfmt,
     require("null-ls").builtins.formatting.stylua.with({
       extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
     }),
     require("typescript.extensions.null-ls.code-actions"),
   },
 })
-
-vim.api.nvim_create_user_command("DisableTsc", function()
-  require("null-ls").disable({ "tsc" })
-end, {})
-vim.api.nvim_create_user_command("EnableTsc", function()
-  require("null-ls").enable({ "tsc" })
-end, {})
 
 require("mason").setup()
 require("mason-lspconfig").setup()
@@ -184,6 +160,22 @@ require("mason-lspconfig").setup_handlers({
             completeFunctionCalls = true,
           },
           typescript = {
+            tsserver = {
+              experimental = {
+                enableProjectDiagnostics = true,
+                completion = {
+                  enableServerSideFuzzyMatch = true,
+                  entriesLimit = 50,
+                },
+              },
+            },
+            experimental = {
+              enableProjectDiagnostics = true,
+              completion = {
+                enableServerSideFuzzyMatch = true,
+                entriesLimit = 50,
+              },
+            },
             format = {
               insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
             },
@@ -192,6 +184,7 @@ require("mason-lspconfig").setup_handlers({
         init_options = {
           preferences = {
             importModuleSpecifierPreference = "relative",
+            includePackageJsonAutoImports = "off,"
           },
         },
       },
