@@ -5,6 +5,12 @@ return {
     end, {}),
   }),
 
+  postfix(".pp", {
+    f(function(_, parent)
+      return "console.log(JSON.stringify(" .. parent.snippet.env.POSTFIX_MATCH .. ", null, 2);"
+    end, {}),
+  }),
+
   postfix(".await", {
     f(function(_, parent)
       return "await " .. parent.snippet.env.POSTFIX_MATCH
