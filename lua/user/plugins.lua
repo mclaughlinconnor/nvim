@@ -140,15 +140,9 @@ return packer.startup(function(use)
 
   -- Telescope
   use({ "stevearc/dressing.nvim", commit = "4436d6f" })
-  use({ "nvim-telescope/telescope.nvim", commit = "2584ff3" })
   use({
-    "nvim-telescope/telescope-fzf-native.nvim",
-    commit = "65c0ee3",
-    run = [[
-      cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release \
-        && cmake --build build --config Release \
-        && cmake --install build --prefix build
-    ]],
+    "ibhagwan/fzf-lua",
+    commit = "b587997",
   })
 
   -- Makes it go fast

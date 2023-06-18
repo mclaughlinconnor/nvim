@@ -1,308 +1,162 @@
-local Job = require("plenary.job")
-local actions = require("telescope.actions")
-local actions_layout = require("telescope.actions.layout")
-local builtin = require("telescope.builtin")
-local conf = require("telescope.config").values
-local finders = require("telescope.finders")
-local pickers = require("telescope.pickers")
-local telescope = require("telescope")
-
-local splitByColon = function(str)
-  local results = {}
-
-  for word in str:gmatch("[^:]+") do
-    local stripped = string.gsub(word, "^%s*(.-)%s*$", "%1")
-    table.insert(results, stripped)
-  end
-
-  return results
-end
+local fzf = require("fzf-lua")
+local actions = require("fzf-lua.actions")
 
 local project_files = function(default_text)
-  local opts = { default_text = default_text }
-  local ok = pcall(builtin.git_files, opts)
+  local opts = { search = default_text }
+  local ok = pcall(fzf.git_files, opts)
   if not ok then
-    builtin.find_files(opts)
+    fzf.files(opts)
   end
 end
 
-telescope.setup({
-  defaults = {
-    layout_strategy = "flex",
-    layout_config = {
-      horizontal = {
-        width = 0.95,
-        height = 0.95,
-        preview_width = 0.4,
-      },
-      vertical = {
-        width = 0.95,
-        height = 0.95,
-        preview_height = 0.4,
-      },
-    },
-    -- Default configuration for telescope goes here:
-    -- config_key = value,
-    path_display = { "smart" },
-    mappings = {
-      n = {
-        ["<M-j>"] = actions.move_selection_next,
-        ["<M-k>"] = actions.move_selection_previous,
-        ["<C-k>"] = actions.preview_scrolling_up,
-        ["<C-j>"] = actions.preview_scrolling_down,
-        ["<M-/>"] = actions.which_key,
-        ["<M-o>"] = actions.cycle_history_next,
-        ["<M-i>"] = actions.cycle_history_prev,
-        ["q"] = actions.close,
-        ["p"] = actions.close,
-        ["<M-;>"] = actions_layout.toggle_preview,
-        ["<M-m>"] = actions.cycle_previewers_next,
-        ["<M-n>"] = actions.cycle_previewers_prev,
-        ["<M-q>"] = actions.smart_add_to_qflist + actions.open_qflist,
-      },
-      i = {
-        ["<M-j>"] = actions.move_selection_next,
-        ["<M-k>"] = actions.move_selection_previous,
-        ["<C-k>"] = actions.preview_scrolling_up,
-        ["<C-j>"] = actions.preview_scrolling_down,
-        ["<M-/>"] = actions.which_key,
-        ["<M-i>"] = actions.cycle_history_next,
-        ["<M-u>"] = actions.cycle_history_prev,
-        ["<Esc>"] = actions.close,
-        ["<M-;>"] = actions_layout.toggle_preview,
-        ["<M-m>"] = actions.cycle_previewers_next,
-        ["<M-n>"] = actions.cycle_previewers_prev,
-        ["<M-q>"] = actions.smart_add_to_qflist + actions.open_qflist,
-      },
-    },
-  },
-  pickers = {
-    -- Default configuration for builtin pickers goes here:
-    -- picker_name = {
-    --   picker_config_key = value,
-    --   ...
-    -- }
-    -- Now the picker_config_key will be applied every time you call this
-    -- builtin picker
-    git_files = {
-      show_untracked = true,
-    },
-    buffers = {
-      sort_mru = true,
-      ignore_current_buffer = true,
-      mappings = {
-        i = {
-          ["<M-d>"] = actions.delete_buffer,
-        },
-      },
-    },
-  },
-})
-
-telescope.load_extension("fzf")
--- TODO: add nvim-telescope/telescope-symbols.nvim source for work icons
-
 local bufopts = { noremap = true, silent = true }
-vim.keymap.set("n", "<leader>b", builtin.buffers, bufopts)
-vim.keymap.set("n", "<leader>B", builtin.oldfiles, bufopts)
+vim.keymap.set("n", "<leader>b", fzf.files, bufopts)
+vim.keymap.set("n", "<leader>B", fzf.oldfiles, bufopts)
 
 vim.keymap.set("n", "<leader>f", project_files, bufopts)
 vim.keymap.set("n", "<leader>F", function()
   project_files(vim.fn.expand("<cword>"))
 end, bufopts)
 
-vim.keymap.set("n", "<leader>tj", builtin.resume, bufopts)
+vim.keymap.set("n", "<leader>tj", fzf.resume, bufopts)
 
-vim.keymap.set("n", "<leader>g", builtin.live_grep, bufopts)
+vim.keymap.set("n", "<leader>g", fzf.live_grep_native, bufopts)
 vim.keymap.set("n", "<leader>G", function()
-  builtin.live_grep({ default_text = vim.fn.expand("<cword>") })
+  fzf.live_grep_native({ search = vim.fn.expand("<cword>") })
 end, bufopts)
-vim.keymap.set("n", "<leader>tg", builtin.current_buffer_fuzzy_find, bufopts)
-vim.keymap.set("n", "<leader>tc", builtin.current_buffer_tags, bufopts)
+vim.keymap.set("n", "<leader>tg", fzf.lines, bufopts)
+vim.keymap.set("n", "<leader>tt", fzf.tags_live_grep, bufopts)
+vim.keymap.set("n", "<leader>tT", function()
+  fzf.tags_live_grep({ search = vim.fn.expand("<cword>") })
+end, bufopts)
+vim.keymap.set("n", "<leader>tC", fzf.btags, bufopts)
 
-vim.keymap.set("n", "<leader>tq", builtin.quickfix, bufopts)
-vim.keymap.set("n", "<leader>tr", builtin.registers, bufopts)
-vim.keymap.set("n", "<leader>ts", builtin.spell_suggest, bufopts)
+vim.keymap.set("n", "<leader>tq", fzf.quickfix, bufopts)
+vim.keymap.set("n", "<leader>tr", fzf.registers, bufopts)
+vim.keymap.set("n", "<leader>ts", fzf.spell_suggest, bufopts)
 
-vim.keymap.set("n", "<leader>loc", builtin.git_commits, bufopts)
-vim.keymap.set("n", "<leader>lod", builtin.git_bcommits, bufopts)
-vim.keymap.set("n", "<leader>lob", builtin.git_branches, bufopts)
-vim.keymap.set("n", "<leader>lot", builtin.git_stash, bufopts)
+vim.keymap.set("n", "<leader>th", fzf.help_tags, bufopts)
 
-vim.keymap.set("n", "<leader>dg", builtin.diagnostics, bufopts) -- gives diagnostics for whole workspace
-vim.keymap.set("n", "<leader>te", builtin.treesitter, bufopts)
+vim.keymap.set("n", "<leader>loc", fzf.git_commits, bufopts)
+vim.keymap.set("n", "<leader>lod", fzf.git_bcommits, bufopts)
+vim.keymap.set("n", "<leader>lob", fzf.git_branches, bufopts)
+vim.keymap.set("n", "<leader>lot", fzf.git_stash, bufopts)
 
-vim.keymap.set("n", "<leader>lii", builtin.lsp_incoming_calls, bufopts) -- no typescript/angular
-vim.keymap.set("n", "<leader>lio", builtin.lsp_outgoing_calls, bufopts) -- no typescript/angular
-vim.keymap.set("n", "<leader>lyl", builtin.lsp_document_symbols, bufopts) -- no typescipt/angular
+vim.keymap.set("n", "<leader>dg", fzf.diagnostics_workspace, bufopts)
+
+vim.keymap.set("n", "<leader>lii", fzf.lsp_incoming_calls, bufopts) -- no typescript/angular
+vim.keymap.set("n", "<leader>lio", fzf.lsp_outgoing_calls, bufopts) -- no typescript/angular
+vim.keymap.set("n", "<leader>lyl", fzf.lsp_finder, bufopts) -- no typescipt/angular
 
 vim.keymap.set("i", "<M-p>", function()
   vim.cmd("stopinsert")
 end, bufopts)
 
-local translationPicker = function(opts)
-  pickers
-      .new(opts, {
-        prompt_title = "Translation Grep",
-        finder = finders.new_dynamic({
-          fn = function(prompt)
-            if not prompt or #prompt < 5 then
-              return {}
-            end
-
-            local yml_keys = {}
-            local yml_values = {}
-
-            local prompt_filter = prompt
-            if opts.strict_value then
-              prompt_filter = ":.*" .. prompt_filter
-            end
-
-            Job:new({
-              command = "rg",
-              interactive = false,
-              args = { "-i", "--color", "never", "--type", "yaml", "--no-heading", prompt_filter },
-              on_stdout = function(_, line)
-                local split = splitByColon(line)
-                table.insert(yml_keys, split[2])
-                table.insert(yml_values, split[3])
-              end,
-            }):sync()
-
-            if #yml_keys == 0 then
-              return {}
-            end
-
-            local translation_values = {}
-
-            for i, key in ipairs(yml_keys) do
-              Job
-                  :new({
-                    command = "rg",
-                    interactive = false,
-                    args = {
-                      "-i",
-                      "--color",
-                      "never",
-                      "-g",
-                      "*.pug",
-                      "--no-heading",
-                      "--line-number",
-                      "--column",
-                      "--case-sensitive",
-                      [[(('|")]]
-                      .. key
-                      .. [[(('|")|\|tr))]],
-                    },
-                    on_stdout = function(_, line)
-                      local split = splitByColon(line)
-                      local path = split[1] or "none"
-                      local line_number = split[2] or "none"
-                      local column_number = split[3] or "none"
-                      table.insert(
-                        translation_values,
-                        { key = key, translation = yml_values[i], path = path, line = line_number, column = column_number }
-                      )
-                    end,
-                  })
-                  :sync()
-            end
-
-            return translation_values or {}
-          end,
-          entry_maker = function(entry)
-            local display = vim.fn.fnamemodify(entry.path, ":t")
-                .. ":"
-                .. entry.line
-                .. ":"
-                .. entry.column
-                .. ":"
-                .. entry.key
-                .. ":"
-                .. entry.translation
-            return {
-              value = entry.key,
-              display = display,
-              ordinal = display,
-              filename = entry.path,
-              lnum = tonumber(entry.line),
-              col = tonumber(entry.column),
-            }
-          end,
-        }),
-        previewer = conf.qflist_previewer(opts),
-        sorter = conf.generic_sorter(opts),
-        attach_mappings = function(_, map)
-          map("i", "<c-space>", actions.to_fuzzy_refine)
-          return true
-        end,
-      })
-      :find()
+local translationPicker = function()
+  require("fzf-lua").fzf_live(function(query)
+    local cmd_string =
+      [[rg -i --color never --type yaml "(\w+)(:.*<query>.*)" --no-heading --no-filename --no-line-number --replace '$1' --null | parallel --colsep '\0' rg {} --color never --no-heading --line-number --column -g "\*.pug" ./]]
+    return (cmd_string):gsub("<query>", query)
+  end, { previewer = "builtin" })
 end
 
-local live_tags = function(opts)
-  local tag_grep_command = { "rg", "--color=never", "--no-heading", "--smart-case" }
-  opts.bufnr = 0 -- TODO: dirty hack to leverage make_entry.gen_from_ctags()
+vim.keymap.set("n", "<leader>tp", translationPicker, bufopts)
 
-  local tagfiles = opts.ctags_file and { opts.ctags_file } or vim.fn.tagfiles()
-  if vim.tbl_isempty(tagfiles) then
-    utils.notify("builtin.tags", {
-      msg = "No tags file found. Create one with ctags -R",
-      level = "ERROR",
-    })
-    return
-  end
+require("fzf-lua").setup({
+  "default",
+  winopts = {
+    preview = {
+      delay = 50,
+    },
+    height = 0.95,
+    width = 0.97,
+    row = 0.2,
+    on_create = function()
+      vim.keymap.set("t", "<M-S-j>", function()
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<M-Down>", true, false, true), "n", true)
+      end, { nowait = true, buffer = true })
+      vim.keymap.set("t", "<M-S-k>", function()
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<M-Up>", true, false, true), "n", true)
+      end, { nowait = true, buffer = true })
 
-  local live_grepper = finders.new_job(function(prompt)
-    if not prompt or prompt == "" then
-      return nil
-    end
-    return vim.tbl_flatten { tag_grep_command, "--", prompt, tagfiles }
-  end, opts.entry_maker or make_entry.gen_from_ctags(opts), opts.max_results, opts.cwd)
-
-  pickers.new(opts, {
-    prompt_title = "Live Tags",
-    finder = live_grepper,
-    previewer = previewers.ctags.new(opts),
-    sorter = sorters.highlighter_only(opts),
-    attach_mappings = function()
-      action_set.select:enhance {
-        post = function()
-          local selection = action_state.get_selected_entry()
-
-          if selection.scode then
-            -- un-escape / then escape required
-            -- special chars for vim.fn.search()
-            -- ] ~ *
-            local scode = selection.scode:gsub([[\/]], "/"):gsub("[%]~*]", function(x)
-              return "\\" .. x
-            end)
-
-            vim.cmd "norm! gg"
-            vim.fn.search(scode)
-            vim.cmd "norm! zz"
-          else
-            vim.api.nvim_win_set_cursor(0, { selection.lnum, 0 })
-          end
-        end,
-      }
-      return true
+      vim.keymap.set("t", "<M-p>", function()
+        vim.cmd("stopinsert")
+      end, { nowait = true, buffer = true })
     end,
-  }):find()
-end
+  },
+  keymap = {
+    builtin = {
+      ["<M-h>"] = "toggle-help",
+      ["<M-z>"] = "toggle-fullscreen",
 
-vim.keymap.set("n", "<leader>tp", function()
-  translationPicker({ strict_value = true })
-end, bufopts)
+      ["<M-'>"] = "toggle-preview-wrap",
+      ["<M-;>"] = "toggle-preview",
 
-vim.keymap.set("n", "<leader>tP", function()
-  translationPicker({ strict_value = false })
-end, bufopts)
+      ["<C-j>"] = "preview-page-down",
+      ["<C-k>"] = "preview-page-up",
+      ["<C-l>"] = "preview-page-reset",
+    },
+    fzf = {
+      ["ctrl-z"] = "abort",
+      ["ctrl-u"] = "unix-line-discard",
 
-vim.keymap.set("n", "<leader>tt", function()
-  builtin.tags({})
-end, bufopts)
+      ["ctrl-a"] = "beginning-of-line",
+      ["ctrl-e"] = "end-of-line",
+      ["alt-a"] = "toggle-all",
 
-vim.keymap.set("n", "<leader>tT", function()
-  builtin.tags({ default_text = vim.fn.expand("<cword>") })
-end, bufopts)
+      ["alt-'"] = "toggle-preview-wrap",
+      ["alt-;"] = "toggle-preview",
+
+      ["ctrl-j"] = "preview-half-page-down",
+      ["ctrl-k"] = "preview-half-page-up",
+
+      ["alt-down"] = "half-page-down",
+      ["alt-up"] = "half-page-up",
+
+      ["alt-j"] = "down",
+      ["alt-k"] = "up",
+
+      ["alt-i"] = "next-history",
+      ["alt-u"] = "previous-history",
+    },
+  },
+  actions = {
+    files = {
+      -- providers that inherit these actions:
+      --   files, git_files, git_status, grep, lsp
+      --   oldfiles, quickfix, loclist, tags, btags
+      --   args
+      ["default"] = actions.file_edit_or_qf,
+      ["alt-s"] = actions.file_split,
+      ["alt-v"] = actions.file_vsplit,
+      ["alt-t"] = actions.file_tabedit,
+      ["alt-q"] = actions.file_sel_to_qf,
+      ["alt-l"] = actions.file_sel_to_ll,
+    },
+    buffers = {
+      -- providers that inherit these actions:
+      --   buffers, tabs, lines, blines
+      ["default"] = actions.buf_edit,
+      ["alt-s"] = actions.buf_split,
+      ["alt-v"] = actions.buf_vsplit,
+      ["alt-t"] = actions.buf_tabedit,
+    },
+  },
+
+  global_git_icons = false,
+  global_file_icons = false,
+
+  manpages = { previewer = "man_native" },
+  helptags = { previewer = "help_native" },
+  files = {
+    fzf_opts = {
+      ["--ansi"] = false,
+      ["--history"] = vim.fn.stdpath("data") .. "/fzf-lua-files-history",
+    },
+  },
+  grep = {
+    fzf_opts = {
+      ["--history"] = vim.fn.stdpath("data") .. "/fzf-lua-grep-history",
+    },
+  },
+})

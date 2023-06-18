@@ -3,7 +3,7 @@ require("neodev").setup({
 })
 
 local lsp_status = require("lsp-status")
-local telescope = require("telescope.builtin")
+local fzf = require("fzf-lua")
 lsp_status.register_progress()
 
 -- these are not lsp specific mappings
@@ -26,18 +26,18 @@ local on_attach = function(client, bufnr)
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
   vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
-  vim.keymap.set("n", "gli", telescope.lsp_implementations, bufopts)
+  vim.keymap.set("n", "gli", fzf.lsp_implementations, bufopts)
   vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, bufopts)
   vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
   vim.keymap.set("n", "<space>wl", function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, bufopts)
-  vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, bufopts)
+  vim.keymap.set("n", "<space>D", fzf.lsp_typedefs, bufopts)
   vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
-  vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set("n", "gr", telescope.lsp_references, bufopts)
-  vim.keymap.set("n", "g0", vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set("n", "<space>ca", fzf.lsp_code_actions, bufopts)
+  vim.keymap.set("n", "gr", fzf.lsp_references, bufopts)
+  vim.keymap.set("n", "g0", fzf.lsp_code_actions, bufopts)
   vim.keymap.set("n", "<space>f", function()
     vim.lsp.buf.format({ async = true })
   end, bufopts)
@@ -197,6 +197,10 @@ require("mason-lspconfig").setup_handlers({
       settings = {
         Lua = {
           completion = { callSnippet = "Replace" },
+          format = {
+            enable = false,
+          },
+          -- Setup tailored for lua in neovim
           runtime = { version = "LuaJIT" },
           telemetry = { enable = false },
           workspace = { library = vim.api.nvim_get_runtime_file("", true), checkThirdParty = false },
