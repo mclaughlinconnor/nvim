@@ -51,6 +51,7 @@ local typeScriptIndentOnPaste = vim.api.nvim_create_augroup("TypeScriptIndentOnP
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   callback = function()
     vim.api.nvim_buf_set_keymap(0, "n", "p", "p`[v`]=", opts)
+    vim.api.nvim_buf_set_keymap(0, "n", "P", "P`[v`]=", opts)
   end,
   group = typeScriptIndentOnPaste,
   pattern = "*.ts",
