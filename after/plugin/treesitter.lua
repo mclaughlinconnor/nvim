@@ -27,7 +27,7 @@ configs.setup({
       end
 
       -- Disable for large files
-      return vim.api.nvim_buf_line_count(bufnr) > 2000
+      return vim.fn.getfsize(vim.fn.expand("%")) > 10 * 1024 -- 10 kilobytes
     end,
   },
   autopairs = {
@@ -134,3 +134,11 @@ vim.keymap.set("n", "<leader>a", "<CMD>:ISwapNodeWithRight<CR>", { noremap = tru
 vim.keymap.set("n", "<leader>A", "<CMD>:ISwapNodeWithLeft<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>sa", "<CMD>:ISwapNodeWith<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>sA", "<CMD>:ISwap<CR>", { noremap = true, silent = true })
+
+-- local bigFile = vim.api.nvim_create_augroup("BigFile", {})
+-- vim.api.nvim_create_autocmd({ "BufReadPre","FileReadPre" }, {
+--   callback = function()
+--     if vim.fn.getfsize(vim.fn.expand("%")) > 512 * 1024 then end
+--   end,
+--   group = bigFile,
+-- })
