@@ -13,6 +13,11 @@ cmp.setup({
   completion = {
     keyword_length = 0,
   },
+  performance = {
+    debounce = 300,
+    -- throttle = 200,
+    fetching_timeout = 500,
+  },
   window = {
     completion = cmp.config.window.bordered(),
     documentation = cmp.config.window.bordered(),
