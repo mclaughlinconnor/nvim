@@ -37,3 +37,15 @@ require("diffview").setup({
 
 vim.keymap.set("n", "<leader>co", "<cmd> DiffviewOpen <CR>", bufopts)
 vim.keymap.set("n", "<leader>cO", "<cmd> DiffviewClose <CR>", bufopts)
+
+-- Weird darker theme, "inline" popups
+-- buffer_history_preview
+-- buffer_blame_preview
+-- require("vgit").setup()
+
+-- I just don't like this one
+-- the docs are awful which, for such a complex plugin, is unacceptable.
+-- Try vimagit
+require("neogit").setup({})
+
+vim.o.diffopt = "internal,filler,closeoff,icase,iblank,iwhite,algorithm:histogram"
