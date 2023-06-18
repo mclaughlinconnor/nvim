@@ -9,7 +9,7 @@ require("gitsigns").setup({
   },
 })
 
-vim.g.lazygit_floating_window_scaling_factor = 0.95
+vim.g.lazygit_floating_window_scaling_factor = 1
 
 local bufopts = { noremap = true, silent = true }
 vim.keymap.set("n", "gh", "<cmd> wall | LazyGit <CR>", bufopts)
