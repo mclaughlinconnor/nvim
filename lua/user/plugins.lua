@@ -148,6 +148,8 @@ return packer.startup(function(use)
   -- Makes it go fast
   use({ "lewis6991/impatient.nvim", commit = "9f7eed8" })
 
+  use({ "uga-rosa/utf8.nvim", commit = "954cbba" })
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
