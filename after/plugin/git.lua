@@ -15,7 +15,7 @@ local bufopts = { noremap = true, silent = true }
 vim.keymap.set("n", "gh", "<cmd> wall | LazyGit <CR>", bufopts)
 
 require("diffview").setup({
-  enhanced_diff_hl = true, -- See |diffview-config-enhanced_diff_hl|
+  enhanced_diff_hl = false, -- See |diffview-config-enhanced_diff_hl|
   view = {
     -- Configure the layout and behavior of different types of views.
     -- Available layouts:
@@ -29,7 +29,7 @@ require("diffview").setup({
     -- For more info, see |diffview-config-view.x.layout|.
     merge_tool = {
       -- Config for conflicted files in diff views during a merge or rebase.
-      layout = "diff3_mixed",
+      layout = "diff4_mixed",
       disable_diagnostics = false, -- Temporarily disable diagnostics for conflict buffers while in the view.
     },
   },
