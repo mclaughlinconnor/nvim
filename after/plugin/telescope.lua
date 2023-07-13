@@ -53,11 +53,19 @@ vim.keymap.set("i", "<M-p>", function()
 end, bufopts)
 
 local translationPicker = function()
-  require("fzf-lua").fzf_live(function(query)
+  local opts = { path_shorten = true }
+
+  opts.actions = fzf.defaults.actions.files
+  opts.previewer = "builtin"
+  opts.fn_transform = function(x)
+    return fzf.make_entry.file(x, opts)
+  end
+
+  fzf.fzf_live(function(query)
     local cmd_string =
       [[rg -i --color never --type yaml "(\w+)(:.*<query>.*)" --no-heading --no-filename --no-line-number --replace '$1' --null | parallel --colsep '\0' rg {} --color never --no-heading --line-number --column -g "\*.pug" ./]]
     return (cmd_string):gsub("<query>", query)
-  end, { previewer = "builtin" })
+  end, opts)
 end
 
 vim.keymap.set("n", "<leader>tp", translationPicker, bufopts)
