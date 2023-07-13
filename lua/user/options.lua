@@ -80,7 +80,7 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
 vim.api.nvim_create_user_command("GenId", function()
   vim.api.nvim_command("silent write")
   vim.cmd(
-    [[silent !awk -i inplace '/---/{"xxd -l 12 -p /dev/urandom" | getline uuid; close("xxd -l 12 -p /dev/urandom"); gsub(/---/, uuid)};{print}' %]]
+    [[silent !gawk -i inplace '/---/{"xxd -l 12 -p /dev/urandom" | getline uuid; close("xxd -l 12 -p /dev/urandom"); gsub(/---/, uuid)};{print}' %]]
   )
 end, {})
 
