@@ -29,7 +29,7 @@ vim.keymap.set("n", "<leader>tt", fzf.tags_live_grep, bufopts)
 vim.keymap.set("n", "<leader>tT", function()
   fzf.tags_live_grep({ search = vim.fn.expand("<cword>") })
 end, bufopts)
-vim.keymap.set("n", "<leader>tC", fzf.btags, bufopts)
+vim.keymap.set("n", "<leader>tc", fzf.btags, bufopts)
 
 vim.keymap.set("n", "<leader>tq", fzf.quickfix, bufopts)
 vim.keymap.set("n", "<leader>tr", fzf.registers, bufopts)
