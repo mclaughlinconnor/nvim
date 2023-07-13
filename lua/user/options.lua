@@ -80,3 +80,9 @@ vim.api.nvim_create_user_command("GenId", function()
 end, {})
 
 vim.keymap.set("n", "<leader>vg", "<cmd>GenId<cr>", opts)
+
+vim.keymap.set("n", "<leader>y", '"+y', opts)
+vim.keymap.set("n", "<leader>p", '"+p', opts)
+
+vim.keymap.set("v", "<leader>p", '"+p', opts)
+vim.keymap.set("v", "<leader>p", '"+p', opts)
