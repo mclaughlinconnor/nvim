@@ -13,6 +13,10 @@ vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 local on_attach = function(client, bufnr)
   lsp_status.on_attach(client)
 
+  if client.name == "tsserver" then
+		client.server_capabilities.document_formatting = false
+	end
+
   -- lsp specific mappings
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
@@ -47,13 +51,76 @@ local cmd = {
   "node_modules",
 }
 -- I don't use the angularls installed by mason
+-- Ref: https://github.com/williamboman/mason.nvim/blob/4f5de77fab742ab2ca5512e7f3c9881cacdaf8eb/lua/nvim-lsp-installer/servers/angularls/init.lua
+
+function get_npm_root()
+  return vim.fn.system('npm root'):gsub("\n", "")
+end
+
+function get_npm_global_root()
+  return vim.fn.system('npm root -g'):gsub("\n", "")
+end
+
+---@generic T, U
+---@param fn fun(item: T): U
+---@param list T[]
+---@return U[]
+function map(fn, list)
+    local result = {}
+    for i = 1, #list do
+        result[#result + 1] = fn(list[i], i)
+    end
+    return result
+end
+
+function npm_executable(root_dir, executable)
+    return table.concat({
+        root_dir,
+        "node_modules",
+        ".bin",
+        executable,
+    }, "/") -- will probably cause problems on windows
+end
+
+local function append_node_modules(dir)
+  return table.concat({ dir, "node_modules" }, "/") -- will probably cause problems on windows
+end
+
+function npm_executable(root_dir, executable)
+    return table.concat({
+        root_dir,
+        "node_modules",
+        ".bin",
+        executable,
+    }, "/") -- will probably cause problems on windows
+end
+
+local function append_node_modules(dir)
+  return table.concat({ dir, "node_modules" }, "/") -- will probably cause problems on windows
+end
+
+local function angularls_config(workspace_dir)
+  local root_dir = vim.loop.fs_realpath('.')
+  local locations = table.concat({ get_npm_global_root(), get_npm_root(), append_node_modules(root_dir), append_node_modules(workspace_dir)}, ",")
+  -- local locations = table.concat({ get_npm_global_root(), get_npm_root(), append_node_modules(root_dir), append_node_modules(workspace_dir)}, " ")
+
+  return {
+    "ngserverPUG",
+    "--stdio",
+    "--tsProbeLocations",
+    locations,
+    "--ngProbeLocations",
+    locations,
+  }
+end
+
 require("lspconfig").angularls.setup({
   on_attach = on_attach,
   capabilities = lsp_status.capabilities,
   filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "pug" },
-  cmd = cmd,
-  on_new_config = function(new_config)
-    new_config.cmd = cmd
+  cmd = angularls_config(vim.loop.fs_realpath(".")),
+  on_new_config = function(new_config, new_root_dir)
+      new_config.cmd = angularls_config(new_root_dir)
   end,
 })
 
