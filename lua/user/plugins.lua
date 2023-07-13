@@ -67,7 +67,12 @@ return packer.startup(function(use)
   use({ "nvim-lua/lsp-status.nvim", commit = "54f48eb" })
   use({ "neovim/nvim-lspconfig", commit = "9a2cc56" })
   use({ "mclaughlinconnor/vimtex", commit = "cff605f4" })
-  use({ "jose-elias-alvarez/typescript.nvim", commit = "5b3680e" })
+  use({
+    "pmizio/typescript-tools.nvim",
+    commit = "1b0af27",
+    requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+  })
+
   use({ "jose-elias-alvarez/null-ls.nvim", requires = { "nvim-lua/plenary.nvim" }, commit = "bbaf5a9" })
 
   -- Debugging/testing

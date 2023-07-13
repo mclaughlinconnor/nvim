@@ -119,7 +119,6 @@ require("null-ls").setup({
     require("null-ls").builtins.formatting.stylua.with({
       extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
     }),
-    require("typescript.extensions.null-ls.code-actions"),
   },
 })
 
@@ -151,41 +150,24 @@ require("mason-lspconfig").setup_handlers({
     })
   end,
   ["tsserver"] = function()
-    require("typescript").setup({
-      server = {
-        on_attach = on_attach,
-        capabilities = lsp_status.capabilities,
-        settings = {
-          completions = {
-            completeFunctionCalls = true,
-          },
-          typescript = {
-            tsserver = {
-              experimental = {
-                enableProjectDiagnostics = true,
-                completion = {
-                  enableServerSideFuzzyMatch = true,
-                  entriesLimit = 50,
-                },
-              },
-            },
-            experimental = {
-              enableProjectDiagnostics = true,
-              completion = {
-                enableServerSideFuzzyMatch = true,
-                entriesLimit = 50,
-              },
-            },
-            format = {
-              insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
-            },
-          },
+    require("typescript-tools").setup({
+      on_attach = on_attach,
+      capabilities = lsp_status.capabilities,
+      settings = {
+        expose_as_code_action = {
+          "add_missing_imports",
+          "fix_all",
+          "remove_unused",
         },
-        init_options = {
-          preferences = {
-            importModuleSpecifierPreference = "relative",
-            includePackageJsonAutoImports = "off,"
-          },
+        tsserver_file_preferences = {
+          importModuleSpecifierPreference = "relative",
+          includeCompletionsForImportStatements = true,
+          includeCompletionsForModuleExports = true,
+          includeCompletionsWithSnippetText = true,
+          quotePreference = "single",
+        },
+        tsserver_format_options = {
+          insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
         },
       },
     })
