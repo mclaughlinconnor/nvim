@@ -3,8 +3,9 @@ local actions = require("fzf-lua.actions")
 
 local project_files = function(default_text)
   local opts = { search = default_text }
-  local ok = pcall(fzf.git_files, opts)
-  if not ok then
+  if fzf.path.is_git_repo() then
+    fzf.git_files(opts)
+  else
     fzf.files(opts)
   end
 end
