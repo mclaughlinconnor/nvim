@@ -48,5 +48,4 @@ vim.keymap.set("n", "<leader>cO", "<cmd> DiffviewClose <CR>", bufopts)
 -- Try vimagit
 require("neogit").setup({})
 
--- Check if using linematch:100 is laggy. They recommend only 50
-vim.o.diffopt = "internal,filler,closeoff,icase,iblank,iwhite,algorithm:histogram,indent-heuristic,linematch:100"
+vim.o.diffopt = "internal,filler,closeoff,icase,iblank,iwhite,algorithm:histogram,indent-heuristic,linematch:50"
