@@ -14,6 +14,15 @@ parser_config.pug = {
   maintainers = { "@mclaughlinconnor" },
 }
 
+parser_config.haxe = {
+  install_info = {
+    url = "https://github.com/vantreeseba/tree-sitter-haxe",
+    files = { "src/parser.c" },
+    branch = "main",
+  },
+  filetype = "haxe",
+}
+
 configs.setup({
   ensure_installed = "all", -- one of "all" or a list of languages
   -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
