@@ -1,6 +1,8 @@
-require 'colorizer'.setup {
-  'css';
-  'pug';
-  'javascript';
-  'html';
-}
+require("colorizer").setup({
+  filetypes = {
+    "css",
+    "pug",
+    "javascript",
+    "html",
+  },
+})

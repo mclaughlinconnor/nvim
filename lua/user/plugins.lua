@@ -40,115 +40,118 @@ packer.init({
 
 -- Install your plugins here
 return packer.startup(function(use)
-  use({ "nvim-lua/plenary.nvim", commit = "968a4b9" })
+  use({ "nvim-lua/plenary.nvim", commit = "36aaceb" })
 
   -- Editor
-  use({ "norcalli/nvim-colorizer.lua", commit = "36c610a" })
-  use({ "numToStr/Comment.nvim", commit = "30d23aa" })
-  use({ "windwp/nvim-autopairs", commit = "5fe2441" })
-  use({ "AndrewRadev/switch.vim", commit = "900c5d3" })
-  use({ "machakann/vim-sandwich", commit = "74898e6" })
-  use({ "AckslD/nvim-trevJ.lua", commit = "7363619" })
-  use({ "nicwest/vim-camelsnek", commit = "3fef4df" })
-  use({ "axelvc/template-string.nvim", commit = "84e50b8" })
-  use({ "mizlan/iswap.nvim", commit = "a21edee" })
+  use({ "NvChad/nvim-colorizer.lua", commit = "dde3084" })
+  use({ "numToStr/Comment.nvim", commit = "176e85e" })
+  use({ "windwp/nvim-autopairs", commit = "e8f7dd7" })
+  use({ "AndrewRadev/switch.vim", commit = "a3fd7bf" })
+  use({ "machakann/vim-sandwich", commit = "c5a2cc4" })
+  -- https://github.com/Wansmer/treesj seems more powerfull
+  use({ "AckslD/nvim-trevJ.lua", commit = "7f40154" })
+  use({ "axelvc/template-string.nvim", commit = "e347d83" })
+  use({ "mizlan/iswap.nvim", commit = "8213a12" })
   use({
     "winston0410/range-highlight.nvim",
     requires = { { "winston0410/cmd-parser.nvim", commit = "6363b8b" } },
     commit = "8b5e8cc",
   })
-  use({ "mbbill/undotree", commit = "bf76bf2" })
-  use({ "tamago324/lir.nvim", commit = "937e882" })
+  use({ "mbbill/undotree", commit = "485f01e" })
+  use({ "tamago324/lir.nvim", commit = "959ac31" })
   use({ "ton/vim-alternate", commit = "57a6d27" })
 
   -- Code
-  use({ "ludovicchabant/vim-gutentags", commit = "b77b8fa" })
+  use({ "ludovicchabant/vim-gutentags", commit = "1337b18" })
   use({ "arkav/lualine-lsp-progress", commit = "56842d0" })
   use({ "nvim-lua/lsp-status.nvim", commit = "54f48eb" })
-  use({ "neovim/nvim-lspconfig", commit = "427378a" })
+  use({ "neovim/nvim-lspconfig", commit = "9a2cc56" })
   use({ "mclaughlinconnor/vimtex", commit = "cff605f4" })
-  use({ "jose-elias-alvarez/typescript.nvim", commit = "b96b3f8" })
-  use({ "jose-elias-alvarez/null-ls.nvim", requires = { "nvim-lua/plenary.nvim" }, commit = "4342844" })
+  use({ "jose-elias-alvarez/typescript.nvim", commit = "5b3680e" })
+  use({ "jose-elias-alvarez/null-ls.nvim", requires = { "nvim-lua/plenary.nvim" }, commit = "bbaf5a9" })
 
   -- Debugging/testing
   use({
     "nvim-neotest/neotest",
     requires = {
-      { "mclaughlinconnor/neotest-mocha",    commit = "deefd41" },
-      { "jbyuki/one-small-step-for-vimkind", commit = "27e5f59" },
+      { "mclaughlinconnor/neotest-mocha", commit = "deefd41" },
+      { "jbyuki/one-small-step-for-vimkind", commit = "f239ca0" },
     },
-    commit = "972a7dc",
+    commit = "e46eae5",
   })
-  use({ "folke/neodev.nvim", commit = "7e3f718" })
+  use({ "folke/neodev.nvim", commit = "b41da39" })
   use({ "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" }, commit = "03bd296" })
   use({
     "microsoft/vscode-js-debug",
-    commit = "52b31fc",
+    commit = "8fa24a7",
     opt = true,
     run = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
   })
-  use({ "mfussenegger/nvim-dap", commit = "55e3a7f", requires = { { "rcarriga/nvim-dap-ui", commit = "286f682" } } })
-  use({ "theHamsta/nvim-dap-virtual-text", commit = "ab988db" })
+  use({ "mfussenegger/nvim-dap", commit = "a6d48d2", requires = { { "rcarriga/nvim-dap-ui", commit = "c020f66" } } })
+  use({ "theHamsta/nvim-dap-virtual-text", commit = "57f1dbd" })
 
   -- Completion
-  use({ "saadparwaiz1/cmp_luasnip", commit = "a9de941" })
-  use({ "L3MON4D3/LuaSnip", run = "make install_jsregexp", commit = "6e506ce" })
-  use({ "hrsh7th/cmp-nvim-lsp", commit = "affe808" })
-  use({ "hrsh7th/nvim-cmp", commit = "913eb85" })
-  use({ "hrsh7th/cmp-cmdline", commit = "9c0e331" })
-  use({ "hrsh7th/cmp-path", commit = "447c87c" })
+  use({ "L3MON4D3/LuaSnip", run = "make install_jsregexp", commit = "4964cd1" })
+  use({ "amarakon/nvim-cmp-buffer-lines", commit = "2036e6f" })
+  use({ "dmitmel/cmp-cmdline-history", commit = "003573b" })
+  use({ "doxnit/cmp-luasnip-choice", commit = "97a3678" })
+  use({ "f3fora/cmp-spell", commit = "60584cb" })
   use({ "hrsh7th/cmp-buffer", commit = "3022dbc" })
   use({ "hrsh7th/cmp-calc", commit = "50792f3" })
-  use({ "f3fora/cmp-spell", commit = "60584cb" })
-  use({ "dmitmel/cmp-cmdline-history", commit = "003573b" })
-  use({ "ray-x/cmp-treesitter", commit = "b40178b" })
-  use({ "doxnit/cmp-luasnip-choice", commit = "97a3678" })
-  use({ "amarakon/nvim-cmp-buffer-lines", commit = "2036e6f" })
+  use({ "hrsh7th/cmp-cmdline", commit = "8ee981b" })
+  use({ "hrsh7th/cmp-nvim-lsp", commit = "0e6b2ed" })
+  use({ "hrsh7th/cmp-omni", commit = "9436e6c" })
+  use({ "hrsh7th/cmp-path", commit = "91ff86c" })
+  use({ "hrsh7th/nvim-cmp", commit = "b8c2a62" })
+  use({ "ray-x/cmp-treesitter", commit = "389eadd" })
   use({ "rcarriga/cmp-dap", commit = "d16f14a" })
-  use({ "hrsh7th/cmp-omni", commit = "8457e41" })
+  use({ "saadparwaiz1/cmp_luasnip", commit = "1809552" })
 
   -- Plugin management
-  use({ "williamboman/mason.nvim", commit = "057ac5c" })
-  use({ "wbthomason/packer.nvim", commit = "00ec5ad" })
-  use({ "williamboman/mason-lspconfig.nvim", commit = "43f2ddf" })
+  use({ "williamboman/mason.nvim", commit = "f7f81ab" })
+  use({ "wbthomason/packer.nvim", commit = "1d0cf98" })
+  use({ "williamboman/mason-lspconfig.nvim", commit = "d381fcb" })
 
   -- Git
-  use({ "kdheepak/lazygit.nvim", commit = "9c73fd6" })
-  use({ "lewis6991/gitsigns.nvim", commit = "d7e0bcb" })
+  use({ "kdheepak/lazygit.nvim", commit = "3466e48" })
+  use({ "lewis6991/gitsigns.nvim", commit = "256569c" })
   use({
-    "mclaughlinconnor/diffview.nvim",
-    requires = { { "nvim-lua/plenary.nvim", commit = "968a4b9" } },
-    rocks = { "diff" },
+    "sindrets/diffview.nvim",
+    commit = "b3a763f",
+    requires = { { "nvim-lua/plenary.nvim" } },
   })
 
   -- Theming
-  use({ "shaunsingh/nord.nvim", commit = "209e9b3" })
+  use({ "shaunsingh/nord.nvim", commit = "fab04b2" })
   use({
     "nvim-lualine/lualine.nvim",
-    commit = "a52f078",
-    requires = { "kyazdani42/nvim-web-devicons", opt = true, commit = "2d02a56" },
+    commit = "05d78e9",
+    requires = { "kyazdani42/nvim-web-devicons", opt = true, commit = "14b3a5b" },
   })
-  use({ "lukas-reineke/indent-blankline.nvim", commit = "018bd04" })
-  use({ "folke/tokyonight.nvim", commit = "1b0c880" })
-  use({ "ldelossa/buffertag", commit = "0322abc" })
+
+  -- Enable only in pug files
+  use({ "lukas-reineke/indent-blankline.nvim", commit = "7075d78" })
+  use({ "folke/tokyonight.nvim", commit = "1825940" })
+  use({ "ldelossa/buffertag", commit = "59df485" })
 
   -- Treesitter
-  use({ "nvim-treesitter/playground", commit = "bcfab84" })
-  use({ "nvim-treesitter/nvim-treesitter", commit = "2eaf188" })
-  use({ "p00f/nvim-ts-rainbow", commit = "620a24f" })
-  use({ "nvim-treesitter/nvim-treesitter-textobjects", commit = "e63c2ff" })
+  use({ "nvim-treesitter/playground", commit = "2b81a01" })
+  use({ "nvim-treesitter/nvim-treesitter", commit = "fdddbff" })
+  use({ "HiPhish/nvim-ts-rainbow2", commit = "0921443" })
+  use({ "nvim-treesitter/nvim-treesitter-textobjects", commit = "2d6d3c7" })
 
   -- Telescope
-  use({ "stevearc/dressing.nvim", commit = "4436d6f" })
+  use({ "stevearc/dressing.nvim", commit = "5fb5cce" })
   use({
     "ibhagwan/fzf-lua",
     commit = "b587997",
   })
 
   -- Makes it go fast
+  -- Not needed for 0.9: vim.loader.enable()
   use({ "lewis6991/impatient.nvim", commit = "9f7eed8" })
 
-  -- Testing
+  -- Currently being tested
   use({
     "tanvirtin/vgit.nvim",
     commit = "a62ad74",
@@ -157,7 +160,7 @@ return packer.startup(function(use)
     },
   })
 
-  use({ "TimUntersberger/neogit", commit = "d7c66e5", requires = "nvim-lua/plenary.nvim" })
+  use({ "TimUntersberger/neogit", commit = "68a3e90", requires = "nvim-lua/plenary.nvim" })
 
   use({ "uga-rosa/utf8.nvim", commit = "954cbba" })
 
