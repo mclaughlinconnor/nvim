@@ -8,7 +8,7 @@ parser_config.pug = {
   install_info = {
     url = "github.com/mclaughlinconnor/tree-sitter-pug",
     files = { "src/parser.c", "src/scanner.cc" },
-    revision = "1fee024cf7803464108cc05e770da395b9e2f91b",
+    revision = "attrs",
   },
   filetype = "pug",
   maintainers = { "@mclaughlinconnor" },
