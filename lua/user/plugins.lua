@@ -117,8 +117,8 @@ return packer.startup(function(use)
   use({ "lewis6991/gitsigns.nvim", commit = "256569c" })
   use({
     "sindrets/diffview.nvim",
-    commit = "b3a763f",
-    requires = { { "nvim-lua/plenary.nvim" } },
+    requires = { { "nvim-lua/plenary.nvim", commit = "968a4b9" } },
+    commit = "766a4f2"
   })
 
   -- Theming
