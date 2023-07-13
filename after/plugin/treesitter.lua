@@ -36,7 +36,7 @@ configs.setup({
       end
 
       -- Disable for large files
-      return vim.fn.getfsize(vim.fn.expand("%")) > 10 * 1024 -- 10 kilobytes
+      return vim.fn.getfsize(vim.fn.expand("%")) > 50 * 1024 -- 10 kilobytes
     end,
   },
   autopairs = {
