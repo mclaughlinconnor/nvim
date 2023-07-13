@@ -32,7 +32,6 @@ end, bufopts)
 vim.keymap.set("n", "<leader>tc", fzf.btags, bufopts)
 
 vim.keymap.set("n", "<leader>tq", fzf.quickfix, bufopts)
-vim.keymap.set("n", "<leader>tr", fzf.registers, bufopts)
 vim.keymap.set("n", "<leader>ts", fzf.spell_suggest, bufopts)
 
 vim.keymap.set("n", "<leader>th", fzf.help_tags, bufopts)
@@ -70,7 +69,7 @@ end
 
 vim.keymap.set("n", "<leader>tp", translationPicker, bufopts)
 
-require("fzf-lua").setup({
+fzf.setup({
   "default",
   winopts = {
     preview = {
@@ -135,19 +134,19 @@ require("fzf-lua").setup({
       --   oldfiles, quickfix, loclist, tags, btags
       --   args
       ["default"] = actions.file_edit_or_qf,
-      ["alt-s"] = actions.file_split,
-      ["alt-v"] = actions.file_vsplit,
-      ["alt-t"] = actions.file_tabedit,
-      ["alt-q"] = actions.file_sel_to_qf,
-      ["alt-l"] = actions.file_sel_to_ll,
+      ["ctrl-s"] = actions.file_split,
+      ["ctrl-v"] = actions.file_vsplit,
+      ["ctrl-t"] = actions.file_tabedit,
+      ["ctrl-q"] = actions.file_sel_to_qf,
+      ["ctrl-l"] = actions.file_sel_to_ll,
     },
     buffers = {
       -- providers that inherit these actions:
       --   buffers, tabs, lines, blines
       ["default"] = actions.buf_edit,
-      ["alt-s"] = actions.buf_split,
-      ["alt-v"] = actions.buf_vsplit,
-      ["alt-t"] = actions.buf_tabedit,
+      ["ctrl-s"] = actions.buf_split,
+      ["ctrl-v"] = actions.buf_vsplit,
+      ["ctrl-t"] = actions.buf_tabedit,
     },
   },
 
