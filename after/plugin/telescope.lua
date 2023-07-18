@@ -32,7 +32,8 @@ vim.keymap.set("n", "<leader>tT", function()
 end, bufopts)
 vim.keymap.set("n", "<leader>tc", fzf.btags, bufopts)
 
-vim.keymap.set("n", "<leader>tq", fzf.quickfix, bufopts)
+vim.keymap.set("n", "<leader>tql", fzf.quickfix, bufopts)
+vim.keymap.set("n", "<leader>tqs", fzf.quickfix_stack, bufopts)
 vim.keymap.set("n", "<leader>ts", fzf.spell_suggest, bufopts)
 
 vim.keymap.set("n", "<leader>th", fzf.help_tags, bufopts)

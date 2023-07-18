@@ -86,3 +86,9 @@ vim.keymap.set("n", "<leader>p", '"+p', opts)
 
 vim.keymap.set("v", "<leader>p", '"+p', opts)
 vim.keymap.set("v", "<leader>p", '"+p', opts)
+
+vim.keymap.set("n", "<leader>co", '<cmd>copen<cr>', opts)
+vim.keymap.set("n", "<leader>cc", '<cmd>cclose<cr>', opts)
+
+vim.keymap.set("n", "<leader>cn", '<cmd>cnext<cr>', opts)
+vim.keymap.set("n", "<leader>cp", '<cmd>cprevious<cr>', opts)
