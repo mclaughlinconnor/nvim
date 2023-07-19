@@ -46,6 +46,10 @@ vim.keymap.set("n", "<leader>dO", "<cmd> DiffviewClose <CR>", bufopts)
 -- I just don't like this one
 -- the docs are awful which, for such a complex plugin, is unacceptable.
 -- Try vimagit
-require("neogit").setup({})
+require("neogit").setup({
+  integrations = {
+    diffview = true,
+  },
+})
 
 vim.o.diffopt = "internal,filler,closeoff,icase,iblank,iwhite,algorithm:histogram,indent-heuristic,linematch:50"
