@@ -157,15 +157,7 @@ return packer.startup(function(use)
   use({ "lewis6991/impatient.nvim", commit = "9f7eed8" })
 
   -- Currently being tested
-  use({
-    "tanvirtin/vgit.nvim",
-    commit = "a62ad74",
-    requires = {
-      "nvim-lua/plenary.nvim",
-    },
-  })
-
-  use({ "TimUntersberger/neogit", commit = "68a3e90", requires = "nvim-lua/plenary.nvim" })
+  use({ "TimUntersberger/neogit", commit = "3d63d76", requires = "nvim-lua/plenary.nvim" })
 
   use({ "uga-rosa/utf8.nvim", commit = "954cbba" })
 
