@@ -11,7 +11,7 @@ local project_files = function(default_text)
 end
 
 local bufopts = { noremap = true, silent = true }
-vim.keymap.set("n", "<leader>b", fzf.files, bufopts)
+vim.keymap.set("n", "<leader>b", fzf.buffers, bufopts)
 vim.keymap.set("n", "<leader>B", fzf.oldfiles, bufopts)
 
 vim.keymap.set("n", "<leader>f", project_files, bufopts)
