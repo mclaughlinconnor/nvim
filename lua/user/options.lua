@@ -93,3 +93,10 @@ vim.keymap.set("n", "<leader>cc", "<cmd>cclose<cr>", opts)
 vim.keymap.set("n", "<leader>cn", "<cmd>cnext<cr>", opts)
 vim.keymap.set("n", "<leader>cp", "<cmd>cprevious<cr>", opts)
 
+local pwd = vim.api.nvim_create_augroup("PWD", {})
+vim.api.nvim_create_autocmd({ "VimEnter" }, {
+  callback = function()
+    vim.api.nvim_set_current_dir(os.getenv("PWD"))
+  end,
+  group = pwd,
+})
