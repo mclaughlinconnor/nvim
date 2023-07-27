@@ -10,6 +10,11 @@ cmp.setup({
     return buftype ~= "prompt" or require("cmp_dap").is_dap_buffer()
   end,
   preselect = cmp.PreselectMode.None,
+  snippet = {
+    expand = function(args)
+      require("luasnip").lsp_expand(args.body)
+    end,
+  },
   completion = {
     keyword_length = 0,
   },
