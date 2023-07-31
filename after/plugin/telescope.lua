@@ -3,11 +3,7 @@ local actions = require("fzf-lua.actions")
 
 local project_files = function(default_text)
   local opts = { search = default_text }
-  if fzf.path.is_git_repo() then
-    fzf.git_files(opts)
-  else
-    fzf.files(opts)
-  end
+  fzf.files(opts)
 end
 
 local bufopts = { noremap = true, silent = true }
