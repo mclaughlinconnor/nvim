@@ -121,9 +121,10 @@ return packer.startup(function(use)
   use({ "kdheepak/lazygit.nvim", commit = "3466e48" })
   use({ "lewis6991/gitsigns.nvim", commit = "256569c" })
   use({
-    "sindrets/diffview.nvim",
+    "mclaughlinconnor/diffview.nvim",
+    rocks = { "luautf8", "lrexlib-pcre2" },
     requires = { "nvim-lua/plenary.nvim" },
-    commit = "766a4f2",
+    commit = "2bd8498",
   })
 
   -- Theming
