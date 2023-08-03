@@ -84,6 +84,13 @@ for _, language in ipairs({ "typescript", "javascript" }) do
       smartStep = true,
       type = "pwa-node",
     },
+    {
+      type = "pwa-node",
+      request = "launch",
+      name = "Current file",
+      program = "${file}",
+      cwd = "${workspaceFolder}",
+    },
   }
 end
 
