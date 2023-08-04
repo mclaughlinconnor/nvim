@@ -162,6 +162,8 @@ return packer.startup(function(use)
 
   use({ "uga-rosa/utf8.nvim", commit = "954cbba" })
 
+  use({ "github/copilot.vim", commit = "4a361e8" })
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
