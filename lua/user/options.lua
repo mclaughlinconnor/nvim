@@ -52,6 +52,9 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   callback = function()
     vim.api.nvim_buf_set_keymap(0, "n", "p", "p`[v`]=", opts)
     vim.api.nvim_buf_set_keymap(0, "n", "P", "P`[v`]=", opts)
+
+    vim.api.nvim_buf_set_keymap(0, "v", "p", "p`[v`]=", opts)
+    vim.api.nvim_buf_set_keymap(0, "v", "P", "P`[v`]=", opts)
   end,
   group = typeScriptIndentOnPaste,
   pattern = "*.ts",
@@ -84,6 +87,8 @@ vim.keymap.set("n", "<leader>vg", "<cmd>GenId<cr>", opts)
 vim.keymap.set("n", "<leader>y", '"+y', opts)
 vim.keymap.set("n", "<leader>p", '"+p', opts)
 
+vim.keymap.set("v", "<leader>y", '"+y', opts)
+vim.keymap.set("v", "<leader>p", '"+p', opts)
 vim.keymap.set("v", "<leader>p", '"+p', opts)
 vim.keymap.set("v", "<leader>p", '"+p', opts)
 
