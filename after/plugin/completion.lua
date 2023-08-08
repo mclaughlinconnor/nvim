@@ -36,10 +36,12 @@ cmp.setup({
     format = function(entry, vim_item)
       -- Source
       vim_item.menu = ({
+        ["buffer-lines"] = "[BL]",
         buffer = "[B]",
         calc = "[C]",
         cmdline_history = "[CH]",
         cmp_git = "[CG]",
+        ctags = "[CT]",
         luasnip = "[LS]",
         luasnip_choice = "[LSC]",
         nvim_lsp = "[LSP]",
@@ -52,6 +54,14 @@ cmp.setup({
       return vim_item
     end,
   },
+  sorting = {
+    comparators = {
+      function(...)
+        return require("cmp_buffer"):compare_locality(...)
+      end,
+    },
+  },
+
   mapping = cmp.mapping.preset.insert({
     ["<C-u>"] = cmp.mapping.scroll_docs(-4),
     ["<C-d>"] = cmp.mapping.scroll_docs(4),
@@ -77,9 +87,9 @@ cmp.setup({
     { name = "luasnip" },
     { name = "luasnip_choice" },
     { name = "calc" },
-    { name = "path" },
+    { name = "async_path" },
+    { name = "ctags" },
     { name = "nvim_lsp" },
-  }, {
     { name = "treesitter" },
     {
       name = "spell",
@@ -89,7 +99,15 @@ cmp.setup({
         end,
       },
     },
-    { name = "buffer" },
+    { name = "buffer-lines" },
+    {
+      name = "buffer",
+      option = {
+        get_bufnrs = function()
+          return vim.api.nvim_list_bufs()
+        end,
+      },
+    },
   }),
 })
 

@@ -111,6 +111,8 @@ return packer.startup(function(use)
   use({ "ray-x/cmp-treesitter", commit = "389eadd" })
   use({ "rcarriga/cmp-dap", commit = "d16f14a" })
   use({ "saadparwaiz1/cmp_luasnip", commit = "1809552" })
+  use({ "FelipeLema/cmp-async-path", commit = "d8229a9" })
+  use({ "delphinus/cmp-ctags", commit = "8d9ddae" })
 
   -- Plugin management
   use({ "williamboman/mason.nvim", commit = "f7f81ab" })
