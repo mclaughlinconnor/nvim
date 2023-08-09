@@ -105,3 +105,6 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
   end,
   group = pwd,
 })
+
+vim.o.grepprg = 'rg --vimgrep'
+vim.o.grepformat = vim.o.grepformat .. ',' .. '%f:%l:%c:%m'
