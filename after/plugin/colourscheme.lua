@@ -1,6 +1,12 @@
-vim.g.nord_contrast = true
-vim.g.nord_borders = true
-vim.g.nord_italic = true
+require("nord").setup({
+  diff = { mode = "bg" },
+  errors = { mode = "fg" },
+  styles = {
+    keywords = { bold = false },
+    functions = { bold = false },
+    variables = { bold = true },
+  },
+})
 
 vim.cmd([[colorscheme nord]])
 
@@ -32,7 +38,7 @@ require("indent_blankline").setup({
   },
 })
 
-local setColour = function (colour)
+local setColour = function(colour)
   vim.cmd.colorscheme(colour)
   -- Same as default, except with `Cursor` added in to change the highlight group
   vim.cmd([[
@@ -40,14 +46,14 @@ local setColour = function (colour)
   ]])
 end
 
-vim.api.nvim_create_user_command('FlashBang', function()
-  setColour('tokyonight-day')
+vim.api.nvim_create_user_command("FlashBang", function()
+  setColour("tokyonight-day")
   -- Makes the diff colour **much** better
   vim.cmd([[highlight DiffAdd guibg=#a4cf69]])
   vim.cmd([[highlight DiffChange guibg=#63c1e6]])
   vim.cmd([[highlight DiffDelete guibg=#d74f56]])
-end,{})
+end, {})
 
-vim.api.nvim_create_user_command('LightsOut', function()
-  setColour('nord')
-end,{})
+vim.api.nvim_create_user_command("LightsOut", function()
+  setColour("nord")
+end, {})
