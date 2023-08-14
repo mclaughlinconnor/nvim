@@ -36,7 +36,6 @@ cmp.setup({
     format = function(entry, vim_item)
       -- Source
       vim_item.menu = ({
-        ["buffer-lines"] = "[BL]",
         buffer = "[B]",
         calc = "[C]",
         cmdline_history = "[CH]",
@@ -99,7 +98,6 @@ cmp.setup({
         end,
       },
     },
-    { name = "buffer-lines" },
     {
       name = "buffer",
       option = {
