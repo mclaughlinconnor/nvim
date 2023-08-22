@@ -130,7 +130,7 @@ return packer.startup(function(use)
   })
 
   -- Theming
-  use({ "gbprod/nord.nvim", commit = "25f4598" })
+  use({ "nordtheme/vim", commit = "f13f5df" })
   use({
     "nvim-lualine/lualine.nvim",
     commit = "05d78e9",

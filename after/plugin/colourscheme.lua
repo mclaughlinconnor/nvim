@@ -1,14 +1,4 @@
-require("nord").setup({
-  diff = { mode = "bg" },
-  errors = { mode = "fg" },
-  styles = {
-    keywords = { bold = false },
-    functions = { bold = false },
-    variables = { bold = true },
-  },
-})
-
-vim.cmd([[colorscheme nord]])
+vim.cmd.colorscheme("nord")
 
 vim.opt.termguicolors = true
 
