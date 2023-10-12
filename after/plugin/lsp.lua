@@ -78,6 +78,21 @@ local function angularls_config(workspace_dir)
   }
 end
 
+local configs = require("lspconfig.configs")
+configs["ast_grep"] = {
+  default_config = {
+    cmd = { "ast-grep", "lsp" },
+    root_dir = require("lspconfig").util.root_pattern(".git", "sgconfig.yml"),
+    filetypes = { "typescript" },
+    init_options = {
+      command = { "ast-grep", "lsp" },
+    },
+    on_attach = on_attach,
+  },
+}
+
+require("lspconfig").ast_grep.setup({})
+
 require("lspconfig").angularls.setup({
   on_attach = on_attach,
   capabilities = lsp_status.capabilities,
