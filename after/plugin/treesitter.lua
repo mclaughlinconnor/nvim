@@ -6,12 +6,22 @@ end
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.pug = {
   install_info = {
-    url = "github.com/mclaughlinconnor/tree-sitter-pug",
-    files = { "src/parser.c", "src/scanner.cc" },
+    url = "https://github.com/mclaughlinconnor/tree-sitter-pug",
+    files = { "src/parser.c", "src/scanner.c" },
     revision = "attrs",
   },
   filetype = "pug",
   maintainers = { "@mclaughlinconnor" },
+}
+
+parser_config.angular = {
+  install_info = {
+    url = "https://github.com/ShooTeX/tree-sitter-angular",
+    files = { "src/parser.c" },
+    branch = "main"
+  },
+  -- filetype = "pug",
+  maintainers = {"@steelsojka"}
 }
 
 parser_config.haxe = {
