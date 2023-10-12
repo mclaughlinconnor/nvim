@@ -1,0 +1,6 @@
+ruleDirs:
+- /home/connor/.config/nvim/sg/rules
+testConfigs:
+- testDir: /home/connor/.config/nvim/sg/rule-tests
+utilDirs:
+- /home/connor/.config/nvim/sg/utils

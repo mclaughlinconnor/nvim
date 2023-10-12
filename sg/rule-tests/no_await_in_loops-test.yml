@@ -1,0 +1,5 @@
+id: no_await_in_loops
+valid:
+- "valid code"
+invalid:
+- "invalid code"
