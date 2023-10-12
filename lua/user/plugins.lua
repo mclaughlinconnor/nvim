@@ -126,7 +126,7 @@ return packer.startup(function(use)
     "mclaughlinconnor/diffview.nvim",
     rocks = { "luautf8", "lrexlib-pcre2" },
     requires = { "nvim-lua/plenary.nvim" },
-    commit = "2bd8498",
+    commit = "44a5b38",
   })
 
   -- Theming
@@ -144,7 +144,7 @@ return packer.startup(function(use)
 
   -- Treesitter
   use({ "nvim-treesitter/playground", commit = "2b81a01" })
-  use({ "nvim-treesitter/nvim-treesitter", commit = "fdddbff" })
+  use({ "nvim-treesitter/nvim-treesitter", commit = "15d327f" })
   use({ "HiPhish/nvim-ts-rainbow2", commit = "0921443" })
   use({ "nvim-treesitter/nvim-treesitter-textobjects", commit = "2d6d3c7" })
 
@@ -160,7 +160,7 @@ return packer.startup(function(use)
   use({ "lewis6991/impatient.nvim", commit = "9f7eed8" })
 
   -- Currently being tested
-  use({ "TimUntersberger/neogit", commit = "e94b159", requires = "nvim-lua/plenary.nvim" })
+  use({ "TimUntersberger/neogit", commit = "69482aa", requires = "nvim-lua/plenary.nvim" })
 
   use({ "uga-rosa/utf8.nvim", commit = "954cbba" })
 
