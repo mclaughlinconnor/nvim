@@ -13,8 +13,24 @@ vim.g.lazygit_floating_window_scaling_factor = 1
 
 local bufopts = { noremap = true, silent = true }
 
+local noop = function() end
+local q = function()
+  vim.cmd.unmap("q")
+end
+
 require("diffview").setup({
-  enhanced_diff_hl = false, -- See |diffview-config-enhanced_diff_hl|
+  enhanced_diff_hl = true, -- See |diffview-config-enhanced_diff_hl|
+  use_icons = false,
+  keymaps = {
+    view = {
+      ["q"] = q,
+      ["<esc>"] = noop,
+    },
+    file_panel = {
+      ["q"] = q,
+      ["<esc>"] = noop,
+    },
+  },
   view = {
     -- Configure the layout and behavior of different types of views.
     -- Available layouts:
@@ -28,8 +44,8 @@ require("diffview").setup({
     -- For more info, see |diffview-config-view.x.layout|.
     merge_tool = {
       -- Config for conflicted files in diff views during a merge or rebase.
-      layout = "diff4_mixed",
-      disable_diagnostics = false, -- Temporarily disable diagnostics for conflict buffers while in the view.
+      layout = "diff3_horizontal",
+      disable_diagnostics = true, -- Temporarily disable diagnostics for conflict buffers while in the view.
     },
   },
 })
@@ -42,6 +58,24 @@ require("neogit").setup()
 vim.keymap.set("n", "gH", "<cmd> wall | LazyGit <CR>", bufopts)
 vim.keymap.set("n", "gh", "<cmd> Neogit <CR>", bufopts)
 
-vim.o.diffopt = "internal,filler,closeoff,icase,iblank,iwhite,algorithm:histogram,indent-heuristic,linematch:50"
+vim.opt.diffopt:append({ "indent-heuristic", "algorithm:histogram", "linematch:60" })
 
+local lineNumbers = vim.api.nvim_create_augroup("lineNumbers", {})
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  callback = function()
+    vim.o.number = true
+    vim.o.relativenumber = true
+  end,
+  group = lineNumbers,
+  pattern = { "NeogitStatus", "NeogitRebaseTodo", "NeogitCommitSelectView", "NeogitCommitMessage" },
+})
 
+local toggle_diff = function()
+  if vim.api.nvim_win_get_option(0, "diff") then
+    vim.cmd.diffoff()
+  else
+    vim.cmd.diffthis()
+  end
+end
+
+vim.keymap.set("n", "<leader>dt", toggle_diff, bufopts)
