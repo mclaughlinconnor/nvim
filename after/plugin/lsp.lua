@@ -134,6 +134,7 @@ require("null-ls").setup({
     require("null-ls").builtins.formatting.stylua.with({
       extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
     }),
+    require("null-ls").builtins.formatting.clang_format,
   },
 })
 
@@ -144,6 +145,12 @@ require("mason-lspconfig").setup_handlers({
   function(server_name)
     require("lspconfig")[server_name].setup({
       on_attach = on_attach,
+    })
+  end,
+  ["clangd"] = function()
+    require("lspconfig")["clangd"].setup({
+      capabilities = lsp_status.capabilities,
+      cmd = { "clangd", "--background-index", "--clang-tidy" },
     })
   end,
   ["ltex"] = function()
