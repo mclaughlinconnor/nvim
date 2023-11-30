@@ -165,6 +165,7 @@ return packer.startup(function(use)
   use({ "uga-rosa/utf8.nvim", commit = "954cbba" })
 
   use({ "github/copilot.vim", commit = "4a361e8" })
+  use({ "Exafunction/codeium.vim", commit = "70ba94a" })
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
