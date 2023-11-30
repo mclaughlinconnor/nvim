@@ -89,6 +89,7 @@ ls.config.setup({
     m = require("luasnip.extras").match,
     ai = require("luasnip.nodes.absolute_indexer"),
     postfix = require("luasnip.extras.postfix").postfix,
+    treesitter_postfix = require("luasnip.extras.treesitter_postfix").treesitter_postfix
   },
 })
 

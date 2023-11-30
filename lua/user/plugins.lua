@@ -96,7 +96,7 @@ return packer.startup(function(use)
   use({ "theHamsta/nvim-dap-virtual-text", commit = "57f1dbd" })
 
   -- Completion
-  use({ "L3MON4D3/LuaSnip", run = "make install_jsregexp", commit = "4964cd1" })
+  use({ "L3MON4D3/LuaSnip", run = "make install_jsregexp", commit = "5e16fcf" })
   use({ "amarakon/nvim-cmp-buffer-lines", commit = "2036e6f" })
   use({ "dmitmel/cmp-cmdline-history", commit = "003573b" })
   use({ "doxnit/cmp-luasnip-choice", commit = "97a3678" })

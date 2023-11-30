@@ -1,5 +1,5 @@
 return {
-  s({ trig = "dbg", wordTrig = false }, {
+  s({ trig = "json", wordTrig = false }, {
     t([[pre {{]]),
     i(1, "prop"),
     t([[ | json }}]]),
