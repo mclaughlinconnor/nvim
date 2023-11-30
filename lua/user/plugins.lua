@@ -69,7 +69,7 @@ return packer.startup(function(use)
   use({ "mclaughlinconnor/vimtex", commit = "cff605f4" })
   use({
     "pmizio/typescript-tools.nvim",
-    commit = "bdc5878",
+    commit = "98165e3",
     requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
   })
 
