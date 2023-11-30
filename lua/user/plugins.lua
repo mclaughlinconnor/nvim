@@ -144,7 +144,7 @@ return packer.startup(function(use)
 
   -- Treesitter
   use({ "nvim-treesitter/playground", commit = "2b81a01" })
-  use({ "nvim-treesitter/nvim-treesitter", commit = "15d327f" })
+  use({ "nvim-treesitter/nvim-treesitter", commit = "1e64838" })
   use({ "HiPhish/nvim-ts-rainbow2", commit = "0921443" })
   use({ "nvim-treesitter/nvim-treesitter-textobjects", commit = "2d6d3c7" })
 

@@ -4,7 +4,7 @@
 (((javascript) @injection.content)
   (#set! injection.language "javascript"))
 
-; :binding="value"
+; span(style="color: red")
 (attribute
   ((attribute_name) @_name
    (#eq? @_name "style"))
@@ -42,14 +42,13 @@
    (#lua-match? @_name "^%*.*"))
   (quoted_attribute_value
    (attribute_value) @injection.content)
-  (#set! injection.language "javascript"))
-
-; {{ someBinding }}
-(tag
-  (content
-   ("{" "{" ("chunk") @injection.content "}" "}"))
-   (#set! injection.language "javascript"))
+  (#set! injection.language "angular"))
 
 (escaped_string_interpolation
   ((interpolation_content) @injection.content
    (#set! injection.language "javascript")))
+
+(tag
+  (content) @injection.content
+  (#set! injection.language "angular_content"))
+

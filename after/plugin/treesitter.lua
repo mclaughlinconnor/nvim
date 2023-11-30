@@ -14,14 +14,22 @@ parser_config.pug = {
   maintainers = { "@mclaughlinconnor" },
 }
 
+parser_config.angular_content = {
+  install_info = {
+    url = "github.com/mclaughlinconnor/tree-sitter-angular-content",
+    files = { "src/parser.c", "src/scanner.c" },
+    revision = "master",
+  },
+  maintainers = { "@mclaughlinconnor" },
+}
+
 parser_config.angular = {
   install_info = {
-    url = "https://github.com/ShooTeX/tree-sitter-angular",
+    url = "https://github.com/tamusall/tree-sitter-angular",
     files = { "src/parser.c" },
     branch = "main"
   },
-  -- filetype = "pug",
-  maintainers = {"@steelsojka"}
+  maintainers = { "@tamusall" },
 }
 
 parser_config.haxe = {

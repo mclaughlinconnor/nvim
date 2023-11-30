@@ -14,8 +14,6 @@
    "details" "summary" "dialog"
    "script" "noscript" "template" "slot" "canvas"))
 
-(content) @spell
-
 (id) @constant
 (class) @property
 
@@ -81,9 +79,6 @@
 
  ([ "(" ")" ] @_parent (#not-has-parent? @_parent content))
 ] @punctuation.bracket
-
-; ([ "," "." "|" ] @_parent
- ; (#not-has-parent? @_parent content))
 
 (buffered_code "=" @punctuation.delimiter)
 (unbuffered_code "-" @punctuation.delimiter)
