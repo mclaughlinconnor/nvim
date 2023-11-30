@@ -210,3 +210,10 @@ require("mason-lspconfig").setup_handlers({
     })
   end,
 })
+
+vim.cmd([[
+  augroup indent_lines
+    autocmd!
+    autocmd FilterWritePre * if &diff | let vim.g.indent_blankline_enabled = false
+  augroup end
+]])
