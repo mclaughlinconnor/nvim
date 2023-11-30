@@ -69,7 +69,7 @@ local function angularls_config(workspace_dir)
   )
 
   return {
-    "ngserverPUG",
+    "ngserver",
     "--stdio",
     "--tsProbeLocations",
     locations,
