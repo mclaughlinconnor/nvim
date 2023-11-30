@@ -28,6 +28,8 @@ require("indent_blankline").setup({
   },
 })
 
+vim.g.indent_blankline_enabled = false
+
 local setColour = function(colour)
   vim.cmd.colorscheme(colour)
   -- Same as default, except with `Cursor` added in to change the highlight group
