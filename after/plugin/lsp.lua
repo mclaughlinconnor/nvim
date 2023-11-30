@@ -177,11 +177,7 @@ require("mason-lspconfig").setup_handlers({
       capabilities = lsp_status.capabilities,
       settings = {
         complete_function_calls = true,
-        expose_as_code_action = {
-          "add_missing_imports",
-          "fix_all",
-          "remove_unused",
-        },
+        expose_as_code_action = "all",
         tsserver_file_preferences = {
           importModuleSpecifierPreference = "relative",
           includeCompletionsForImportStatements = true,
