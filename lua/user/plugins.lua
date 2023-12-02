@@ -158,8 +158,6 @@ return packer.startup(function(use)
   -- Curr
   use({ "TimUntersberger/neogit", commit = "d0e87541130b2cf62d7f8a54487ef99560232fb6", requires = "nvim-lua/plenary.nvim" })
 
-  use({ "uga-rosa/utf8.nvim", commit = "954cbbadabe5cd19f202e918fec191d64eea7766" }) -- remove. remove difftest too
-
   use({ "github/copilot.vim", commit = "2c31989063b145830d5f0bea8ab529d2aef2427b" })
   use({ "Exafunction/codeium.vim", commit = "2a0c0b7fecee38a52fe750563ff70cff45f768b0" })
 
