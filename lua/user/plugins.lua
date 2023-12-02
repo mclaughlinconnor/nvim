@@ -48,8 +48,7 @@ return packer.startup(function(use)
   use({ "windwp/nvim-autopairs", commit = "0f04d78619cce9a5af4f355968040f7d675854a1" })
   use({ "AndrewRadev/switch.vim", commit = "68d269301181835788dcdcb6d5bca337fb954395" })
   use({ "machakann/vim-sandwich", commit = "c5a2cc438ce6ea2005c556dc833732aa53cae21a" })
-  -- https://github.com/Wansmer/treesj seems more powerfull
-  use({ "AckslD/nvim-trevJ.lua", commit = "7f401543b5cd5496b6120dddcab394c29983a55c" })
+  use({ "Wansmer/treesj", commit = "1d6e89f4790aa04eaae38fa9460a3ee191961c96" })
   use({ "axelvc/template-string.nvim", commit = "5559125aba8499695eb23c3ff2434a13fb05e304" })
   use({ "mizlan/iswap.nvim", commit = "6b77e8a2235aebbc6d2df150d0c780200f0cefa2" })
   use({
