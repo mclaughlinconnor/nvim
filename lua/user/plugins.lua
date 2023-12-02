@@ -128,6 +128,7 @@ return packer.startup(function(use)
     requires = { "nvim-lua/plenary.nvim" },
     commit = "44a5b386b21a6704d28a027ca819a837b1968df8",
   })
+  use({ "TimUntersberger/neogit", commit = "d0e87541130b2cf62d7f8a54487ef99560232fb6", requires = "nvim-lua/plenary.nvim" })
 
   -- Theming
   use({ "gbprod/nord.nvim", commit = "2948bddbc3cf202789a37b38237144b290b432f6" })
@@ -155,8 +156,7 @@ return packer.startup(function(use)
     commit = "a1a2d0f42eaec400cc6918a8e898fc1f9c4dbc5f",
   })
 
-  -- Curr
-  use({ "TimUntersberger/neogit", commit = "d0e87541130b2cf62d7f8a54487ef99560232fb6", requires = "nvim-lua/plenary.nvim" })
+  -- AI stuff
 
   use({ "github/copilot.vim", commit = "2c31989063b145830d5f0bea8ab529d2aef2427b" })
   use({ "Exafunction/codeium.vim", commit = "2a0c0b7fecee38a52fe750563ff70cff45f768b0" })
