@@ -145,7 +145,7 @@ return packer.startup(function(use)
   -- Tree
   use({ "nvim-treesitter/playground", commit = "ba48c6a62a280eefb7c85725b0915e021a1a0749" }) -- deprecated
   use({ "nvim-treesitter/nvim-treesitter", commit = "80a16deb5146a3eb4648effccda1ab9f45e43e76" })
-  use({ "HiPhish/nvim-ts-rainbow2", commit = "b3120cd5ae9ca524af9cb602f41e12e301fa985f" }) -- deprecated
+  use({ "https://gitlab.com/HiPhish/rainbow-delimiters.nvim", commit = "47404636a34580db1636dc0cf35027bdf77abba5" })
   use({ "nvim-treesitter/nvim-treesitter-textobjects", commit = "ec1c5bdb3d87ac971749fa6c7dbc2b14884f1f6a" })
 
   -- Telescope
