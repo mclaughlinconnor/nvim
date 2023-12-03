@@ -148,6 +148,94 @@ return {
     dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
   },
   { "nvim-treesitter/nvim-treesitter-textobjects", commit = "ec1c5bdb3d87ac971749fa6c7dbc2b14884f1f6a" },
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("refactoring").setup()
+    end,
+    keys = {
+      -- Select refactor
+      {
+        "<leader>rr",
+        function()
+          require("refactoring").select_refactor()
+        end,
+      },
+      {
+        "<leader>rr",
+        function()
+          require("refactoring").select_refactor()
+        end,
+        mode = "x",
+      },
+
+      -- Extract function supports only visual mode
+      {
+        "<leader>re",
+        function()
+          require("refactoring").refactor("Extract Function")
+        end,
+        mode = "x",
+      },
+      {
+        "<leader>rf",
+        function()
+          require("refactoring").refactor("Extract Function To File")
+        end,
+        mode = "x",
+      },
+
+      -- Extract variable supports only visual mode
+      {
+        "<leader>rv",
+        function()
+          require("refactoring").refactor("Extract Variable")
+        end,
+        mode = "x",
+      },
+
+      -- Inline func supports only normal
+      {
+        "<leader>rI",
+        function()
+          require("refactoring").refactor("Inline Function")
+        end,
+      },
+
+      -- Inline var supports both normal and visual mode
+      {
+        "<leader>ri",
+        function()
+          require("refactoring").refactor("Inline Variable")
+        end,
+      },
+      {
+        "<leader>ri",
+        function()
+          require("refactoring").refactor("Inline Variable")
+        end,
+        mode = "x",
+      },
+
+      -- Extract block supports only normal mode
+      {
+        "<leader>rb",
+        function()
+          require("refactoring").refactor("Extract Block")
+        end,
+      },
+      {
+        "<leader>rbf",
+        function()
+          require("refactoring").refactor("Extract Block To File")
+        end,
+      },
+    },
+  },
 }
 
 -- local bigFile = vim.api.nvim_create_augroup("BigFile", {})
