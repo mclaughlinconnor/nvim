@@ -209,26 +209,8 @@ return {
           null_ls.builtins.formatting.latexindent.with({
             filetypes = { "tex", "latex" },
           }),
-          null_ls.builtins.diagnostics.eslint_d.with({
-            condition = function(utils)
-              return utils.root_has_file({
-                ".eslintrc.js",
-                ".eslintrc.cjs",
-                ".eslintrc.cjs",
-                ".eslintrc.yaml",
-                ".eslintrc.yml",
-                ".eslintrc.json",
-              })
-            end,
-          }),
-          null_ls.builtins.code_actions.eslint_d,
           null_ls.builtins.formatting.eslint_d,
           null_ls.builtins.formatting.fixjson,
-          null_ls.builtins.diagnostics.luacheck,
-          null_ls.builtins.diagnostics.shellcheck,
-          null_ls.builtins.diagnostics.stylelint,
-          null_ls.builtins.diagnostics.todo_comments,
-          null_ls.builtins.diagnostics.trail_space,
           null_ls.builtins.formatting.trim_whitespace,
           null_ls.builtins.formatting.stylua.with({
             extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
@@ -236,6 +218,42 @@ return {
           null_ls.builtins.formatting.clang_format,
         },
       }
+    end,
+  },
+  {
+    "mfussenegger/nvim-lint",
+    commit = "f20f35756e74b91c0b4340d01fee22422bdffefa",
+    config = function()
+      local lint = require("lint")
+
+      require("lint").linters_by_ft = {
+        javascript = { "eslint_d" },
+        typescript = { "eslint_d" },
+        scss = { "stylelint" },
+        css = { "stylelint" },
+        less = { "stylelint" },
+      }
+      local stylelint = require('lint').linters.stylelint
+      stylelint.args = {
+        "-f",
+        "json",
+        "--config",
+        function()
+          return vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ':h') .. "/stylelint.config.js"
+        end,
+        "--stdin",
+        "--stdin-filename",
+        function()
+          return vim.fn.expand("%:p")
+        end,
+      }
+
+      vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "InsertLeave", "TextChanged" }, {
+        group = vim.api.nvim_create_augroup("lint", { clear = true }),
+        callback = function()
+          lint.try_lint()
+        end,
+      })
     end,
   },
 }
