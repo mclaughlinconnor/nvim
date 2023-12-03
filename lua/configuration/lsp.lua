@@ -184,17 +184,6 @@ return {
     config = function()
       local lsp_status = require("lsp-status")
 
-      require("lspconfig")["ast_grep"].setup({
-        cmd = { "ast-grep", "lsp" },
-        capabilities = lsp_status.capabilities,
-        root_dir = require("lspconfig").util.root_pattern(".git", "sgconfig.yml"),
-        filetypes = { "typescript" },
-        init_options = {
-          command = { "ast-grep", "lsp" },
-        },
-        on_attach = on_attach,
-      })
-
       require("lspconfig")["angularls"].setup({
         on_attach = on_attach,
         capabilities = lsp_status.capabilities,

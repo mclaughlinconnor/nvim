@@ -1,5 +1,0 @@
-id: conditional_chaining
-valid:
-- "variable?.()"
-invalid:
-- "variable && variable()"
