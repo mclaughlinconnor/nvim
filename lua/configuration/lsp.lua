@@ -229,7 +229,13 @@ return {
           null_ls.builtins.formatting.fixjson,
           null_ls.builtins.diagnostics.luacheck,
           null_ls.builtins.diagnostics.shellcheck,
-          null_ls.builtins.diagnostics.stylelint,
+          null_ls.builtins.diagnostics.stylelint.with({
+            extra_args = {
+              "--config",
+              ---@diagnostic disable-next-line: param-type-mismatch
+              vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/stylelint.config.js",
+            },
+          }),
           null_ls.builtins.diagnostics.todo_comments,
           null_ls.builtins.diagnostics.trail_space,
           null_ls.builtins.formatting.trim_whitespace,
