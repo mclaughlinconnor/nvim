@@ -84,6 +84,7 @@ return {
       "williamboman/mason.nvim",
       "ibhagwan/fzf-lua",
       "neovim/nvim-lspconfig",
+      "nvim-cmp",
       {
         "pmizio/typescript-tools.nvim",
         commit = "7911a0aa27e472bff986f1d3ce38ebad3b635b28",
