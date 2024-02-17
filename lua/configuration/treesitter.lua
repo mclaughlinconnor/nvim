@@ -150,6 +150,7 @@ return {
   { "nvim-treesitter/nvim-treesitter-textobjects", commit = "ec1c5bdb3d87ac971749fa6c7dbc2b14884f1f6a" },
   {
     "ThePrimeagen/refactoring.nvim",
+    commit = "fb4990a0546c59136930ea624b8640d07957f281",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
