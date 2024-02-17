@@ -25,114 +25,107 @@ return {
       local cmp = require("cmp")
       local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 
-      local config = function(sources)
-        return {
-          enabled = function()
-            local buftype = vim.api.nvim_get_option_value("buftype", {})
-            return buftype ~= "prompt" or require("cmp_dap").is_dap_buffer()
+      cmp.setup({
+        enabled = function()
+          local buftype = vim.api.nvim_get_option_value("buftype", {})
+          return buftype ~= "prompt" or require("cmp_dap").is_dap_buffer()
+        end,
+        preselect = cmp.PreselectMode.None,
+        snippet = {
+          expand = function(args)
+            require("luasnip").lsp_expand(args.body)
           end,
-          preselect = cmp.PreselectMode.None,
-          snippet = {
-            expand = function(args)
-              require("luasnip").lsp_expand(args.body)
+        },
+        completion = {
+          keyword_length = 0,
+        },
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
+        },
+        formatting = {
+          fields = {
+            cmp.ItemField.Abbr,
+            cmp.ItemField.Kind,
+            cmp.ItemField.Menu,
+          },
+          format = function(entry, vim_item)
+            -- Source
+            vim_item.menu = ({
+              buffer = "[B]",
+              calc = "[C]",
+              cmdline_history = "[CH]",
+              cmp_git = "[CG]",
+              ctags = "[CT]",
+              luasnip = "[LS]",
+              luasnip_choice = "[LSC]",
+              nvim_lsp = "[LSP]",
+              nvim_lua = "[L]",
+              omni = (vim.inspect(vim_item.menu):gsub('%"', "")),
+              path = "[P]",
+              treesitter = "[TS]",
+              spell = "[S]",
+            })[entry.source.name]
+            return vim_item
+          end,
+        },
+        sorting = {
+          comparators = {
+            function(...)
+              return require("cmp_buffer"):compare_locality(...)
             end,
           },
-          completion = {
-            keyword_length = 0,
-          },
-          performance = {
-            debounce = 300,
-            -- throttle = 200,
-            fetching_timeout = 500,
-          },
-          window = {
-            completion = cmp.config.window.bordered(),
-            documentation = cmp.config.window.bordered(),
-          },
-          formatting = {
-            fields = {
-              cmp.ItemField.Abbr,
-              cmp.ItemField.Kind,
-              cmp.ItemField.Menu,
-            },
-            format = function(entry, vim_item)
-              -- Source
-              vim_item.menu = ({
-                buffer = "[B]",
-                calc = "[C]",
-                cmdline_history = "[CH]",
-                cmp_git = "[CG]",
-                ctags = "[CT]",
-                luasnip = "[LS]",
-                luasnip_choice = "[LSC]",
-                nvim_lsp = "[LSP]",
-                nvim_lua = "[L]",
-                omni = (vim.inspect(vim_item.menu):gsub('%"', "")),
-                path = "[P]",
-                treesitter = "[TS]",
-                spell = "[S]",
-              })[entry.source.name]
-              return vim_item
-            end,
-          },
-          sorting = {
-            comparators = {
-              function(...)
-                return require("cmp_buffer"):compare_locality(...)
+        },
+
+        mapping = cmp.mapping.preset.insert({
+          ["<C-u>"] = cmp.mapping.scroll_docs(-4),
+          ["<C-d>"] = cmp.mapping.scroll_docs(4),
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<M-a>"] = function() cmp.complete({ config = { sources = { { name = "routes" } } } }) end,
+          ["<M-;>"] = cmp.mapping.abort(),
+          ["<CR>"] = cmp.mapping.confirm({ select = false }),
+          ["<M-j>"] = function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            else
+              fallback()
+            end
+          end,
+          ["<M-k>"] = function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end,
+        }),
+        sources = cmp.config.sources({
+          { name = "luasnip" },
+          { name = "luasnip_choice" },
+          { name = "nvim_lsp" },
+        }, {
+          { name = "calc" },
+          { name = "async_path" },
+          { name = "ctags" },
+          { name = "treesitter" },
+          {
+            name = "spell",
+            option = {
+              enable_in_context = function()
+                return require("cmp.config.context").in_treesitter_capture("spell")
               end,
             },
           },
-
-          mapping = cmp.mapping.preset.insert({
-            ["<C-u>"] = cmp.mapping.scroll_docs(-4),
-            ["<C-d>"] = cmp.mapping.scroll_docs(4),
-            ["<C-Space>"] = cmp.mapping.complete(),
-            ["<M-;>"] = cmp.mapping.abort(),
-            ["<CR>"] = cmp.mapping.confirm({ select = false }),
-            ["<M-j>"] = function(fallback)
-              if cmp.visible() then
-                cmp.select_next_item()
-              else
-                fallback()
-              end
-            end,
-            ["<M-k>"] = function(fallback)
-              if cmp.visible() then
-                cmp.select_prev_item()
-              else
-                fallback()
-              end
-            end,
-          }),
-          sources = cmp.config.sources(sources),
-        }
-      end
-
-      cmp.setup(config({
-        { name = "luasnip" },
-        { name = "luasnip_choice" },
-        { name = "calc" },
-        { name = "async_path" },
-        { name = "ctags" },
-        { name = "nvim_lsp" },
-        { name = "treesitter" },
-        {
-          name = "spell",
-          option = {
-            enable_in_context = function()
-              return require("cmp.config.context").in_treesitter_capture("spell")
-            end,
+          {
+            name = "buffer",
+            option = {
+              get_bufnrs = function()
+                return vim.api.nvim_list_bufs()
+              end,
+            },
           },
-        },
-        {
-          name = "buffer",
-          option = {
-            get_bufnrs = function()
-              return vim.api.nvim_list_bufs()
-            end,
-          },
-        },
-      }))
+        }),
+      })
 
       cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
@@ -216,10 +209,6 @@ return {
         group = jsonDisableTS,
         pattern = "*.json",
       })
-
-      vim.keymap.set("i", "<M-a>", function()
-        cmp.complete({ config = config({ { name = "routes" } }) })
-      end, { noremap = true, silent = false })
     end,
   },
 }
