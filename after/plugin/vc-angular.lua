@@ -5,6 +5,16 @@ local lir_actions = require("lir.actions")
 
 local cwd = vim.loop.cwd()
 
+local function find_buffer_by_name(name)
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    local buf_name = vim.api.nvim_buf_get_name(buf)
+    if buf_name == name then
+      return buf
+    end
+  end
+  return -1
+end
+
 -- Could probably have used vim.fs.find instead of this whole function
 local find_modules
 find_modules = function(directory, filename)
@@ -51,8 +61,8 @@ local function get_treesitter_root(bufnr)
   return tree:root()
 end
 
-local function update_module_arrays(bufnr, export, component)
-  local query = vim.treesitter.parse_query(
+local function update_module_arrays(bufnr, target_array, component)
+  local query = vim.treesitter.query.parse(
     "typescript",
     [[
       (decorator
@@ -110,107 +120,75 @@ local function update_module_arrays(bufnr, export, component)
     end
   end
 
+  local updated = false
   for id, node in query:iter_captures(root, bufnr, 0, -1) do
     local name = query.captures[id]
     if name == "values" then
-      local array_name = vim.treesitter.query.get_node_text(node:prev_named_sibling(), bufnr)
-      if array_name == "declarations" then
+      local prev = node:prev_named_sibling()
+
+      if prev == nil then
+        goto continue
+      end
+
+      if vim.treesitter.get_node_text(prev, bufnr) == target_array then
         add_to_array(node)
-      elseif array_name == "exports" and export then
-        add_to_array(node)
+        updated = true
       end
     end
+    ::continue::
   end
 
   for _, change in ipairs(changes) do
     vim.api.nvim_buf_set_lines(bufnr, change.start, change.final, false, change.content)
   end
-end
 
-local function get_ts_client(bufnr)
-  for _, client in pairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
-    if client.name == "tsserver" then
-      return client
-    end
+  if not updated then
+    vim.notify("Couldn't update " .. target_array .. " in " .. vim.api.nvim_buf_get_name(bufnr))
   end
 end
 
-local function find_buffer_by_name(name)
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    local buf_name = vim.api.nvim_buf_get_name(buf)
-    if buf_name == name then
-      return buf
-    end
+local function get_ts_client(module, component_name, callback)
+  local bufnr = find_buffer_by_name(module)
+  if bufnr == -1 then
+    bufnr = vim.api.nvim_create_buf(true, false)
+    vim.api.nvim_buf_set_name(bufnr, module)
+    vim.api.nvim_buf_call(bufnr, vim.cmd.edit)
   end
-  return -1
+  vim.cmd.buffer(bufnr)
+
+  update_module_arrays(bufnr, "declarations", component_name)
+
+  local ts = vim.lsp.get_clients({ name = "typescript-tools" })
+  if ts[1] ~= nil and ts[1].name == "typescript-tools" then
+    vim.lsp.buf_attach_client(bufnr, ts[1].id)
+    callback(bufnr)
+  end
+
+  vim.notify("Attempting to start tsserver...")
+  vim.cmd("LspStart typescript-tools")
+
+  return vim.defer_fn(function()
+    callback(bufnr)
+  end, 5000)
 end
 
-local function update_module(component_name)
+local function update_module(component_name, component_directory)
   find_module(function(module)
-    local bufnr = find_buffer_by_name(module)
-    if bufnr == -1 then
-      bufnr = vim.api.nvim_create_buf(true, false)
-      vim.api.nvim_buf_set_name(bufnr, module)
-      vim.api.nvim_buf_call(bufnr, vim.cmd.edit)
-      -- vim.api.nvim_exec_autocmds("BufEnter", { buffer = bufnr })
-    end
+    vim.notify("Updating " .. module)
 
-    local tsserver_imports = function()
-      local client = get_ts_client(bufnr)
+    get_ts_client(module, component_name, function(bufnr)
+      vim.ui.select(
+        { "Sharing is caring", "Keep it to ourselves" },
+        { prompt = "Export from module?" },
+        function(choice)
+          if choice == "Sharing is caring" then
+            update_module_arrays(bufnr, "exports", component_name)
+          end
 
-      local function apply_edits(result)
-        local res_edit = result[1]
-
-        -- Equivalent to res[0]?.edit?.documentChanges?.[0]?.edits
-        if res_edit ~= nil then
-          res_edit = res_edit.edit
+          require("typescript-tools.api").add_missing_imports(true)
+          vim.cmd(":edit " .. component_directory .. "/..")
         end
-        local res_edit_document_changes = res_edit
-        if res_edit_document_changes ~= nil then
-          res_edit_document_changes = res_edit_document_changes.documentChanges
-        end
-        local res_edit_document_changes_first = res_edit_document_changes
-        if res_edit_document_changes_first ~= nil then
-          res_edit_document_changes_first = res_edit_document_changes_first[1]
-        end
-        local res_edit_document_changes_first_edits = res_edit_document_changes_first
-        if res_edit_document_changes_first_edits ~= nil then
-          res_edit_document_changes_first_edits = res_edit_document_changes_first_edits.edits
-        end
-        if res_edit_document_changes_first_edits == nil then
-          return
-        end
-
-        vim.lsp.util.apply_text_edits(result[1].edit.documentChanges[1].edits, bufnr, client.offset_encoding)
-
-        return true
-      end
-
-      local res = client.request_sync("textDocument/codeAction", {
-        range = { ["end"] = { character = 0, line = 0 }, ["start"] = { character = 0, line = 0 } },
-        textDocument = { uri = "file://" .. vim.loop.cwd() .. "/" .. module }, -- use vim.uri_from_bufnr?
-        context = { only = { "source.addMissingImports.ts" }, diagnostics = vim.diagnostic.get(bufnr) },
-      }, nil, bufnr)
-
-      if apply_edits(res.result) == nil then
-        vim.notify(
-          "Tsserver didn't send back any imports. You're gonna have to add it yourself to "
-          .. module
-          .. " in a few seconds"
-        )
-      else
-        vim.notify("Successfully updated " .. module .. " to include the component")
-      end
-
-      vim.cmd("silent wall")
-    end
-
-    vim.ui.select({ "Sharing is caring", "Keep it to ourselves" }, { prompt = "Export from module?" }, function(choice)
-      local export = choice == "Sharing is caring"
-      update_module_arrays(bufnr, export, component_name)
-
-      -- Give tsserver a few seconds to notice I haven't imported things
-      vim.defer_fn(tsserver_imports, 5000)
+      )
     end)
   end)
 end
@@ -258,7 +236,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
         local component_class_name = selector:gsub("-(.)", string.upper):gsub("^%l", string.upper) .. "Component"
         local component_directory = make_directory(lir_directory, selector)
         make_component(component_directory, component_class_name, selector)
-        update_module(component_class_name)
+        update_module(component_class_name, component_directory)
       end)
     end, { noremap = true, buffer = 0 })
   end,
