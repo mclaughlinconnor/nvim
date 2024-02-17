@@ -16,6 +16,25 @@ end
 
 return {
   {
+    "harrisoncramer/gitlab.nvim",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
+      "stevearc/dressing.nvim", -- Recommended but not required. Better UI for pickers.
+      "nvim-tree/nvim-web-devicons" -- Recommended but not required. Icons in discussion tree.
+    },
+    enabled = true,
+    build = function () require("gitlab.server").build(true) end, -- Builds the Go binary
+    config = function()
+      require("gitlab").setup(
+        {
+          config_path = vim.fn.expand("$HOME"),
+        }
+      )
+    end,
+  },
+  {
     -- pretty sure I'm woefully underutilising this plugin
     "lewis6991/gitsigns.nvim",
     commit = "6ef8c54fb526bf3a0bc4efb0b2fe8e6d9a7daed2",
