@@ -3,10 +3,21 @@ return {
     "theHamsta/nvim-dap-virtual-text",
     commit = "57f1dbd0458dd84a286b27768c142e1567f3ce3b",
     opts = {
-      all_frames = true,
       all_references = true,
+      display_callback = function(variable, _, _, _, options)
+        local value = variable.value
+        if string.len(value) > 10 then
+          value = string.sub(value, 1, 10) .. "..."
+        end
+
+        if options.virt_text_pos == "inline" then
+          return " = " .. value
+        else
+          return variable.name .. " = " .. value
+        end
+      end,
       enabled = true,
-      only_first_definition = false,
+      only_first_definition = true,
     },
   },
   {
@@ -16,7 +27,7 @@ return {
       require("dapui").setup()
 
       local dap_float = vim.api.nvim_create_augroup("dap_float", { clear = true })
-      vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+      vim.api.nvim_create_autocmd({ "FileType" }, {
         pattern = "dap-float",
         group = dap_float,
         callback = function()
@@ -29,13 +40,25 @@ return {
     "mxsdev/nvim-dap-vscode-js",
     commit = "03bd29672d7fab5e515fc8469b7d07cc5994bbf6",
     dependencies = { "microsoft/vscode-js-debug" },
-    opts = {
-      adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" }, -- which adapters to register in nvim-dap
-    },
+    opts = function()
+      local utils = require("dap-vscode-js.utils")
+      return {
+        adapters = {
+          "pwa-node",
+          "pwa-chrome",
+          "pwa-msedge",
+          "node-terminal",
+          "pwa-extensionHost",
+        }, -- which adapters to register in nvim-dap
+        debugger_path = utils.join_paths(utils.get_runtime_dir(), "lazy/vscode-js-debug"),
+        -- log_file_level = vim.log.levels.TRACE,
+        -- log_console_level = vim.log.levels.TRACE,
+      }
+    end,
   },
   {
     "microsoft/vscode-js-debug",
-    commit = "636f7e3f7c0204c370a46c6a76e1b6b688f41a85",
+    commit = "8fa24a71b84043a3c7065e4c64e1a9541ec518b2",
     lazy = true,
     build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
   },
@@ -45,6 +68,7 @@ return {
     dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap", "mxsdev/nvim-dap-vscode-js" },
     config = function()
       local dap = require("dap")
+      -- dap.set_log_level('TRACE')
 
       dap.configurations["lua"] = {
         {
@@ -69,36 +93,9 @@ return {
       for _, language in ipairs({ "typescript", "javascript" }) do
         dap.configurations[language] = {
           {
-            name = "Chrome",
-            type = "pwa-chrome",
-            request = "launch",
-            url = "http://localhost:4200/",
-            webRoot = "${workspaceFolder}",
-          },
-          {
-            keepProfileChanges = true,
-            name = "Firefox",
-            pathMappings = {
-              {
-                url = "webpack:///assets",
-                path = "${workspaceFolder}/assets",
-              },
-            },
-            profileDir = "/home/connorm/snap/firefox/common/.cache/mozilla/firefox/debug/", -- platform specific :(
-            request = "launch",
-            skipFiles = {
-              "<node_internals>/**",
-            },
-            timeout = 20,
-            tmpDir = firefoxPath .. "/temp",
-            type = "firefox",
-            url = "http://localhost:4200/",
-            webRoot = "${workspaceFolder}",
-          },
-          {
-            continueOnAttach = true,
             cwd = "${workspaceFolder}",
             name = "Server",
+            trace = false,
             outputCapture = "std",
             port = 9229,
             request = "launch",
@@ -118,10 +115,97 @@ return {
             type = "pwa-node",
           },
           {
+            name = "Firefox",
+            pathMappings = {
+              {
+                url = "webpack:///assets",
+                path = "${workspaceFolder}/assets",
+              },
+            },
+            profileDir = "/Users/connorveryconnect.com/Library/Application Support/Firefox/Profiles/t2i3rv3r.debug", -- platform specific :(
+            request = "launch",
+            skipFiles = {
+              "<node_internals>/**",
+            },
+            timeout = 20,
+            tmpDir = firefoxPath .. "/temp",
+            type = "firefox",
+            url = "http://localhost:1337/",
+            webRoot = "${workspaceFolder}",
+          },
+          {
+            name = "Chrome",
+            type = "pwa-chrome",
+            request = "launch",
+            runtimeArgs = {
+              "--profile-directory=debug-profile",
+            },
+            userDataDir = false,
+            url = "http://localhost:1337",
+            webRoot = "${workspaceFolder}",
+          },
+          {
             type = "pwa-node",
             request = "launch",
-            name = "Current file",
-            program = "${file}",
+            name = "Debug backend tests",
+            env = { NODE_ENV = "test" },
+            program = "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            runtimeArgs = {
+              "--inspect",
+            },
+            args = {
+              "--timeout",
+              "999999",
+              "--exit",
+              "--full-trace",
+              "-r",
+              "source-map-support/register",
+              "-r",
+              "${workspaceFolder}/.src/test.bootstrap.js",
+              "--recursive",
+              "${workspaceFolder}/.src/test/tests",
+            },
+            rootPath = "${workspaceFolder}",
+            cwd = "${workspaceFolder}",
+          },
+          {
+            name = "Attach frontend tests",
+            port = 9222,
+            request = "attach",
+            type = "pwa-chrome",
+            pathMapping = {
+              ["/_karma_webpack_"] = "${workspaceFolder}",
+            },
+          },
+          {
+            console = "integratedTerminal",
+            cwd = "${workspaceFolder}",
+            name = "Launch frontend tests",
+            outputCapture = "std",
+            request = "launch",
+            resolveSourceMapLocations = {
+              "${workspaceFolder}/**",
+              "!**/node_modules/**",
+            },
+            runtimeArgs = {
+              "run-script",
+              "test:frontend:watch",
+              "--",
+              "--karma-config",
+              vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/after/plugin/vc-karma.js",
+            },
+            runtimeExecutable = "npm",
+            skipFiles = {
+              "<node_internals>/**",
+            },
+            smartStep = true,
+            type = "pwa-node",
+          },
+          {
+            type = "pwa-node",
+            request = "attach",
+            name = "Attach",
+            processId = require("dap.utils").pick_process,
             cwd = "${workspaceFolder}",
           },
         }
@@ -219,7 +303,7 @@ return {
       {
         "<leader>dh",
         function()
-          local widgets = require("dapui.widgets")
+          local widgets = require("dap.ui.widgets")
           widgets.cursor_float(widgets.expression)
         end,
         desc = "Hover expression in float",
@@ -227,7 +311,7 @@ return {
       {
         "<leader>dH",
         function()
-          local widgets = require("dapui.widgets")
+          local widgets = require("dap.ui.widgets")
           widgets.centered_float(widgets.expression)
         end,
         desc = "Hover expression in big float",
@@ -247,7 +331,7 @@ return {
         desc = "DAP step over",
       },
       {
-        "<leader>do",
+        "<leader>dt",
         function()
           require("dap").step_out()
         end,

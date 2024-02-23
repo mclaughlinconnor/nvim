@@ -69,5 +69,5 @@
   "vim-gutentags": { "branch": "master", "commit": "aa47c5e29c37c52176c44e61c780032dfacef3dd" },
   "vim-sandwich": { "branch": "master", "commit": "c5a2cc438ce6ea2005c556dc833732aa53cae21a" },
   "vimtex": { "branch": "master", "commit": "941485f8b046ac00763dad2546f0701e85e5e02c" },
-  "vscode-js-debug": { "branch": "main", "commit": "636f7e3f7c0204c370a46c6a76e1b6b688f41a85" }
+  "vscode-js-debug": { "branch": "main", "commit": "8fa24a71b84043a3c7065e4c64e1a9541ec518b2" }
 }
