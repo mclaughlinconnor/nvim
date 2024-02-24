@@ -1,0 +1,9 @@
+id: use-assignment-operators
+valid:
+- x &&= y
+- x = z &&= y
+invalid:
+- x = x && y
+- x = y && x
+- x = x || y
+- x = y || x

@@ -1,0 +1,28 @@
+id: no-bad-ng-container
+snapshots:
+  ng-container(*ngIf="true"):
+    labels:
+    - source: ng-container
+      style: primary
+      start: 0
+      end: 12
+    - source: '*ngIf'
+      style: secondary
+      start: 13
+      end: 18
+    - source: )
+      style: secondary
+      start: 25
+      end: 26
+    - source: (
+      style: secondary
+      start: 12
+      end: 13
+    - source: '*ngIf="true"'
+      style: secondary
+      start: 13
+      end: 25
+    - source: (*ngIf="true")
+      style: secondary
+      start: 12
+      end: 26

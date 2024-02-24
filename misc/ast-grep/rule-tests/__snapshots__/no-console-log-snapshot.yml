@@ -1,0 +1,8 @@
+id: no-console-log
+snapshots:
+  console.log:
+    labels:
+    - source: console.log
+      style: primary
+      start: 0
+      end: 11

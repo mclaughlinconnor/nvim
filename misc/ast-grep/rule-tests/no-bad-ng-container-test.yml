@@ -1,0 +1,6 @@
+id: no-bad-ng-container
+valid:
+- ng-container(*ngFor="true")
+- span(*ngIf="true")
+invalid:
+- ng-container(*ngIf="true")

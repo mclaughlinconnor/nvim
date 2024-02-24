@@ -1,0 +1,74 @@
+id: use-assignment-operators
+snapshots:
+  x = x && y:
+    labels:
+    - source: x = x && y
+      style: primary
+      start: 0
+      end: 10
+    - source: x
+      style: secondary
+      start: 4
+      end: 5
+    - source: '&&'
+      style: secondary
+      start: 6
+      end: 8
+    - source: x && y
+      style: secondary
+      start: 4
+      end: 10
+  x = x || y:
+    labels:
+    - source: x = x || y
+      style: primary
+      start: 0
+      end: 10
+    - source: x
+      style: secondary
+      start: 4
+      end: 5
+    - source: '||'
+      style: secondary
+      start: 6
+      end: 8
+    - source: x || y
+      style: secondary
+      start: 4
+      end: 10
+  x = y && x:
+    labels:
+    - source: x = y && x
+      style: primary
+      start: 0
+      end: 10
+    - source: y
+      style: secondary
+      start: 4
+      end: 5
+    - source: '&&'
+      style: secondary
+      start: 6
+      end: 8
+    - source: y && x
+      style: secondary
+      start: 4
+      end: 10
+  x = y || x:
+    labels:
+    - source: x = y || x
+      style: primary
+      start: 0
+      end: 10
+    - source: y
+      style: secondary
+      start: 4
+      end: 5
+    - source: '||'
+      style: secondary
+      start: 6
+      end: 8
+    - source: y || x
+      style: secondary
+      start: 4
+      end: 10

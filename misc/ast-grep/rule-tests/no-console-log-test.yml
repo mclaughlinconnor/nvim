@@ -1,0 +1,5 @@
+id: no-console-log
+valid:
+- this.log();
+invalid:
+- console.log

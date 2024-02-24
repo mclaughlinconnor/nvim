@@ -1,0 +1,9 @@
+id: no-unnecessary-tr-pipe
+valid:
+- "span {{' '}}{{'text'|tr}}"
+- "span([attr]='value')"
+- "span {{'text'|tr}}:"
+invalid:
+- "span {{'text'|tr}}"
+- "span([attr]='value') {{'text'|tr}}"
+

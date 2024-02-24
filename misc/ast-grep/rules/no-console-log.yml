@@ -1,0 +1,6 @@
+id: no-console-log
+message: Don't use console.log
+severity: error
+language: TypeScript
+rule:
+  pattern: console.log

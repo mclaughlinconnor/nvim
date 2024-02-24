@@ -1,0 +1,35 @@
+id: no-for-assignment
+message: Don't reassign the iterator variable
+severity: error # error, warning, info, hint
+language: TypeScript
+rule:
+  all:
+    - any:
+      - pattern:
+          context: $A = $_
+          selector: assignment_expression
+      - all:
+          - kind: update_expression
+          - has:
+              kind: identifier
+              pattern: $A
+    - inside:
+        kind: statement_block
+        stopBy: end
+    - any:
+      - inside:
+          kind: for_in_statement
+          stopBy: end
+          has:
+            kind: identifier
+            pattern: $A
+      - inside:
+          kind: for_statement
+          stopBy: end
+          has:
+            kind: lexical_declaration
+            any:
+              - pattern: let $A = $_;
+              - pattern: const $A = $_;
+              - pattern: var $A = $_;
+

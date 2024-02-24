@@ -1,0 +1,17 @@
+id: use-assignment-operators
+message: Use the assignment operator instead
+severity: info
+language: TypeScript
+rule:
+  all:
+    - kind: assignment_expression
+    - has:
+        kind: binary_expression
+        all:
+          - has:
+              kind: identifier
+              pattern: $A
+          - has:
+              field: operator
+              regex: "&&|\\|\\||\\+|-|\\*|/"
+

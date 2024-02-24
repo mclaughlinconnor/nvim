@@ -1,0 +1,110 @@
+id: no-for-assignment
+snapshots:
+  for (const i = 0; i < 10; i++) { i = 100 }:
+    labels:
+    - source: i = 100
+      style: primary
+      start: 33
+      end: 40
+    - source: '{ i = 100 }'
+      style: secondary
+      start: 31
+      end: 42
+    - source: const i = 0;
+      style: secondary
+      start: 5
+      end: 17
+    - source: for (const i = 0; i < 10; i++) { i = 100 }
+      style: secondary
+      start: 0
+      end: 42
+  for (const i = 0; i < 10; i++) { if (i === 0) {i = 100} }:
+    labels:
+    - source: i = 100
+      style: primary
+      start: 47
+      end: 54
+    - source: '{i = 100}'
+      style: secondary
+      start: 46
+      end: 55
+    - source: const i = 0;
+      style: secondary
+      start: 5
+      end: 17
+    - source: for (const i = 0; i < 10; i++) { if (i === 0) {i = 100} }
+      style: secondary
+      start: 0
+      end: 57
+  for (const x of xs) { x = 100 }:
+    labels:
+    - source: x = 100
+      style: primary
+      start: 22
+      end: 29
+    - source: '{ x = 100 }'
+      style: secondary
+      start: 20
+      end: 31
+    - source: x
+      style: secondary
+      start: 11
+      end: 12
+    - source: for (const x of xs) { x = 100 }
+      style: secondary
+      start: 0
+      end: 31
+  for (let i = 0; i < 10; i++) { i = 100 }:
+    labels:
+    - source: i = 100
+      style: primary
+      start: 31
+      end: 38
+    - source: '{ i = 100 }'
+      style: secondary
+      start: 29
+      end: 40
+    - source: let i = 0;
+      style: secondary
+      start: 5
+      end: 15
+    - source: for (let i = 0; i < 10; i++) { i = 100 }
+      style: secondary
+      start: 0
+      end: 40
+  for (let x in xs) { x = 100 }:
+    labels:
+    - source: x = 100
+      style: primary
+      start: 20
+      end: 27
+    - source: x
+      style: secondary
+      start: 9
+      end: 10
+    - source: for (let x in xs) { x = 100 }
+      style: secondary
+      start: 0
+      end: 29
+  for (let x in xs) {x++}:
+    labels:
+    - source: x++
+      style: primary
+      start: 19
+      end: 22
+    - source: x
+      style: secondary
+      start: 19
+      end: 20
+    - source: '{x++}'
+      style: secondary
+      start: 18
+      end: 23
+    - source: x
+      style: secondary
+      start: 9
+      end: 10
+    - source: for (let x in xs) {x++}
+      style: secondary
+      start: 0
+      end: 23

@@ -1,0 +1,10 @@
+customLanguages:
+  pug:
+    libraryPath: ./parsers/pug.so
+    extensions: [pug]
+ruleDirs:
+- ./rules
+testConfigs:
+- testDir: ./rule-tests
+utilDirs:
+- ./utils

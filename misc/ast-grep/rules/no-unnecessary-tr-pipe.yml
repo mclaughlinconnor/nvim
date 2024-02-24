@@ -1,0 +1,13 @@
+id: no-unnecessary-tr-pipe
+message: Could use [translate] instead
+severity: info # error, warning, info, hint
+language: pug
+rule:
+  all:
+    - regex: "^\\{\\{[^{}]*?\\|tr\\}\\}$"
+    - pattern: $A
+    - kind: content
+    - inside:
+        kind: tag
+# utils: Extract repeated rule as local utility here.
+# note: Add detailed explanation for the rule.
