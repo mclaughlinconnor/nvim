@@ -1,0 +1,9 @@
+id: no-for-assignment
+valid:
+- for (let i = 0; i < 10; i++) { console.log(i) }
+invalid:
+- for (let i = 0; i < 10; i++) { i = 100 }
+- for (const i = 0; i < 10; i++) { i = 100 }
+- for (const i = 0; i < 10; i++) { if (i === 0) {i = 100} }
+- for (const x of xs) { x = 100 }
+- for (let x in xs) {x++}

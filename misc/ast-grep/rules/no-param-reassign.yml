@@ -1,0 +1,40 @@
+id: no-param-reassign
+message: Don't reassign the function parameter
+severity: error # error, warning, info, hint
+language: TypeScript
+rule:
+  all:
+     - any:
+        - all:
+          - kind: assignment_expression
+          - has:
+              kind: identifier
+              stopBy: end
+              pattern: $A
+        - all:
+          - kind: call_expression
+          - has:
+              kind: identifier
+              stopBy: end
+              pattern: $A
+          - has:
+              kind: property_identifier
+              regex: push
+              stopBy: end
+
+     - inside:
+        any:
+          - kind: method_definition
+          - kind: function_declaration
+        stopBy: end
+        has:
+          kind: formal_parameters
+          has:
+            any:
+              - kind: required_parameter
+              - kind: optional_parameter
+            has:
+              kind: identifier
+              pattern: $A
+# utils: Extract repeated rule as local utility here.
+# note: Add detailed explanation for the rule.

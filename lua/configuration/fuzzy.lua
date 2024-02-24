@@ -54,6 +54,7 @@ return {
         mode = "i",
       },
       { "<leader>tp", function() require("user.pickers.translations")() end },
+      { "<leader>cp", function() require("user.pickers.ast_grep")() end },
     },
     opts = function()
       local actions = require("fzf-lua.actions")

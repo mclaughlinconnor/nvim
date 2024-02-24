@@ -1,0 +1,20 @@
+id: no-bad-ng-container
+message: Could be ng-template
+severity: warning # error, warning, info, hint
+language: pug
+rule:
+  all:
+    - pattern:
+        context: ng-container
+        selector: tag_name
+    - precedes:
+        kind: attributes
+        has:
+          kind: attribute
+          follows:
+            regex: "\\("
+          precedes:
+            regex: "\\)"
+          has:
+            kind: attribute_name
+            regex: "\\*ngIf"

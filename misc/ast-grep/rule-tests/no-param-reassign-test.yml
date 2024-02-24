@@ -1,0 +1,9 @@
+id: no-param-reassign
+valid:
+- "valid code"
+invalid:
+- "class ClassName {public method(param: string) {param = 'test'} }"
+- "class ClassName {public method(param: string, value: number) {param.value.push('fda')} }"
+- "function func(param: string, value: number) {param.value = 'test'; variable=true}"
+- "export function func(param: string, value: number) {param.value = 'test'; if (true) {param.value = 'test'}}"
+- "export function func(param: string, value: number) {if (true) {param.value = 'test'}}"

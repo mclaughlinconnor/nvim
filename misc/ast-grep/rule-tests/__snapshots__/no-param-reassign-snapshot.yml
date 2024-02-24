@@ -1,0 +1,136 @@
+id: no-param-reassign
+snapshots:
+  'class ClassName {public method(param: string) {param = ''test''} }':
+    labels:
+    - source: param = 'test'
+      style: primary
+      start: 47
+      end: 61
+    - source: param
+      style: secondary
+      start: 47
+      end: 52
+    - source: param
+      style: secondary
+      start: 31
+      end: 36
+    - source: 'param: string'
+      style: secondary
+      start: 31
+      end: 44
+    - source: '(param: string)'
+      style: secondary
+      start: 30
+      end: 45
+    - source: 'public method(param: string) {param = ''test''}'
+      style: secondary
+      start: 17
+      end: 62
+  'class ClassName {public method(param: string, value: number) {param.value.push(''fda'')} }':
+    labels:
+    - source: param.value.push('fda')
+      style: primary
+      start: 62
+      end: 85
+    - source: param
+      style: secondary
+      start: 62
+      end: 67
+    - source: push
+      style: secondary
+      start: 74
+      end: 78
+    - source: param
+      style: secondary
+      start: 31
+      end: 36
+    - source: 'param: string'
+      style: secondary
+      start: 31
+      end: 44
+    - source: '(param: string, value: number)'
+      style: secondary
+      start: 30
+      end: 60
+    - source: 'public method(param: string, value: number) {param.value.push(''fda'')}'
+      style: secondary
+      start: 17
+      end: 86
+  'export function func(param: string, value: number) {if (true) {param.value = ''test''}}':
+    labels:
+    - source: param.value = 'test'
+      style: primary
+      start: 63
+      end: 83
+    - source: param
+      style: secondary
+      start: 63
+      end: 68
+    - source: param
+      style: secondary
+      start: 21
+      end: 26
+    - source: 'param: string'
+      style: secondary
+      start: 21
+      end: 34
+    - source: '(param: string, value: number)'
+      style: secondary
+      start: 20
+      end: 50
+    - source: 'function func(param: string, value: number) {if (true) {param.value = ''test''}}'
+      style: secondary
+      start: 7
+      end: 85
+  'export function func(param: string, value: number) {param.value = ''test''; if (true) {param.value = ''test''}}':
+    labels:
+    - source: param.value = 'test'
+      style: primary
+      start: 52
+      end: 72
+    - source: param
+      style: secondary
+      start: 52
+      end: 57
+    - source: param
+      style: secondary
+      start: 21
+      end: 26
+    - source: 'param: string'
+      style: secondary
+      start: 21
+      end: 34
+    - source: '(param: string, value: number)'
+      style: secondary
+      start: 20
+      end: 50
+    - source: 'function func(param: string, value: number) {param.value = ''test''; if (true) {param.value = ''test''}}'
+      style: secondary
+      start: 7
+      end: 107
+  'function func(param: string, value: number) {param.value = ''test''; variable=true}':
+    labels:
+    - source: param.value = 'test'
+      style: primary
+      start: 45
+      end: 65
+    - source: param
+      style: secondary
+      start: 45
+      end: 50
+    - source: param
+      style: secondary
+      start: 14
+      end: 19
+    - source: 'param: string'
+      style: secondary
+      start: 14
+      end: 27
+    - source: '(param: string, value: number)'
+      style: secondary
+      start: 13
+      end: 43
+    - source: 'function func(param: string, value: number) {param.value = ''test''; variable=true}'
+      style: secondary
+      start: 0
+      end: 81
