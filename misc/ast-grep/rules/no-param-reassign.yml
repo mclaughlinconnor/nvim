@@ -1,6 +1,6 @@
 id: no-param-reassign
 message: Don't reassign the function parameter
-severity: error # error, warning, info, hint
+severity: hint # error, warning, info, hint
 language: TypeScript
 rule:
   all:
@@ -9,7 +9,8 @@ rule:
           - kind: assignment_expression
           - has:
               kind: identifier
-              stopBy: end
+              stopBy:
+                kind: call_expression
               pattern: $A
         - all:
           - kind: call_expression
@@ -19,8 +20,9 @@ rule:
               pattern: $A
           - has:
               kind: property_identifier
-              regex: push
-              stopBy: end
+              regex: "push"
+              stopBy:
+                kind: arguments
 
      - inside:
         any:

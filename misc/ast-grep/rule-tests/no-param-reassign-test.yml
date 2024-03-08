@@ -1,6 +1,8 @@
 id: no-param-reassign
 valid:
 - "valid code"
+- "export function func(param: string, value: number) {param.function() = 'test'}"
+- "export function func(param: string, value: number) {const x = param}"
 invalid:
 - "class ClassName {public method(param: string) {param = 'test'} }"
 - "class ClassName {public method(param: string, value: number) {param.value.push('fda')} }"
