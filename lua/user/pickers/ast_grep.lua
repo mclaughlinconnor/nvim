@@ -30,7 +30,7 @@ return function()
   require("fzf-lua").fzf_live(function(query)
     -- query = [[$X.aggregate]]
     local cmd_string =
-      [[ast-grep --pattern '<query>' --lang "pug" --config ~/.config/nvim/misc/ast-grep/sgconfig.yml typescript--json=stream | head -n 200]]
+      [[ast-grep --pattern '<query>' --lang "typescript" --json=stream | head -n 200]]
     return (cmd_string):gsub("<query>", query)
   end, opts)
 end
