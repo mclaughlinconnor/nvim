@@ -25,7 +25,7 @@ return {
         install_info = {
           url = "https://github.com/mclaughlinconnor/tree-sitter-pug",
           files = { "src/parser.c", "src/scanner.c" },
-          revision = "attrs",
+          revision = "betterindents",
         },
         filetype = "pug",
         maintainers = { "@mclaughlinconnor" },
