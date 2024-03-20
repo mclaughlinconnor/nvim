@@ -204,7 +204,7 @@ return {
           })
         end,
         ["ast_grep"] = function()
-          require("lspconfig")["lua_ls"].setup({
+          require("lspconfig")["ast_grep"].setup({
             cmd = { "sg", "lsp" },
             filetypes = { "typescript", "pug" },
             single_file_support = true,
