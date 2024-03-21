@@ -92,7 +92,6 @@ return {
           null_ls.builtins.formatting.latexindent.with({
             filetypes = { "tex", "latex" },
           }),
-          null_ls.builtins.formatting.eslint_d,
           null_ls.builtins.formatting.fixjson,
           null_ls.builtins.diagnostics.luacheck,
           null_ls.builtins.diagnostics.shellcheck,
@@ -251,8 +250,6 @@ return {
       local lint = require("lint")
 
       require("lint").linters_by_ft = {
-        javascript = { "eslint_d" },
-        typescript = { "eslint_d" },
         scss = { "stylelint" },
         css = { "stylelint" },
         less = { "stylelint" },
