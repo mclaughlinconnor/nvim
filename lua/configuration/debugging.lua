@@ -7,7 +7,7 @@ return {
       display_callback = function(variable, _, _, _, options)
         local value = variable.value
         if string.len(value) > 10 then
-          value = string.sub(value, 1, 10) .. "..."
+          return ""
         end
 
         if options.virt_text_pos == "inline" then
