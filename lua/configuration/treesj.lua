@@ -30,6 +30,7 @@ return {
             }),
           }),
         },
+        max_join_length = 1000,
       }
     end,
     keys = {
