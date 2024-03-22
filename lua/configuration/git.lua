@@ -17,13 +17,15 @@ end
 return {
   {
     "harrisoncramer/gitlab.nvim",
+    commit = "c0c67486d17d4f73f62b50c13c77aaed2e9f17f0",
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",
-      "sindrets/diffview.nvim",
+      "mclaughlinconnor/diffview.nvim",
       "stevearc/dressing.nvim", -- Recommended but not required. Better UI for pickers.
       "nvim-tree/nvim-web-devicons" -- Recommended but not required. Icons in discussion tree.
     },
+    event = "VeryLazy",
     enabled = true,
     build = function () require("gitlab.server").build(true) end, -- Builds the Go binary
     config = function()
@@ -116,7 +118,7 @@ return {
         end,
       },
     },
-    lazy = false,
+    event = "VeryLazy",
     opts = {
       enhanced_diff_hl = true, -- See |diffview-config-enhanced_diff_hl|
       use_icons = false,
