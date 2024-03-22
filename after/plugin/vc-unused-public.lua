@@ -20,7 +20,7 @@ local identifiers = [[
 local property_definition = [[
   (public_field_definition
     (accessibility_modifier) @accessibility_modifier
-    name: (property_identifier) @var)
+    name: (property_identifier) @var) @definition
 ]]
 
 local property_usage = [[
@@ -46,6 +46,28 @@ local template = [[
     (#eq? @decorator_name "Component")
   )
 ]]
+
+local disallowed_decorators = {
+  ["Attribute"] = true,
+  ["Component"] = true,
+  ["ContentChild"] = true,
+  ["ContentChildren"] = true,
+  ["Directive"] = true,
+  ["Host"] = true,
+  ["HostBinding"] = true,
+  ["HostListener"] = true,
+  ["Inject"] = true,
+  ["Injectable"] = true,
+  ["Input"] = true,
+  ["NgModule"] = true,
+  ["Optional"] = true,
+  ["Output"] = true,
+  ["Pipe"] = true,
+  ["Self"] = true,
+  ["SkipSelf"] = true,
+  ["ViewChild"] = true,
+  ["ViewChildren"] = true,
+}
 
 local function find_unused(ts_bufnr)
   -- var: ispublic
@@ -112,10 +134,34 @@ local function find_unused(ts_bufnr)
     local definitions_query = vim.treesitter.query.parse("typescript", property_definition)
     local usages_query = vim.treesitter.query.parse("typescript", property_usage)
 
+    local function add_nodes(nodes)
+      local is_public = vim.treesitter.get_node_text(nodes[1], ts_bufnr) == "public"
+      local var = vim.treesitter.get_node_text(nodes[2], ts_bufnr)
+      definitions[var] = { is_public = is_public, node = nodes[2], used = false }
+    end
+
     for _, node in definitions_query:iter_matches(ts_root, ts_bufnr, 0, -1) do
-      local is_public = vim.treesitter.get_node_text(node[1], ts_bufnr) == "public"
-      local var = vim.treesitter.get_node_text(node[2], ts_bufnr)
-      definitions[var] = { is_public = is_public, node = node[2], used = false }
+      local prev_node = node[3]:prev_named_sibling()
+      if prev_node ~= nil and prev_node:type() == "decorator" then
+        local first_child = prev_node:named_child(0)
+
+        local decorator_name = nil
+        if first_child ~= nil then
+          if first_child:type() == "call_expression" then
+            decorator_name = vim.treesitter.get_node_text(first_child:field("function")[1], ts_bufnr)
+          elseif first_child:type() == "identifier" then
+            decorator_name = vim.treesitter.get_node_text(first_child, ts_bufnr)
+          end
+        end
+
+        print(decorator_name)
+
+        if decorator_name ~= nil and not disallowed_decorators[decorator_name] then
+          add_nodes(node)
+        end
+      else
+        add_nodes(node)
+      end
     end
 
     for _, node in usages_query:iter_captures(ts_root, ts_bufnr, 0, -1) do
