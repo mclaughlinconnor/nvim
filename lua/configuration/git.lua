@@ -16,6 +16,27 @@ end
 
 return {
   {
+    "harrisoncramer/gitlab.nvim",
+    commit = "c0c67486d17d4f73f62b50c13c77aaed2e9f17f0",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "mclaughlinconnor/diffview.nvim",
+      "stevearc/dressing.nvim", -- Recommended but not required. Better UI for pickers.
+      "nvim-tree/nvim-web-devicons" -- Recommended but not required. Icons in discussion tree.
+    },
+    event = "VeryLazy",
+    enabled = true,
+    build = function () require("gitlab.server").build(true) end, -- Builds the Go binary
+    config = function()
+      require("gitlab").setup(
+        {
+          config_path = vim.fn.expand("$HOME"),
+        }
+      )
+    end,
+  },
+  {
     -- pretty sure I'm woefully underutilising this plugin
     "lewis6991/gitsigns.nvim",
     commit = "6ef8c54fb526bf3a0bc4efb0b2fe8e6d9a7daed2",
@@ -97,7 +118,7 @@ return {
         end,
       },
     },
-    lazy = false,
+    event = "VeryLazy",
     opts = {
       enhanced_diff_hl = true, -- See |diffview-config-enhanced_diff_hl|
       use_icons = false,
