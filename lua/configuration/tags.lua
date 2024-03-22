@@ -51,6 +51,13 @@ return {
         "coverage*/",
         "*.ts.html",
       }
+
+      vim.api.nvim_create_autocmd({ "BufEnter" }, {
+        callback = function()
+          vim.cmd.call("gutentags#setup_gutentags()")
+        end,
+        group = vim.api.nvim_create_augroup("GutentagsEmptyBuffer", {}),
+      })
     end,
   },
 }
