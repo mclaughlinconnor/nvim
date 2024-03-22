@@ -7,7 +7,23 @@ return {
     commit = "68d269301181835788dcdcb6d5bca337fb954395",
     init = function()
       local switch = vim.api.nvim_create_augroup("SwitchNeogit", {})
-      vim.api.nvim_create_autocmd({ "FileType"}, {
+      vim.api.nvim_create_autocmd({ "FileType" }, {
+        callback = function()
+          if not vim.g.loaded_switch then
+            return
+          end
+
+          vim.b.switch_definitions = {
+            vim.g.switch_builtins.javascript_function,
+            vim.g.switch_builtins.javascript_arrow_function,
+            vim.g.switch_builtins.javascript_es6_declarations,
+            { "public", "private" },
+          }
+        end,
+        group = switch,
+        pattern = "typescript",
+      })
+      vim.api.nvim_create_autocmd({ "FileType" }, {
         callback = function()
           if not vim.g.loaded_switch then
             return
