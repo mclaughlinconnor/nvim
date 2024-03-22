@@ -9,7 +9,7 @@ end
 return {
   {
     "gbprod/nord.nvim",
-    commit = "2948bddbc3cf202789a37b38237144b290b432f6",
+    commit = "9896e4634b1ba99e7a532a568b3b66e3344ad0df",
     lazy = false,
     priority = 1000, -- load first
     config = function()
@@ -18,19 +18,9 @@ return {
       vim.api.nvim_create_user_command("LightsOut", function()
         setColour("nord")
       end, {})
-    end,
-  },
-  {
-    "folke/tokyonight.nvim",
-    commit = "f247ee700b569ed43f39320413a13ba9b0aef0db",
-    lazy = false,
-    config = function()
+
       vim.api.nvim_create_user_command("FlashBang", function()
-        setColour("tokyonight-day")
-        -- Makes the diff colour **much** better
-        vim.cmd([[highlight DiffAdd guibg=#a4cf69]])
-        vim.cmd([[highlight DiffChange guibg=#63c1e6]])
-        vim.cmd([[highlight DiffDelete guibg=#d74f56]])
+        setColour("delek")
       end, {})
     end,
   },
