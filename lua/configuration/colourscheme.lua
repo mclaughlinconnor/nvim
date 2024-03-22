@@ -22,6 +22,8 @@ return {
       vim.api.nvim_create_user_command("FlashBang", function()
         setColour("delek")
       end, {})
+      local c = require("nord.colors").palette
+      vim.cmd([[highlight debugPC guibg=#000000]])
     end,
   },
   {
