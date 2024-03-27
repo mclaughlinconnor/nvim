@@ -23,6 +23,13 @@ local property_definition = [[
     name: (property_identifier) @var) @definition
 ]]
 
+local getter_definition = [[
+  (method_definition
+    (accessibility_modifier) @accessibility_modifier
+    "get"
+    name: (property_identifier) @var)
+]]
+
 local property_usage = [[
   (member_expression
     object: (this)
@@ -69,10 +76,13 @@ local disallowed_decorators = {
   ["ViewChildren"] = true,
 }
 
+local SERVERITY = vim.lsp.protocol.DiagnosticSeverity
+
 local function find_unused(ts_bufnr)
   -- var: ispublic
   local usages = {}
-  local definitions = {}
+  local variable_definitions = {}
+  local getter_definitions = {}
 
   local ts_parser = vim.treesitter.get_parser(ts_bufnr, "typescript")
   local ts_tree = ts_parser:parse()[1]
@@ -132,12 +142,17 @@ local function find_unused(ts_bufnr)
 
   local function extract_ts_identifiers()
     local definitions_query = vim.treesitter.query.parse("typescript", property_definition)
+    local getter_definition_query = vim.treesitter.query.parse("typescript", getter_definition)
     local usages_query = vim.treesitter.query.parse("typescript", property_usage)
 
-    local function add_nodes(nodes)
+    local function add_nodes(nodes, defs)
       local is_public = vim.treesitter.get_node_text(nodes[1], ts_bufnr) == "public"
       local var = vim.treesitter.get_node_text(nodes[2], ts_bufnr)
-      definitions[var] = { is_public = is_public, node = nodes[2], used = false }
+      defs[var] = { is_public = is_public, node = nodes[2], used = false }
+    end
+
+    for _, node in getter_definition_query:iter_matches(ts_root, ts_bufnr, 0, -1) do
+      add_nodes(node, getter_definitions)
     end
 
     for _, node in definitions_query:iter_matches(ts_root, ts_bufnr, 0, -1) do
@@ -157,10 +172,10 @@ local function find_unused(ts_bufnr)
         print(decorator_name)
 
         if decorator_name ~= nil and not disallowed_decorators[decorator_name] then
-          add_nodes(node)
+          add_nodes(node, variable_definitions)
         end
       else
-        add_nodes(node)
+        add_nodes(node, variable_definitions)
       end
     end
 
@@ -197,7 +212,9 @@ local function find_unused(ts_bufnr)
 
   local pug_bufnr = find_template()
 
-  local function generate_diagnostic(message, node)
+  local function generate_diagnostic(message, node, s)
+    local severity = s or SERVERITY.Warning
+
     local lnum, col, end_lnum, end_col = node:range()
     local formatted_message = message
 
@@ -211,7 +228,7 @@ local function find_unused(ts_bufnr)
       end_lnum = end_lnum,
       end_col = end_col,
       message = formatted_message,
-      severity = vim.lsp.protocol.DiagnosticSeverity.Warning,
+      severity = severity,
     }
   end
 
@@ -222,22 +239,24 @@ local function find_unused(ts_bufnr)
 
   local diagnostics = {}
 
-  for var, definition in pairs(definitions) do
+  for var, definition in pairs(getter_definitions) do
+    if usages[var] == true then
+      table.insert(diagnostics, generate_diagnostic("Getter used in template: " .. var, definition.node, SERVERITY.Hint))
+    end
+  end
+
+  for var, definition in pairs(variable_definitions) do
     local node = definition.node
     local definition_is_public = definition.is_public
     local usage = usages[var]
 
+    -- tsserver covers this unused variables already
     if definition_is_public then
       if usage == nil then
         table.insert(diagnostics, generate_diagnostic("Unused public variable: " .. var, node))
       elseif usage == false then
         table.insert(diagnostics, generate_diagnostic("Needlessly public variable: " .. var, node))
       end
-      -- tsserver covers this
-      -- else
-      --   if usage == nil then
-      --     table.insert(diagnostics, generate_diagnostic("Unused variable: " .. var, node))
-      --   end
     end
   end
 
@@ -259,3 +278,6 @@ vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI", "BufEnter" }, {
   group = vim.api.nvim_create_augroup("UnusedPublicDefinitions", {}),
   pattern = { "*.ts" },
 })
+
+-- todo: make this into a general purpose framework to find angular templates, etc.
+-- The plan is to eventually index the entire project using something like this
