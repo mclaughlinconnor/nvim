@@ -53,6 +53,10 @@ function M.extract_ts_identifiers(source, root, on_getter, on_property_definitio
   for node in utils.iter_captures("property_usage", source, root) do
     on_usage(node)
   end
+
+  for node in utils.iter_captures("prototype_usage", source, root) do
+    on_usage(node)
+  end
 end
 
 -- Does this make sense as a method in this file?

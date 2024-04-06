@@ -41,7 +41,7 @@ end
 function M.extract_pug_identifiers(filename, usages)
   local on_identifier = function(node, text)
     local var = vim.treesitter.get_node_text(node[1], text)
-    usages[var] = true
+    usages[var] = { is_public = true }
   end
 
   utils.with_file_contents(filename, function(contents)

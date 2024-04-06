@@ -32,6 +32,16 @@ M.raw_queries.getter_definition = [[
     name: (property_identifier) @var)
 ]]
 
+M.raw_queries.prototype_usage = [[
+  (member_expression
+    object: (member_expression
+      object: (identifier) @class
+      property: (property_identifier) @prototype)
+      (#eq? @prototype "prototype")
+      ; (#eq? @class "class") ; add later when class checking is supported
+    property: (property_identifier) @var)
+]]
+
 M.raw_queries.property_usage = [[
   (member_expression
     object: (this)
@@ -62,6 +72,7 @@ M.interpolation = vim.treesitter.query.parse("angular_content", M.raw_queries.in
 M.identifiers = vim.treesitter.query.parse("javascript", M.raw_queries.identifiers)
 M.property_definition = vim.treesitter.query.parse("typescript", M.raw_queries.property_definition)
 M.getter_definition = vim.treesitter.query.parse("typescript", M.raw_queries.getter_definition)
+M.prototype_usage = vim.treesitter.query.parse("typescript", M.raw_queries.prototype_usage)
 M.property_usage = vim.treesitter.query.parse("typescript", M.raw_queries.property_usage)
 M.template = vim.treesitter.query.parse("typescript", M.raw_queries.template)
 
