@@ -30,10 +30,10 @@ local function handle_class(name, source, root, file_path, start, stop)
     table.insert(decorators, decorator_name)
   end
 
-  local has_template, pug_filename = utils.find_template(file_path, root)
+  local pug_filename = utils.find_template(file_path, root)
 
   extract_ts_identifiers()
-  if has_template then
+  if pug_filename ~= nil then
     pug.extract_pug_identifiers(pug_filename, usages)
   end
 
@@ -41,7 +41,7 @@ local function handle_class(name, source, root, file_path, start, stop)
     decorators = decorators,
     file_path = file_path,
     getter_definitions = getter_definitions,
-    has_template = has_template,
+    template = pug_filename,
     usages = usages,
     variable_definitions = variable_definitions,
   }
@@ -66,7 +66,7 @@ local function find_unused(ts_bufnr)
 
   local file_diagnostics = {}
   for _, class in ipairs(classes) do
-    diagnostics.build_diagnostics_for_class(file_diagnostics, class, class.has_template)
+    diagnostics.build_diagnostics_for_class(file_diagnostics, class, class.template ~= nil)
   end
 
   diagnostics.set_diagnostics(ts_bufnr, file_diagnostics)

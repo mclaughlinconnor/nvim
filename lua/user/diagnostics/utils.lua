@@ -47,10 +47,10 @@ function M.find_template(file_path, root)
   end)
 
   if relative_template_path == nil then
-    return false, nil
+    return nil
   end
 
-  return true, controller_directory .. "/" .. relative_template_path
+  return controller_directory .. "/" .. relative_template_path
 end
 
 function M.with_file_contents(filename, cb)
