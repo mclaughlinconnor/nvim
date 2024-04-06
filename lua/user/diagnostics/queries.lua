@@ -20,9 +20,14 @@ M.raw_queries.identifiers = [[
 ]]
 
 M.raw_queries.property_definition = [[
-  (public_field_definition
-    (accessibility_modifier) @accessibility_modifier
-    name: (property_identifier) @var) @definition
+  [
+    (public_field_definition
+      (accessibility_modifier) @accessibility_modifier
+      name: (property_identifier) @var) @definition
+    (required_parameter
+      (accessibility_modifier) @accessibility_modifier
+      pattern: (identifier) @var) @definition
+  ]
 ]]
 
 M.raw_queries.getter_definition = [[
