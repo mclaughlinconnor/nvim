@@ -3,8 +3,8 @@ local utils = require("user.diagnostics.utils")
 
 local M = {}
 
-function M.find_getters(source, root, cb)
-  for node in utils.iter_matches("getter_definition", source, root) do
+function M.find_getters(source, root, cb, start, stop)
+  for node in utils.iter_matches("getter_definition", source, root, nil, start, stop) do
     cb(node)
   end
 end
@@ -33,13 +33,12 @@ function M.is_angular_decorator(decorator_name)
   return angular_decorators[decorator_name]
 end
 
-function M.extract_ts_identifiers(source, root, on_getter, on_property_definition, on_usage)
-
+function M.extract_ts_identifiers(source, root, on_getter, on_property_definition, on_usage, start, stop)
   M.find_getters(source, root, function(node)
     on_getter(node)
-  end)
+  end, start, stop)
 
-  for node in utils.iter_matches("property_definition", source, root) do
+  for node in utils.iter_matches("property_definition", source, root, nil, start, stop) do
     local decorator_name, is_angular_decorator = M.get_property_definition_decorator(node, source)
     if decorator_name ~= nil then
       if not is_angular_decorator then
@@ -50,11 +49,11 @@ function M.extract_ts_identifiers(source, root, on_getter, on_property_definitio
     end
   end
 
-  for node in utils.iter_captures("property_usage", source, root) do
+  for node in utils.iter_captures("property_usage", source, root, nil, start, stop) do
     on_usage(node)
   end
 
-  for node in utils.iter_captures("prototype_usage", source, root) do
+  for node in utils.iter_captures("prototype_usage", source, root, nil, start, stop) do
     on_usage(node)
   end
 end

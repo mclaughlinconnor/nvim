@@ -37,15 +37,16 @@ function M.generate_diagnostic(message, node, pug_bufnr, s)
   }
 end
 
-function M.find_template(bufnr, root)
-  local relative_template_path = ""
-  local controller_directory = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":h")
+function M.find_template(file_path, root)
+  local controller_directory = vim.fn.fnamemodify(file_path, ":h")
 
-  for node in M.iter_matches("template", bufnr, root) do
-    relative_template_path = vim.treesitter.get_node_text(node[3], bufnr)
-  end
+  local relative_template_path = M.with_file_contents(file_path, function(contents)
+    for node in M.iter_matches("component_decorator", contents, root) do
+      return vim.treesitter.get_node_text(node[3], contents)
+    end
+  end)
 
-  if relative_template_path == "" then
+  if relative_template_path == nil then
     return false, nil
   end
 
@@ -61,12 +62,15 @@ function M.with_file_contents(filename, cb)
   end
 
   local contents = file:read("*all")
-  cb(contents)
-
   file:close()
+
+  return cb(contents)
 end
 
-function M.iter_captures(query, content, tree, language)
+function M.iter_captures(query, content, tree, language, start_, stop_)
+  local start = start_ or 0
+  local stop = stop_ or -1
+
   if tree == nil then
     if type(content) == "string" then
       tree = M.create_string_parser(content, language)
@@ -75,7 +79,7 @@ function M.iter_captures(query, content, tree, language)
     end
   end
 
-  local original = queries[query]:iter_captures(tree, content, 0, -1)
+  local original = queries[query]:iter_captures(tree, content, start, stop)
   return function()
     local _, node = original()
     if node then
@@ -84,7 +88,10 @@ function M.iter_captures(query, content, tree, language)
   end
 end
 
-function M.iter_matches(query, content, tree, language)
+function M.iter_matches(query, content, tree, language, start_, stop_)
+  local start = start_ or 0
+  local stop = stop_ or -1
+
   if tree == nil then
     if type(content) == "string" then
       tree = M.create_string_parser(content, language)
@@ -93,7 +100,7 @@ function M.iter_matches(query, content, tree, language)
     end
   end
 
-  local original = queries[query]:iter_matches(tree, content, 0, -1)
+  local original = queries[query]:iter_matches(tree, content, start, stop)
   return function()
     local _, node = original()
     if node then
