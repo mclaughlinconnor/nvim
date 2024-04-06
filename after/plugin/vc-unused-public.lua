@@ -1,67 +1,68 @@
-local SERVERITY = require("user.diagnostics.severity")
+local diagnostics = require("user.diagnostics.diagnostics")
 local pug = require("user.diagnostics.languages.pug")
 local typescript = require("user.diagnostics.languages.typescript")
 local utils = require("user.diagnostics.utils")
 
-local function find_unused(ts_bufnr)
+local function handle_class(name, source, root, file_path, start, stop)
   local usages = {}
   local variable_definitions = {}
   local getter_definitions = {}
 
-  local ts_root = utils.create_buffer_parser(ts_bufnr, "typescript")
-
-  local diagnostics_namespace = vim.api.nvim_create_namespace("unused-public-diagnostics")
-
   local function extract_ts_identifiers()
     local function on_usage(node)
-      local var = vim.treesitter.get_node_text(node, ts_bufnr)
+      local var = vim.treesitter.get_node_text(node, source)
       usages[var] = { is_public = false }
     end
 
     local function on_getter(node)
-      typescript.add_method_definition(node, ts_bufnr, getter_definitions)
+      typescript.add_method_definition(node, source, getter_definitions)
     end
     local function on_property_definition(node)
-      typescript.add_method_definition(node, ts_bufnr, variable_definitions)
+      typescript.add_method_definition(node, source, variable_definitions)
     end
 
-    typescript.extract_ts_identifiers(ts_bufnr, ts_root, on_getter, on_property_definition, on_usage)
+    typescript.extract_ts_identifiers(source, root, on_getter, on_property_definition, on_usage, start, stop)
   end
 
-  local has_template, pug_filename = utils.find_template(ts_bufnr, ts_root)
+  local has_template, pug_filename = utils.find_template(file_path, root)
 
   extract_ts_identifiers()
   if has_template then
     pug.extract_pug_identifiers(pug_filename, usages)
   end
 
-  local diagnostics = {}
+  return {
+    file_path = file_path,
+    getter_definitions = getter_definitions,
+    has_template = has_template,
+    usages = usages,
+    variable_definitions = variable_definitions,
+  }
+end
 
-  for var, definition in pairs(getter_definitions) do
-    if usages[var] and usages[var].is_public == true then
-      table.insert(
-        diagnostics,
-        utils.generate_diagnostic("Getter used in template: " .. var, definition.node, has_template, SERVERITY.Hint)
-      )
-    end
+local function find_unused(ts_bufnr)
+  local classes = {}
+  local file_path = vim.api.nvim_buf_get_name(ts_bufnr)
+
+  local ts_root = utils.create_buffer_parser(ts_bufnr, "typescript")
+
+  for node in utils.iter_matches("class_definition", ts_bufnr, ts_root) do
+    local name = node[1]
+    local startRow, _, _ = node[2]:start()
+    local stopRow, _, _ = node[2]:end_()
+
+    table.insert(
+      classes,
+      handle_class(vim.treesitter.get_node_text(name, ts_bufnr), ts_bufnr, ts_root, file_path, startRow, stopRow)
+    )
   end
 
-  for var, definition in pairs(variable_definitions) do
-    local node = definition.node
-    local definition_is_public = definition.is_public
-    local usage = usages[var]
-
-    -- tsserver covers unused variables already
-    if definition_is_public then
-      if usage == nil then
-        table.insert(diagnostics, utils.generate_diagnostic("Unused public variable: " .. var, node, has_template))
-      elseif usage.is_public == false then
-        table.insert(diagnostics, utils.generate_diagnostic("Needlessly public variable: " .. var, node, has_template))
-      end
-    end
+  local file_diagnostics = {}
+  for _, class in ipairs(classes) do
+    diagnostics.build_diagnostics_for_class(file_diagnostics, class, class.has_template)
   end
 
-  vim.diagnostic.set(diagnostics_namespace, ts_bufnr, diagnostics)
+  diagnostics.set_diagnostics(ts_bufnr, file_diagnostics)
 end
 
 vim.keymap.set("n", "<leader>vs", function()
