@@ -7,6 +7,7 @@ local function handle_class(name, source, root, file_path, start, stop)
   local usages = {}
   local variable_definitions = {}
   local getter_definitions = {}
+  local decorators = {}
 
   local function extract_ts_identifiers()
     local function on_usage(node)
@@ -24,6 +25,11 @@ local function handle_class(name, source, root, file_path, start, stop)
     typescript.extract_ts_identifiers(source, root, on_getter, on_property_definition, on_usage, start, stop)
   end
 
+  for node in utils.iter_matches("class_decorator", source, root, nil, start, stop) do
+    local decorator_name = vim.treesitter.get_node_text(node[1], source)
+    table.insert(decorators, decorator_name)
+  end
+
   local has_template, pug_filename = utils.find_template(file_path, root)
 
   extract_ts_identifiers()
@@ -32,6 +38,7 @@ local function handle_class(name, source, root, file_path, start, stop)
   end
 
   return {
+    decorators = decorators,
     file_path = file_path,
     getter_definitions = getter_definitions,
     has_template = has_template,
