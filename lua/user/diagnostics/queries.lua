@@ -61,6 +61,20 @@ M.raw_queries.property_usage = [[
     property: (property_identifier) @var)
 ]]
 
+M.raw_queries.class_decorator = [[
+  [
+    (export_statement
+      decorator: (decorator
+        (call_expression
+          function: (identifier) @decorator_name))
+      declaration: (class_declaration))
+    (class_declaration
+      decorator: (decorator
+        (call_expression
+          function: (identifier) @decorator_name)))
+  ]
+]]
+
 M.raw_queries.component_decorator = [[
   (decorator
     (call_expression
@@ -80,9 +94,17 @@ M.raw_queries.component_decorator = [[
 ]]
 
 M.raw_queries.class_definition = [[
-  (class_declaration
-    name: (type_identifier) @name
-    body: (class_body)) @class
+  [
+    (export_statement
+      decorator: (decorator)
+      declaration: (class_declaration
+        name: (type_identifier) @name
+        body: (class_body))) @class
+    (class_declaration
+      decorator: (decorator)
+      name: (type_identifier) @name
+      body: (class_body)) @class
+  ]
 ]]
 
 M.attributes = vim.treesitter.query.parse("pug", M.raw_queries.attributes)
@@ -95,5 +117,6 @@ M.prototype_usage = vim.treesitter.query.parse("typescript", M.raw_queries.proto
 M.property_usage = vim.treesitter.query.parse("typescript", M.raw_queries.property_usage)
 M.component_decorator = vim.treesitter.query.parse("typescript", M.raw_queries.component_decorator)
 M.class_definition = vim.treesitter.query.parse("typescript", M.raw_queries.class_definition)
+M.class_decorator = vim.treesitter.query.parse("typescript", M.raw_queries.class_decorator)
 
 return M
