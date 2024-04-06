@@ -30,7 +30,7 @@ local function handle_class(name, source, root, file_path, start, stop)
     table.insert(decorators, decorator_name)
   end
 
-  local pug_filename = utils.find_template(file_path, root)
+  local pug_filename = utils.find_template(file_path, root, start, stop)
 
   extract_ts_identifiers()
   if pug_filename ~= nil then

@@ -37,11 +37,11 @@ function M.generate_diagnostic(message, node, pug_bufnr, s)
   }
 end
 
-function M.find_template(file_path, root)
+function M.find_template(file_path, root, start, stop)
   local controller_directory = vim.fn.fnamemodify(file_path, ":h")
 
   local relative_template_path = M.with_file_contents(file_path, function(contents)
-    for node in M.iter_matches("component_decorator", contents, root) do
+    for node in M.iter_matches("component_decorator", contents, root, nil, start, stop) do
       return vim.treesitter.get_node_text(node[3], contents)
     end
   end)
