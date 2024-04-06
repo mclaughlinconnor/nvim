@@ -33,13 +33,21 @@ M.raw_queries.getter_definition = [[
 ]]
 
 M.raw_queries.prototype_usage = [[
-  (member_expression
-    object: (member_expression
-      object: (identifier) @class
-      property: (property_identifier) @prototype)
-      (#eq? @prototype "prototype")
-      ; (#eq? @class "class") ; add later when class checking is supported
-    property: (property_identifier) @var)
+  [
+    (member_expression
+      object: (member_expression
+        object: (identifier) @class
+        property: (property_identifier) @prototype)
+      property: (property_identifier) @var)
+    (subscript_expression
+      object: (member_expression
+        object: (identifier) @class
+        property: (property_identifier) @prototype)
+      index: (string
+        (string_fragment) @var))
+    (#eq? @prototype "prototype")
+    ; (#eq? @class "class") ; add later when class checking is supported
+  ]
 ]]
 
 M.raw_queries.property_usage = [[
