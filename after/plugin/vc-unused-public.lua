@@ -4,7 +4,6 @@ local typescript = require("user.diagnostics.languages.typescript")
 local utils = require("user.diagnostics.utils")
 
 local function find_unused(ts_bufnr)
-  -- var: ispublic
   local usages = {}
   local variable_definitions = {}
   local getter_definitions = {}
@@ -16,7 +15,7 @@ local function find_unused(ts_bufnr)
   local function extract_ts_identifiers()
     local function on_usage(node)
       local var = vim.treesitter.get_node_text(node, ts_bufnr)
-      usages[var] = false
+      usages[var] = { is_public = false }
     end
 
     local function on_getter(node)
@@ -39,7 +38,7 @@ local function find_unused(ts_bufnr)
   local diagnostics = {}
 
   for var, definition in pairs(getter_definitions) do
-    if usages[var] == true then
+    if usages[var] and usages[var].is_public == true then
       table.insert(
         diagnostics,
         utils.generate_diagnostic("Getter used in template: " .. var, definition.node, has_template, SERVERITY.Hint)
@@ -56,7 +55,7 @@ local function find_unused(ts_bufnr)
     if definition_is_public then
       if usage == nil then
         table.insert(diagnostics, utils.generate_diagnostic("Unused public variable: " .. var, node, has_template))
-      elseif usage == false then
+      elseif usage.is_public == false then
         table.insert(diagnostics, utils.generate_diagnostic("Needlessly public variable: " .. var, node, has_template))
       end
     end
