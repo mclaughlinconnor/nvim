@@ -62,7 +62,7 @@ end
 function M.add_method_definition(nodes, source, tab)
   local is_public = vim.treesitter.get_node_text(nodes[1], source) == "public"
   local var = vim.treesitter.get_node_text(nodes[2], source)
-  tab[var] = { is_public = is_public, node = nodes[2], used = false }
+  tab[var] = { is_public = is_public, node = nodes[2] }
 end
 
 return M
