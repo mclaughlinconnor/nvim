@@ -1,3 +1,4 @@
+local ACCESSIBILITY = require("user.diagnostics.accessibility")
 local diagnostics = require("user.diagnostics.diagnostics")
 local pug = require("user.diagnostics.languages.pug")
 local typescript = require("user.diagnostics.languages.typescript")
@@ -12,7 +13,7 @@ local function handle_class(name, source, root, file_path, start, stop)
   local function extract_ts_identifiers()
     local function on_constructor_usage(node)
       local var = vim.treesitter.get_node_text(node, source)
-      usages[var] = { is_public = false, constructor_only = true, node = node }
+      usages[var] = { access = ACCESSIBILITY.Access.Local, constructor_only = true, node = node }
     end
 
     local function on_usage(node)
@@ -22,7 +23,7 @@ local function handle_class(name, source, root, file_path, start, stop)
         return
       end
 
-      usages[var] = { is_public = false, node = node }
+      usages[var] = { access = ACCESSIBILITY.Access.Local, node = node }
     end
 
     local function on_getter(node)

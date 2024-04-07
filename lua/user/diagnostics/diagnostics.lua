@@ -1,4 +1,5 @@
 local SERVERITY = require("user.diagnostics.severity")
+local ACCESSIBILITY = require("user.diagnostics.accessibility")
 local utils = require("user.diagnostics.utils")
 
 local M = {}
@@ -16,7 +17,7 @@ function M.build_diagnostics_for_class(file_diagnostics, class, has_template)
   local vars = class.variable_definitions
 
   for var, definition in pairs(getters) do
-    if usages[var] and usages[var].is_public == true then
+    if usages[var] and usages[var].accessibility == ACCESSIBILITY.Definition.Public then
       table.insert(
         file_diagnostics,
         utils.generate_diagnostic("Getter used in template: " .. var, definition.node, has_template, SERVERITY.Hint)
@@ -26,7 +27,7 @@ function M.build_diagnostics_for_class(file_diagnostics, class, has_template)
 
   for var, definition in pairs(vars) do
     local node = definition.node
-    local definition_is_public = definition.is_public
+    local definition_is_public = definition.accessibility == ACCESSIBILITY.Definition.Public
     local usage = usages[var]
 
     if usage ~= nil and usage.constructor_only == true then
@@ -38,7 +39,7 @@ function M.build_diagnostics_for_class(file_diagnostics, class, has_template)
     if definition_is_public then
       if usage == nil then
         table.insert(file_diagnostics, utils.generate_diagnostic("Unused public variable: " .. var, node, has_template))
-      elseif usage.is_public == false then
+      elseif usage.access ~= ACCESSIBILITY.Access.Foreign then
         table.insert(
           file_diagnostics,
           utils.generate_diagnostic("Needlessly public variable: " .. var, node, has_template)

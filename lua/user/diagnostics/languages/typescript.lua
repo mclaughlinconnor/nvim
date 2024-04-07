@@ -76,9 +76,9 @@ end
 
 -- Does this make sense as a method in this file?
 function M.add_method_definition(nodes, source, tab)
-  local is_public = vim.treesitter.get_node_text(nodes[1], source) == "public"
+  local accessibility = vim.treesitter.get_node_text(nodes[1], source)
   local var = vim.treesitter.get_node_text(nodes[2], source)
-  tab[var] = { is_public = is_public, node = nodes[2] }
+  tab[var] = { accessibility = accessibility, node = nodes[2] }
 end
 
 return M

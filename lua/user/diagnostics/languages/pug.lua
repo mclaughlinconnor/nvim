@@ -1,3 +1,4 @@
+local ACCESSIBILITY = require("user.diagnostics.accessibility")
 local javascript = require("user.diagnostics.languages.javascript")
 local utils = require("user.diagnostics.utils")
 
@@ -41,7 +42,7 @@ end
 function M.extract_pug_identifiers(filename, usages)
   local on_identifier = function(node, text)
     local var = vim.treesitter.get_node_text(node[1], text)
-    usages[var] = { is_public = true, node = node }
+    usages[var] = { access = ACCESSIBILITY.Access.Foreign, node = node }
   end
 
   utils.with_file_contents(filename, function(contents)
