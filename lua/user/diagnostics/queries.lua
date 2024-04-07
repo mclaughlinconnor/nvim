@@ -61,6 +61,13 @@ M.raw_queries.property_usage = [[
     property: (property_identifier) @var)
 ]]
 
+M.raw_queries.constructor = [[
+  ((method_definition
+    name: (property_identifier) @name
+    body: (statement_block) @body)
+    (#eq? @name "constructor"))
+]]
+
 M.raw_queries.class_decorator = [[
   [
     (export_statement
@@ -118,5 +125,6 @@ M.property_usage = vim.treesitter.query.parse("typescript", M.raw_queries.proper
 M.component_decorator = vim.treesitter.query.parse("typescript", M.raw_queries.component_decorator)
 M.class_definition = vim.treesitter.query.parse("typescript", M.raw_queries.class_definition)
 M.class_decorator = vim.treesitter.query.parse("typescript", M.raw_queries.class_decorator)
+M.constructor = vim.treesitter.query.parse("typescript", M.raw_queries.constructor)
 
 return M

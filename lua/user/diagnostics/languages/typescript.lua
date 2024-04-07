@@ -33,7 +33,16 @@ function M.is_angular_decorator(decorator_name)
   return angular_decorators[decorator_name]
 end
 
-function M.extract_ts_identifiers(source, root, on_getter, on_property_definition, on_usage, start, stop)
+function M.extract_ts_identifiers(
+  source,
+  root,
+  on_getter,
+  on_property_definition,
+  on_usage,
+  on_constructor_usage,
+  start,
+  stop
+)
   M.find_getters(source, root, function(node)
     on_getter(node)
   end, start, stop)
@@ -46,6 +55,13 @@ function M.extract_ts_identifiers(source, root, on_getter, on_property_definitio
       end
     else
       on_property_definition(node)
+    end
+  end
+
+  for node in utils.iter_matches("constructor", source, root, nil, start, stop) do
+    local body = node[2]
+    for usage in utils.iter_captures("property_usage", source, root, nil, body:start(), body:end_()) do
+      on_constructor_usage(usage)
     end
   end
 
