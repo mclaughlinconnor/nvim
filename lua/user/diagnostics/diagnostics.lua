@@ -29,6 +29,11 @@ function M.build_diagnostics_for_class(file_diagnostics, class, has_template)
     local definition_is_public = definition.is_public
     local usage = usages[var]
 
+    if usage ~= nil and usage.constructor_only == true then
+      table.insert(file_diagnostics, utils.generate_diagnostic("Variable only used in constructor: " .. var, node, has_template))
+      goto continue
+    end
+
     -- tsserver covers unused variables already
     if definition_is_public then
       if usage == nil then
@@ -40,6 +45,8 @@ function M.build_diagnostics_for_class(file_diagnostics, class, has_template)
         )
       end
     end
+
+    ::continue::
   end
 end
 

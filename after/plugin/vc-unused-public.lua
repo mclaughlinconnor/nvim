@@ -10,9 +10,19 @@ local function handle_class(name, source, root, file_path, start, stop)
   local decorators = {}
 
   local function extract_ts_identifiers()
+    local function on_constructor_usage(node)
+      local var = vim.treesitter.get_node_text(node, source)
+      usages[var] = { is_public = false, constructor_only = true, node = node }
+    end
+
     local function on_usage(node)
       local var = vim.treesitter.get_node_text(node, source)
-      usages[var] = { is_public = false }
+
+      if usages[var] ~= nil and usages[var].constructor_only and usages[var].node:id() == node:id() then
+        return
+      end
+
+      usages[var] = { is_public = false, node = node }
     end
 
     local function on_getter(node)
@@ -22,7 +32,16 @@ local function handle_class(name, source, root, file_path, start, stop)
       typescript.add_method_definition(node, source, variable_definitions)
     end
 
-    typescript.extract_ts_identifiers(source, root, on_getter, on_property_definition, on_usage, start, stop)
+    typescript.extract_ts_identifiers(
+      source,
+      root,
+      on_getter,
+      on_property_definition,
+      on_usage,
+      on_constructor_usage,
+      start,
+      stop
+    )
   end
 
   for node in utils.iter_matches("class_decorator", source, root, nil, start, stop) do
