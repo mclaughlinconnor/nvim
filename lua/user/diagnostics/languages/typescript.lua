@@ -1,4 +1,5 @@
 local angular_decorators = require("user.diagnostics.angular_decorators")
+local queries = require("user.diagnostics.queries")
 local utils = require("user.diagnostics.utils")
 
 local M = {}
@@ -71,6 +72,33 @@ function M.extract_ts_identifiers(
 
   for node in utils.iter_captures("prototype_usage", source, root, nil, start, stop) do
     on_usage(node)
+  end
+end
+
+function M.extract_imports(source, root, on_import)
+  for node in utils.iter_matches("import", source, root) do
+    local import = {}
+
+    import.is_type = node[1] ~= nil
+    import.path = vim.treesitter.get_node_text(node[3], source)
+
+    for specifier in node[2]:iter_children() do
+      if specifier:named() then
+        if import.identifiers == nil then
+          import.identifiers = {}
+        end
+
+        local identifier = specifier:field("name")
+        local alias = specifier:field("alias")
+
+        table.insert(import.identifiers, {
+          identifier = vim.treesitter.get_node_text(identifier[1], source),
+          alias = #alias ~= 0 and vim.treesitter.get_node_text(alias[1], source) or nil,
+        })
+      end
+    end
+
+    on_import(import)
   end
 end
 

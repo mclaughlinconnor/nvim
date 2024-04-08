@@ -73,6 +73,10 @@ local function find_unused(ts_bufnr)
 
   local ts_root = utils.create_buffer_parser(ts_bufnr, "typescript")
 
+  typescript.extract_imports(ts_bufnr, ts_root, function(import)
+    print(vim.inspect(import))
+  end)
+
   for node in utils.iter_matches("class_definition", ts_bufnr, ts_root) do
     local name = node[1]
     local startRow, _, _ = node[2]:start()
