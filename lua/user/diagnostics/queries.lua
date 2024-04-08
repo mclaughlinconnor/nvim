@@ -114,6 +114,15 @@ M.raw_queries.class_definition = [[
   ]
 ]]
 
+M.raw_queries.import = [[
+  (import_statement
+    "type"? @type
+    (import_clause
+      (named_imports) @imports)
+    source: (string
+      (string_fragment) @path))
+]]
+
 M.attributes = vim.treesitter.query.parse("pug", M.raw_queries.attributes)
 M.content = vim.treesitter.query.parse("pug", M.raw_queries.content)
 M.interpolation = vim.treesitter.query.parse("angular_content", M.raw_queries.interpolation)
@@ -126,5 +135,6 @@ M.component_decorator = vim.treesitter.query.parse("typescript", M.raw_queries.c
 M.class_definition = vim.treesitter.query.parse("typescript", M.raw_queries.class_definition)
 M.class_decorator = vim.treesitter.query.parse("typescript", M.raw_queries.class_decorator)
 M.constructor = vim.treesitter.query.parse("typescript", M.raw_queries.constructor)
+M.import = vim.treesitter.query.parse("typescript", M.raw_queries.import)
 
 return M
