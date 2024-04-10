@@ -54,6 +54,17 @@ function M.find_template(file_path, root, start, stop)
 end
 
 function M.with_file_contents(filename, cb)
+  filename = vim.fn.fnamemodify(filename, ":p")
+  local content
+
+  local bufnr = M.buffer_for_name(filename)
+  if bufnr ~= nil then
+    local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+    content = table.concat(lines, "\n")
+
+    return cb(content)
+  end
+
   local file = io.open(filename, "r")
 
   if file == nil then
@@ -61,10 +72,10 @@ function M.with_file_contents(filename, cb)
     return
   end
 
-  local contents = file:read("*all")
+  content = file:read("*all")
   file:close()
 
-  return cb(contents)
+  return cb(content)
 end
 
 function M.iter_captures(query, content, tree, language, start_, stop_)
@@ -107,6 +118,17 @@ function M.iter_matches(query, content, tree, language, start_, stop_)
       return node
     end
   end
+end
+
+function M.buffer_for_name(filename)
+  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
+    if bufname == filename then
+      return bufnr
+    end
+  end
+
+  return nil
 end
 
 return M
