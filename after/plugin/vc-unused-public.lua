@@ -94,18 +94,32 @@ local function find_unused(ts_bufnr)
   end
 
   diagnostics.set_diagnostics(ts_bufnr, file_diagnostics)
+local function update_all_buffers()
+  local current_tabpage = vim.api.nvim_get_current_tabpage()
+  local windows = vim.api.nvim_tabpage_list_wins(current_tabpage)
+
+  local bufnrs = {}
+
+  for _, win in ipairs(windows) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    table.insert(bufnrs, buf)
+  end
+
+  for _, bufnr in ipairs(bufnrs) do
+    find_unused(bufnr)
+  end
 end
 
 vim.keymap.set("n", "<leader>vs", function()
-  find_unused(0)
+  update_all_buffers()
 end)
 
 vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI", "BufEnter" }, {
-  callback = function(event)
-    find_unused(event.buf)
+  callback = function()
+    update_all_buffers()
   end,
   group = vim.api.nvim_create_augroup("UnusedPublicDefinitions", {}),
-  pattern = { "*.ts" },
+  pattern = { "*.ts", "*.pug" },
 })
 
 -- todo: make this into a general purpose framework to find angular templates, etc.
