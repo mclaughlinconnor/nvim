@@ -54,6 +54,7 @@ function M.find_template(file_path, root, start, stop)
 end
 
 function M.with_file_contents(filename, cb)
+  -- todo: do something about diffview's diffview:// files
   filename = vim.fn.fnamemodify(filename, ":p")
   local content
 

@@ -10,6 +10,17 @@ local function handle_class(name, source, root, file_path, start, stop)
   local getter_definitions = {}
   local decorators = {}
 
+  if file_path:find("^diffview://") then
+    return {
+      decorators = {},
+      file_path = file_path,
+      getter_definitions = {},
+      template = nil,
+      usages = {},
+      variable_definitions = {},
+    }
+  end
+
   local function extract_ts_identifiers()
     local function on_constructor_usage(node)
       local var = vim.treesitter.get_node_text(node, source)
