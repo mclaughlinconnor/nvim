@@ -6,7 +6,7 @@ end
 return {
   {
     "ibhagwan/fzf-lua",
-    commit = "a1a2d0f42eaec400cc6918a8e898fc1f9c4dbc5f",
+    commit = "2a1bb74da8e409d8c534a8f43d7fb0f8acc85207",
     keys = {
       { "<leader>b", function() require("fzf-lua").buffers() end },
       { "<leader>B", function() require("fzf-lua").oldfiles() end },
@@ -25,7 +25,8 @@ return {
           require("fzf-lua").live_grep_native({ search = vim.fn.expand("<cword>") })
         end,
       },
-      { "<leader>tg", function() require("fzf-lua").lines() end },
+      { "<leader>tg", function() require("fzf-lua").live_grep_glob() end },
+      { "<leader>tG", function() require("fzf-lua").lines() end },
       { "<leader>tt", function() require("fzf-lua").tags() end },
       {
         "<leader>tT",
@@ -38,10 +39,21 @@ return {
       { "<leader>tqs", function() require("fzf-lua").quickfix_stack() end },
       { "<leader>ts", function() require("fzf-lua").spell_suggest() end },
       { "<leader>th", function() require("fzf-lua").help_tags() end },
-      { "<leader>loc", function() require("fzf-lua").git_commits() end },
-      { "<leader>lod", function() require("fzf-lua").git_bcommits() end },
-      { "<leader>lob", function() require("fzf-lua").git_branches() end },
-      { "<leader>lot", function() require("fzf-lua").git_stash() end },
+      {
+        "<leader>cg",
+        function()
+          require("fzf-lua").git_commits({
+            actions = {
+              ["default"] = {
+                fn = function(entries)
+                  local hash = vim.split(entries[1], " ")[1]
+                  vim.cmd("DiffviewFileHistory --range=" .. hash .. "^.." .. hash .. "--right-only --no-merges")
+                end,
+              },
+            },
+          })
+        end,
+      },
       { "<leader>dg", function() require("fzf-lua").diagnostics_workspace() end },
       { "<leader>lii", function() require("fzf-lua").lsp_incoming_calls() end },
       { "<leader>lio", function() require("fzf-lua").lsp_outgoing_calls() end },
