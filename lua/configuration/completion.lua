@@ -5,7 +5,6 @@ return {
     dependencies = {
       { "FelipeLema/cmp-async-path", commit = "d8229a93d7b71f22c66ca35ac9e6c6cd850ec61d" },
       { "L3MON4D3/LuaSnip" }, -- configured elsewhere
-      { "amarakon/nvim-cmp-buffer-lines", commit = "924ccc04dc5c919b6baa05d45818025baa82699a" },
       { "delphinus/cmp-ctags", commit = "8d9ddae9ea20c303bdc0888b663c0459b0dc72c2" },
       { "dmitmel/cmp-cmdline-history", commit = "003573b72d4635ce636234a826fa8c4ba2895ffe" },
       { "doxnit/cmp-luasnip-choice", commit = "97a367851bc17984b56164b5427a53919aed873a" },
@@ -15,7 +14,7 @@ return {
       { "hrsh7th/cmp-cmdline", commit = "8ee981b4a91f536f52add291594e89fb6645e451" },
       { "hrsh7th/cmp-nvim-lsp", commit = "44b16d11215dce86f253ce0c30949813c0a90765" },
       { "hrsh7th/cmp-omni", commit = "4ef610bbd85a5ee4e97e09450c0daecbdc60de86" },
-      { "hrsh7th/cmp-path", commit = "91ff86cd9c29299a64f968ebb45846c485725f23" },
+      { "https://codeberg.org/FelipeLema/cmp-async-path", commit = "91ff86cd9c29299a64f968ebb45846c485725f23" },
       { "ray-x/cmp-treesitter", commit = "b8bc760dfcc624edd5454f0982b63786a822eed9" },
       { "rcarriga/cmp-dap", commit = "d16f14a210cd28988b97ca8339d504533b7e09a4" },
       { "saadparwaiz1/cmp_luasnip", commit = "05a9ab28b53f71d1aece421ef32fee2cb857a843" },
@@ -57,14 +56,14 @@ return {
               cmdline_history = "[CH]",
               cmp_git = "[CG]",
               ctags = "[CT]",
-              luasnip = "[LS]",
-              luasnip_choice = "[LSC]",
+              luasnip = "[S]",
+              luasnip_choice = "[SC]",
               nvim_lsp = "[LSP]",
               nvim_lua = "[L]",
               omni = (vim.inspect(vim_item.menu):gsub('%"', "")),
               path = "[P]",
               treesitter = "[TS]",
-              spell = "[S]",
+              spell = "[SP]",
             })[entry.source.name]
             return vim_item
           end,
