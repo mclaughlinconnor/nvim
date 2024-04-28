@@ -17,7 +17,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    commit = "80a16deb5146a3eb4648effccda1ab9f45e43e76",
+    commit = "dbbaa3f66e736a8e446572e1079ffa2f6d40b266",
     config = function()
       local configs = require("nvim-treesitter.configs")
       local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
@@ -147,7 +147,7 @@ return {
     end,
     dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
   },
-  { "nvim-treesitter/nvim-treesitter-textobjects", commit = "ec1c5bdb3d87ac971749fa6c7dbc2b14884f1f6a" },
+  { "nvim-treesitter/nvim-treesitter-textobjects", commit = "23b820146956b3b681c19e10d3a8bc0cbd9a1d4c" },
   {
     "ThePrimeagen/refactoring.nvim",
     commit = "fb4990a0546c59136930ea624b8640d07957f281",
