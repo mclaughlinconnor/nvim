@@ -122,6 +122,9 @@ return {
     opts = {
       enhanced_diff_hl = true, -- See |diffview-config-enhanced_diff_hl|
       use_icons = false,
+      default_args = {
+        DiffviewOpen = { "--imply-local" },
+      },
       keymaps = {
         view = {
           ["q"] = q,
