@@ -72,8 +72,8 @@ return {
     },
   },
   {
-    "TimUntersberger/neogit",
-    commit = "20ab5a688c2de6fa371865528c737ae901989aa5",
+    "NeogitOrg/neogit",
+    commit = "df527d152d34214a3a24a577bf7ef1f121e8add2",
     keys = {
       {
         "gh",
