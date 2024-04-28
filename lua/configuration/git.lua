@@ -117,6 +117,12 @@ return {
           vim.cmd.Close()
         end,
       },
+      {
+        "<leader>rg",
+        function()
+          vim.cmd("DiffviewFileHistory --range=origin/HEAD...HEAD --right-only --no-merges")
+        end,
+      },
     },
     event = "VeryLazy",
     opts = {
