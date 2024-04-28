@@ -6,12 +6,19 @@ vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
 -- do this only on attached buffers
-local on_attach = function(client, bufnr)
+local function on_attach(client, bufnr)
   local fzf = require("fzf-lua")
   require("lsp-status").on_attach(client)
 
   if client.name == "tsserver" then
     client.server_capabilities.document_formatting = false
+  end
+
+  if client.server_capabilities.inlayHintProvider then
+    vim.keymap.set("n", "<space>gi", function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(0))
+    end)
+    vim.lsp.inlay_hint.enable(true)
   end
 
   -- lsp specific mappings
@@ -163,6 +170,7 @@ return {
         end,
         ["tsserver"] = function()
           require("typescript-tools").setup({
+            code_lens = "off", -- need to patch a newer version of angularls to support them
             on_attach = on_attach,
             capabilities = lsp_status.capabilities,
             settings = {
@@ -173,6 +181,14 @@ return {
                 includeCompletionsForImportStatements = true,
                 includeCompletionsForModuleExports = true,
                 includeCompletionsWithSnippetText = true,
+                includeInlayEnumMemberValueHints = true, -- enum {ONE /* = 0 */, TWO /* = 1 */,}
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayFunctionParameterTypeHints = false, -- no need for `.then(r /* ResultInterface[] */ => handleResult(r))`
+                includeInlayParameterNameHints = "literals", -- only show inlay hints for literal values being passed
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayVariableTypeHintsWhenTypeMatchesName = false,
                 quotePreference = "single",
               },
               tsserver_format_options = {
@@ -188,6 +204,9 @@ return {
             settings = {
               Lua = {
                 completion = { callSnippet = "Replace" },
+                hint = {
+                  enable = true,
+                },
                 format = {
                   enable = false,
                 },
@@ -207,7 +226,9 @@ return {
             cmd = { "sg", "lsp" },
             filetypes = { "typescript", "pug" },
             single_file_support = true,
-            root_dir = function() return vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/misc/ast-grep" end ,
+            root_dir = function()
+              return vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/misc/ast-grep"
+            end,
           })
         end,
       })
@@ -254,13 +275,13 @@ return {
         css = { "stylelint" },
         less = { "stylelint" },
       }
-      local stylelint = require('lint').linters.stylelint
+      local stylelint = require("lint").linters.stylelint
       stylelint.args = {
         "-f",
         "json",
         "--config",
         function()
-          return vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ':h') .. "/stylelint.config.js"
+          return vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/stylelint.config.js"
         end,
         "--stdin",
         "--stdin-filename",
