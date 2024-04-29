@@ -1,3 +1,5 @@
 spell/
 /plugin/
 tags
+misc/handlebars/node_modules
+misc/handlebars/package-lock.json
