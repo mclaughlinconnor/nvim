@@ -1,4 +1,4 @@
--- Current nvim HEAD: c3061a40f7012b4cd9afcaa6e8b856e946aed528
+-- Current nvim HEAD: ca432069eb6f5453acab896acdb8e0363c232629
 
 vim.loader.enable()
 
