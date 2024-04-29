@@ -50,7 +50,11 @@ function M.find_template(file_path, root, start, stop)
     return nil
   end
 
-  return controller_directory .. "/" .. relative_template_path
+  local filename = controller_directory .. "/" .. relative_template_path
+
+  if M.file_exists(filename) then
+    return filename
+  end
 end
 
 function M.with_file_contents(filename, cb)
@@ -130,6 +134,11 @@ function M.buffer_for_name(filename)
   end
 
   return nil
+end
+
+function M.file_exists(filename)
+  local stat = vim.loop.fs_stat(filename)
+  return stat and stat.type == "file"
 end
 
 return M
