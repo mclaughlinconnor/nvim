@@ -25,7 +25,6 @@ return {
       "stevearc/dressing.nvim", -- Recommended but not required. Better UI for pickers.
       "nvim-tree/nvim-web-devicons" -- Recommended but not required. Icons in discussion tree.
     },
-    event = "VeryLazy",
     enabled = true,
     build = function () require("gitlab.server").build(true) end, -- Builds the Go binary
     config = function()
@@ -120,11 +119,16 @@ return {
       {
         "<leader>rg",
         function()
-          vim.cmd("DiffviewFileHistory --range=origin/HEAD...HEAD --right-only --no-merges")
+          vim.cmd("DiffviewFileHistory --range=origin/HEAD...HEAD --right-only --no-merges --imply-local")
+        end,
+      },
+      {
+        "<leader>rc",
+        function()
+          vim.cmd("DiffviewFileHistory %")
         end,
       },
     },
-    event = "VeryLazy",
     opts = {
       enhanced_diff_hl = true, -- See |diffview-config-enhanced_diff_hl|
       use_icons = false,
