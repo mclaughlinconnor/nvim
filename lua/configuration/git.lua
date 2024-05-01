@@ -23,16 +23,143 @@ return {
       "nvim-lua/plenary.nvim",
       "mclaughlinconnor/diffview.nvim",
       "stevearc/dressing.nvim", -- Recommended but not required. Better UI for pickers.
-      "nvim-tree/nvim-web-devicons" -- Recommended but not required. Icons in discussion tree.
+      "nvim-tree/nvim-web-devicons", -- Recommended but not required. Icons in discussion tree.
     },
     enabled = true,
-    build = function () require("gitlab.server").build(true) end, -- Builds the Go binary
+    build = function()
+      require("gitlab.server").build(true)
+    end, -- Builds the Go binary
+    keys = {
+      {
+        "glr",
+        function()
+          require("gitlab").review()
+        end,
+      },
+      {
+        "gls",
+        function()
+          require("gitlab").summary()
+        end,
+      },
+      {
+        "glA",
+        function()
+          require("gitlab").approve()
+        end,
+      },
+      {
+        "glR",
+        function()
+          require("gitlab").revoke()
+        end,
+      },
+      {
+        "glc",
+        function()
+          require("gitlab").create_comment()
+        end,
+      },
+      {
+        "glc",
+        function()
+          require("gitlab").create_multiline_comment()
+        end,
+      },
+      {
+        "glC",
+        function()
+          require("gitlab").create_comment_suggestion()
+        end,
+      },
+      {
+        "glO",
+        function()
+          require("gitlab").create_mr()
+        end,
+      },
+      {
+        "glm",
+        function()
+          require("gitlab").move_to_discussion_tree_from_diagnostic()
+        end,
+      },
+      {
+        "gln",
+        function()
+          require("gitlab").create_note()
+        end,
+      },
+      {
+        "gld",
+        function()
+          require("gitlab").toggle_discussions()
+        end,
+      },
+      {
+        "glaa",
+        function()
+          require("gitlab").add_assignee()
+        end,
+      },
+      {
+        "glad",
+        function()
+          require("gitlab").delete_assignee()
+        end,
+      },
+      {
+        "glla",
+        function()
+          require("gitlab").add_label()
+        end,
+      },
+      {
+        "glld",
+        function()
+          require("gitlab").delete_label()
+        end,
+      },
+      {
+        "glra",
+        function()
+          require("gitlab").add_reviewer()
+        end,
+      },
+      {
+        "glrd",
+        function()
+          require("gitlab").delete_reviewer()
+        end,
+      },
+      {
+        "glp",
+        function()
+          require("gitlab").pipeline()
+        end,
+      },
+      {
+        "glo",
+        function()
+          require("gitlab").open_in_browser()
+        end,
+      },
+      {
+        "glM",
+        function()
+          require("gitlab").merge()
+        end,
+      },
+    },
     config = function()
-      require("gitlab").setup(
-        {
-          config_path = vim.fn.expand("$HOME"),
-        }
-      )
+      require("gitlab").setup({
+        reviewer_settings = {
+          diffview = {
+            imply_local = true, -- Use --imply_local with diffview
+          },
+        },
+        config_path = vim.fn.expand("$HOME"),
+      })
     end,
   },
   {
