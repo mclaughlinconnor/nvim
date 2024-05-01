@@ -48,10 +48,50 @@ return {
         mode = "s",
       },
 
-      { "<C-h>", "luasnip#choice_active() ? '<Plug>luasnip-next-choice' : ''", desc = "Next choice", mode = "i" },
-      { "<C-h>", "luasnip#choice_active() ? '<Plug>luasnip-next-choice' : ''", desc = "Next choice", mode = "s" },
-      { "<C-h>", "luasnip#choice_active() ? '<Plug>luasnip-prev-choice' : ''", desc = "Previous choice", mode = "i" },
-      { "<C-h>", "luasnip#choice_active() ? '<Plug>luasnip-prev-choice' : ''", desc = "Previous choice", mode = "s" },
+      {
+        "<C-h>",
+        function()
+          local ls = require("luasnip")
+          if ls.choice_active() then
+            ls.change_choice(1)
+          end
+        end,
+        desc = "Next choice",
+        mode = "i",
+      },
+      {
+        "<C-h>",
+        function()
+          local ls = require("luasnip")
+          if ls.choice_active() then
+            ls.change_choice(1)
+          end
+        end,
+        desc = "Next choice",
+        mode = "s",
+      },
+      {
+        "<C-y>",
+        function()
+          local ls = require("luasnip")
+          if ls.choice_active() then
+            ls.change_choice(-1)
+          end
+        end,
+        desc = "Previous choice",
+        mode = "i",
+      },
+      {
+        "<C-y>",
+        function()
+          local ls = require("luasnip")
+          if ls.choice_active() then
+            ls.change_choice(-1)
+          end
+        end,
+        desc = "Previous choice",
+        mode = "s",
+      },
 
       {
         "<leader><leader>s",

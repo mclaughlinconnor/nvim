@@ -1,3 +1,9 @@
+local function same(index)
+  return f(function(args)
+    return args[1]
+  end, { index })
+end
+
 return {
   s({ trig = "json", wordTrig = false }, {
     t([[pre {{]]),
@@ -10,7 +16,11 @@ return {
     i(1, "prop"),
     c(2, {
       t([[']]),
-      t([[]]),
+      sn(nil, {
+        t([[; else ]]),
+        i(1, [[templateName]]), -- could autocomplete templates here
+        t([[']]),
+      }),
     }),
   }),
 
@@ -33,4 +43,26 @@ return {
     i(2, "iterator"),
     t([[']]),
   }),
+
+  s({ trig = "cls", wordTrig = true }, fmta([[[class]="<>"]], { i(1) })),
+  s({ trig = "ngcls", wordTrig = true }, fmta([[[ngClass]="{<>: <>}"]], { i(1), i(2) })),
+  s({ trig = "cname", wordTrig = true }, fmta([[[formControlName]="<>"]], { i(1) })), -- could definitely get for controls from the component
+  s({ trig = "fg", wordTrig = true }, fmta([[[formGroup]="<>"]], { i(1) })),
+  s({ trig = "fgname", wordTrig = true }, fmta([[[formGroupName]="<>"]], { i(1) })),
+  s({ trig = "model", wordTrig = true }, fmta([[[ngModel]="<>"]], { i(1) })),
+  s({ trig = "nsty", wordTrig = true }, fmta([[[ngStyle]="{<>: <>}"]], { i(1), i(2) })),
+  s({ trig = "sw", wordTrig = true }, fmta([[[ngSwitch]="<>"]], { i(1) })),
+  s({ trig = "swc", wordTrig = true }, fmta([[*ngSwitchCase="<>"]], { i(1) })),
+  s({ trig = "swd", wordTrig = true }, fmta([[*ngSwitchDefault]], {})),
+  s(
+    { trig = "select", wordTrig = true },
+    fmta(
+      [[
+        select([(ngModel)]="<>")
+          option(*ngFor="let <> of <>" [value]="<>") {'<>'|tr}}
+      ]],
+      { i(1), i(2), i(3), same(2), same(2) }
+    )
+  ),
+  s({ trig = "sty", wordTrig = true }, fmta([[[style.<>]="<>"]], { i(1), i(2) })),
 }, {}
