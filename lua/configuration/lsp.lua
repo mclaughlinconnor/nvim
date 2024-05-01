@@ -205,6 +205,10 @@ return {
             settings = {
               Lua = {
                 completion = { callSnippet = "Replace" },
+                diagnostics = {
+                  globals = { "vim", "use", "s", "sn", "i", "rep", "c", "d", "f", "t", "fmta", "fmt" },
+                  ignoredFiles = "Opened",
+                },
                 hint = {
                   enable = true,
                 },
