@@ -1,3 +1,28 @@
+local function same(index)
+  return f(function(args)
+    return args[1]
+  end, { index })
+end
+
+local function component_name(index, prefix)
+  return f(function(args)
+    local n = args[1][1]
+    print(n)
+    if prefix then
+      return { "tg-" .. (n):gsub(" ", "-"):gsub("([a-z])([A-Z])", "%1-%2"):lower() }
+    else
+      return { (n):gsub(" ", "-"):gsub("([a-z])([A-Z])", "%1-%2"):lower() }
+    end
+  end, { index })
+end
+
+local function lowercase_first(index)
+  return f(function(args)
+    local n = args[1][1]
+    return (n:gsub("^%l", string.upper))
+  end, { index })
+end
+
 ---Attempts to (in decreasing order of presedence):
 -- - Convert a plural noun into a singular noun
 -- - Return the first letter of the word
@@ -145,7 +170,7 @@ return {
     end),
     t([[  ]]),
     i(1),
-    t({[[]], [[}]]}),
+    t({ [[]], [[}]] }),
   }),
 
   s(
@@ -187,12 +212,27 @@ return {
     i(4, "type"),
   }),
 
-  s({ trig = "cprop" }, {
-    c(2, {
+  s({ trig = "cinj" }, {
+    c(1, {
       t([[private ]]),
       t([[public ]]),
     }),
     t([[readonly ]]),
+    i(2, "prop"),
+    t([[ = inject(]]),
+    i(3, "injection token"),
+    t([[);]]),
+  }),
+
+  s({ trig = "cprop" }, {
+    c(1, {
+      t([[rivate]]),
+      t([[public]]),
+    }),
+    c(2, {
+      t([[ ]]),
+      t([[ readonly ]]),
+    }),
     i(3, "prop"),
     t([[: ]]),
     i(4, "type"),
@@ -275,4 +315,150 @@ return {
     i(3, "type"),
     t([[;]]),
   }),
+
+  s(
+    { trig = "output", wordTrig = true },
+    fmt(
+      [[
+        @Output({})
+        public readonly {}$ = new EventEmitter<{}>();
+      ]],
+      { i(1), same(1), i(2, "type") }
+    )
+  ),
+
+  s(
+    { trig = "comp", wordTrig = true },
+    fmta(
+      [[
+        import {ChangeDetectionStrategy, Component} from '@angular/core';
+
+        @Component({
+          changeDetection: ChangeDetectionStrategy.OnPush,
+          selector: '<>',
+          templateUrl: './<>.component.pug'
+        })
+
+        export class <>Component {
+          constructor() { }
+
+          <>
+        }
+      ]],
+      { component_name(1, true), component_name(1), i(1), i(2) }
+    )
+  ),
+
+  s(
+    { trig = "compi", wordTrig = true },
+    fmta(
+      [[
+        import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+
+        @Component({
+          changeDetection: ChangeDetectionStrategy.OnPush,
+          selector: '<>',
+          templateUrl: './<>.component.pug'
+        })
+
+        export class <>Component implements OnInit {
+          constructor() { }
+
+          ngOnInit() { }
+
+          <>
+        }
+      ]],
+      { component_name(1, true), component_name(1), i(1), i(2) }
+    )
+  ),
+
+  s(
+    { trig = "dir", wordTrig = true },
+    fmta(
+      [[
+        import {Directive} from '@angular/core';
+
+        @Directive({ selector: '[<>]' })
+        export class <>Directive {
+          constructor() { }
+        }
+      ]],
+      { component_name(1, false), i(1) }
+    )
+  ),
+
+  s(
+    { trig = "injectable", wordTrig = true },
+    fmta(
+      [[
+        @Injectable<><>
+      ]],
+      { c(1, { t([[({providedIn: 'root'})]]), t([[()]]) }), i(2) }
+    )
+  ),
+
+  s(
+    { trig = "service", wordTrig = true },
+    fmta(
+      [[
+        import {Injectable} from '@angular/core';
+
+        @Injectable<>
+        export class <>Service {
+          constructor() { }
+
+          <>
+        }
+      ]],
+      { c(1, { t([[({providedIn: 'root'})]]), t([[()]]) }), i(2), i(3) }
+    )
+  ),
+
+  s(
+    { trig = "module", wordTrig = true },
+    fmta(
+      [[
+        import {NgModule} from '@angular/core';
+        import {<>Component} from './<>.component';
+
+        @NgModule({
+          imports: [
+            GlobalModule,
+          ],
+          exports: [],
+          declarations: [<>Component],
+          providers: [],
+        })
+        export class <>Module { }
+      ]],
+      { same(1), component_name(1, false), same(1), i(1) }
+    )
+  ),
+
+  s(
+    { trig = "pipe", wordTrig = true },
+    fmta(
+      [[
+        import {Pipe, PipeTransform} from '@angular/core';
+
+        @Pipe({
+          name: '<>'
+        })
+
+        export class <>Pipe implements PipeTransform {
+          transform(value: <>): <> {
+            <>
+          }
+        }
+      ]],
+      { lowercase_first(1), i(1), i(2, "type"), i(3, "return"), i(4) }
+    )
+  ),
+
+  s({ trig = "apa", wordTrig = true }, fmta([[await Promise.all(<>)]], { i(1) })),
+  s({ trig = "pa", wordTrig = true }, fmta([[Promise.all(<>)]], { i(1) })),
+  s({ trig = "la", wordTrig = true }, fmta([[let <> = await <>;]], { i(1), i(2) })),
+  s({ trig = "ca", wordTrig = true }, fmta([[const <> = await <>;]], { i(1), i(2) })),
+  s({ trig = "ov", wordTrig = true }, fmta([[Object.values(<>)]], { i(1)})),
 }, {}
