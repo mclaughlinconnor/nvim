@@ -127,7 +127,11 @@ end)
 
 vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI", "BufEnter" }, {
   callback = function()
-    update_all_buffers()
+    local ok = pcall(update_all_buffers)
+    if not ok then
+      vim.notify("[PUG] Error updating buffers' diagnostics")
+      diagnostics.reset_diagnostics()
+    end
   end,
   group = vim.api.nvim_create_augroup("UnusedPublicDefinitions", {}),
   pattern = { "*.ts", "*.pug" },
