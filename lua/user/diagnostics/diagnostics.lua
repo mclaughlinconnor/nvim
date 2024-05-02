@@ -31,7 +31,10 @@ function M.build_diagnostics_for_class(file_diagnostics, class, has_template)
     local usage = usages[var]
 
     if usage ~= nil and usage.constructor_only == true then
-      table.insert(file_diagnostics, utils.generate_diagnostic("Variable only used in constructor: " .. var, node, has_template))
+      table.insert(
+        file_diagnostics,
+        utils.generate_diagnostic("Variable only used in constructor: " .. var, node, has_template)
+      )
       goto continue
     end
 
@@ -53,6 +56,10 @@ end
 
 function M.set_diagnostics(bufnr, diagnostics)
   vim.diagnostic.set(diagnostics_namespace, bufnr, diagnostics)
+end
+
+function M.reset_diagnostics(bufnr)
+  vim.diagnostic.reset(diagnostics_namespace, bufnr)
 end
 
 return M
