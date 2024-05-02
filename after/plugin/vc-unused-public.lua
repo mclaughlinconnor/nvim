@@ -38,7 +38,7 @@ local function handle_class(name, source, root, file_path, start, stop)
     end
 
     local function on_getter(node)
-      typescript.add_method_definition(node, source, getter_definitions)
+      typescript.add_getter_definition(node, source, getter_definitions)
     end
     local function on_property_definition(node)
       typescript.add_method_definition(node, source, variable_definitions)

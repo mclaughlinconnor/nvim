@@ -22,9 +22,15 @@ M.raw_queries.identifiers = [[
 M.raw_queries.property_definition = [[
   [
     (public_field_definition
+      decorator: (decorator
+        (call_expression
+          function: (identifier) @decorator))?
       (accessibility_modifier) @accessibility_modifier
       name: (property_identifier) @var) @definition
     (required_parameter
+      decorator: (decorator
+        (call_expression
+          function: (identifier) @decorator))?
       (accessibility_modifier) @accessibility_modifier
       pattern: (identifier) @var) @definition
   ]
