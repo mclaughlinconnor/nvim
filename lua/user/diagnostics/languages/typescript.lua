@@ -53,6 +53,7 @@ function M.extract_ts_identifiers(
     end
   end
 
+  -- also disable usage checks for abstract classes and @Injectable classes
   for node in utils.iter_captures("property_usage", source, root, nil, start, stop) do
     on_usage(node)
   end
@@ -62,12 +63,17 @@ function M.extract_ts_identifiers(
   end
 end
 
-function M.extract_imports(source, root, on_import)
+function M.extract_imports(source, root, file_path, on_import)
   for node in utils.iter_matches("import", source, root) do
     local import = {}
 
     import.is_type = node[1] ~= nil
-    import.path = vim.treesitter.get_node_text(node[3], source)
+
+    local path = vim.treesitter.get_node_text(node[3], source)
+    import.is_relative = utils.path_is_relative(path)
+
+    if import.is_relative then
+      import.path = vim.fn.fnamemodify(vim.fn.fnamemodify(file_path, ":h") .. "/" .. path .. ".ts", ":p")
     else
       import.path = path
     end

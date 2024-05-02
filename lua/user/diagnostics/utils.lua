@@ -3,6 +3,14 @@ local queries = require("user.diagnostics.queries")
 
 local M = {}
 
+function M.create_parser(source, language)
+  if type(source) == "string" then
+    return M.create_string_parser(source, language)
+  else
+    return M.create_buffer_parser(source, language)
+  end
+end
+
 function M.create_string_parser(text, language)
   local parser = vim.treesitter.get_string_parser(text, language)
   local tree = parser:parse()[1]:root()
@@ -50,7 +58,7 @@ function M.find_template(file_path, root, start, stop)
     return nil
   end
 
-  local filename = controller_directory .. "/" .. relative_template_path
+  local filename = vim.fn.fnamemodify(controller_directory .. "/" .. relative_template_path, ":p")
 
   if M.file_exists(filename) then
     return filename
@@ -89,11 +97,7 @@ function M.iter_captures(query, content, tree, language, start_, stop_)
   local stop = stop_ or -1
 
   if tree == nil then
-    if type(content) == "string" then
-      tree = M.create_string_parser(content, language)
-    else
-      tree = M.create_buffer_parser(content, language)
-    end
+    tree = M.create_parser(content, language)
   end
 
   local original = queries[query]:iter_captures(tree, content, start, stop)
@@ -110,11 +114,7 @@ function M.iter_matches(query, content, tree, language, start_, stop_)
   local stop = stop_ or -1
 
   if tree == nil then
-    if type(content) == "string" then
-      tree = M.create_string_parser(content, language)
-    else
-      tree = M.create_buffer_parser(content, language)
-    end
+    tree = M.create_parser(content, language)
   end
 
   local original = queries[query]:iter_matches(tree, content, start, stop)
@@ -135,6 +135,10 @@ function M.buffer_for_name(filename)
   end
 
   return nil
+end
+
+function M.path_is_relative(path)
+  return path:sub(1, 1) == "."
 end
 
 function M.file_exists(filename)
