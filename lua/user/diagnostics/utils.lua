@@ -63,7 +63,8 @@ function M.with_file_contents(filename, cb)
   local content
 
   local bufnr = M.buffer_for_name(filename)
-  if bufnr ~= nil then
+  -- unlisted buffers are usually (in my experience any way) from LSP
+  if bufnr ~= nil and vim.bo[bufnr].buflisted then
     local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
     content = table.concat(lines, "\n")
 
