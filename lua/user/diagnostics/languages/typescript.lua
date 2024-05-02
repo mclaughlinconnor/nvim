@@ -10,26 +10,6 @@ function M.find_getters(source, root, cb, start, stop)
   end
 end
 
-function M.get_property_definition_decorator(nodes, source)
-  local prev_node = nodes[3]:prev_named_sibling()
-  if prev_node ~= nil and prev_node:type() == "decorator" then
-    local first_child = prev_node:named_child(0)
-
-    local decorator_name = nil
-    if first_child ~= nil then
-      if first_child:type() == "call_expression" then
-        decorator_name = vim.treesitter.get_node_text(first_child:field("function")[1], source)
-      elseif first_child:type() == "identifier" then
-        decorator_name = vim.treesitter.get_node_text(first_child, source)
-      end
-    end
-
-    return decorator_name, M.is_angular_decorator(decorator_name)
-  end
-
-  return nil, false
-end
-
 function M.is_angular_decorator(decorator_name)
   return angular_decorators[decorator_name]
 end
@@ -49,8 +29,15 @@ function M.extract_ts_identifiers(
   end, start, stop)
 
   for node in utils.iter_matches("property_definition", source, root, nil, start, stop) do
-    local decorator_name, is_angular_decorator = M.get_property_definition_decorator(node, source)
-    if decorator_name ~= nil then
+    -- todo: add data for if it's overriding something on the parent
+    local is_angular_decorator = false
+    local has_decorator = node[1] ~= nil
+    if has_decorator then
+      local decorator_name = vim.treesitter.get_node_text(node[1], source)
+      is_angular_decorator = M.is_angular_decorator(decorator_name)
+    end
+
+    if has_decorator then
       if not is_angular_decorator then
         on_property_definition(node)
       end
@@ -81,6 +68,9 @@ function M.extract_imports(source, root, on_import)
 
     import.is_type = node[1] ~= nil
     import.path = vim.treesitter.get_node_text(node[3], source)
+    else
+      import.path = path
+    end
 
     for specifier in node[2]:iter_children() do
       if specifier:named() then
@@ -104,10 +94,15 @@ end
 
 -- Does this make sense as a method in this file?
 function M.add_method_definition(nodes, source, tab)
+  local accessibility = vim.treesitter.get_node_text(nodes[2], source)
+  local var = vim.treesitter.get_node_text(nodes[3], source)
+  tab[var] = { accessibility = accessibility, node = nodes[4] }
+end
+
+function M.add_getter_definition(nodes, source, tab)
   local accessibility = vim.treesitter.get_node_text(nodes[1], source)
   local var = vim.treesitter.get_node_text(nodes[2], source)
-  tab[var] = { accessibility = accessibility, node = nodes[2] }
+  tab[var] = { accessibility = accessibility, node = nodes[4] }
 end
 
 return M
-
