@@ -6,7 +6,7 @@ end
 return {
   {
     "ibhagwan/fzf-lua",
-    commit = "2a1bb74da8e409d8c534a8f43d7fb0f8acc85207",
+    commit = "b6996a86fecf13c94f97583353c80375a8f413bf",
     keys = {
       { "<leader>b", function() require("fzf-lua").buffers() end },
       { "<leader>B", function() require("fzf-lua").oldfiles() end },
@@ -157,6 +157,7 @@ return {
 
         manpages = { previewer = "man_native" },
         helptags = { previewer = "help_native" },
+        lsp = { code_actions = { previewer = false } }, -- typescript-tools.nvim is buggy
         files = {
           fzf_opts = {
             ["--ansi"] = false,
