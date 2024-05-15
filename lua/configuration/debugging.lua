@@ -58,6 +58,20 @@ return {
     },
   },
   {
+    "leoluz/nvim-dap-go",
+    commit = "5faf165f5062187320eaf9d177c3c1f647adc22e",
+    opts = {
+      dap_configurations = {
+        {
+          type = "go",
+          name = "Debug main.go",
+          request = "launch",
+          program = "${workspaceFolder}/main.go"
+        },
+      }
+    },
+  },
+  {
     "mfussenegger/nvim-dap",
     commit = "281a2e4cd1e7a17cea7ecb1745d84a8ab1249925",
     dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap", "microsoft/vscode-js-debug", "mxsdev/nvim-dap-vscode-js" },
