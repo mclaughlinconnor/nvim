@@ -37,26 +37,6 @@ return {
     end,
   },
   {
-    "mxsdev/nvim-dap-vscode-js",
-    commit = "03bd29672d7fab5e515fc8469b7d07cc5994bbf6",
-    dependencies = { "microsoft/vscode-js-debug" },
-    opts = function()
-      local utils = require("dap-vscode-js.utils")
-      return {
-        adapters = {
-          "pwa-node",
-          "pwa-chrome",
-          "pwa-msedge",
-          "node-terminal",
-          "pwa-extensionHost",
-        }, -- which adapters to register in nvim-dap
-        debugger_path = utils.join_paths(utils.get_runtime_dir(), "lazy/vscode-js-debug"),
-        -- log_file_level = vim.log.levels.TRACE,
-        -- log_console_level = vim.log.levels.TRACE,
-      }
-    end,
-  },
-  {
     "microsoft/vscode-js-debug",
     commit = "8fa24a71b84043a3c7065e4c64e1a9541ec518b2",
     lazy = true,
@@ -80,6 +60,22 @@ return {
 
       dap.adapters.nlua = function(callback, config)
         callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
+      end
+
+      if not dap.adapters["pwa-node"] then
+        require("dap").adapters["pwa-node"] = {
+          type = "server",
+          host = "127.0.0.1",
+          port = "${port}",
+          executable = {
+            command = "node",
+            args = {
+              require("mason-registry").get_package("js-debug-adapter"):get_install_path()
+                .. "/js-debug/src/dapDebugServer.js",
+              "${port}",
+            },
+          },
+        }
       end
 
       local firefoxPath = vim.fn.stdpath("data") .. "/mason/packages/firefox-debug-adapter"

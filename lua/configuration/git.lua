@@ -199,7 +199,7 @@ return {
   },
   {
     "NeogitOrg/neogit",
-    commit = "df527d152d34214a3a24a577bf7ef1f121e8add2",
+    commit = "3d58bf1d548f6fafdaab8ce4d75e25c438aee92c",
     keys = {
       {
         "gh",
