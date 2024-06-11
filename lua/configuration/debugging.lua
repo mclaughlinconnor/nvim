@@ -1,4 +1,5 @@
 return {
+  { "stevearc/profile.nvim", commit = "0ee32b7aba31d84b0ca76aaff2ffcb11f8f5449f" },
   {
     "theHamsta/nvim-dap-virtual-text",
     commit = "57f1dbd0458dd84a286b27768c142e1567f3ce3b",
@@ -25,13 +26,13 @@ return {
     commit = "34160a7ce6072ef332f350ae1d4a6a501daf0159",
     config = function()
       require("dapui").setup()
-
       local dap_float = vim.api.nvim_create_augroup("dap_float", { clear = true })
       vim.api.nvim_create_autocmd({ "FileType" }, {
         pattern = "dap-float",
         group = dap_float,
-        callback = function()
-          vim.keymap.set("n", "q", vim.cmd.close)
+        callback = function(event)
+          vim.bo[event.buf].buflisted = false
+          vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
         end,
       })
     end,
@@ -41,6 +42,20 @@ return {
     commit = "8fa24a71b84043a3c7065e4c64e1a9541ec518b2",
     lazy = true,
     build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+  },
+  {
+    "leoluz/nvim-dap-go",
+    opts = {
+      dap_configurations = {
+        {
+          -- Must be "go" or it will be ignored by the plugin
+          type = "go",
+          name = "Attach remote",
+          mode = "remote",
+          request = "attach",
+        },
+      },
+    },
   },
   {
     "mfussenegger/nvim-dap",
@@ -60,6 +75,22 @@ return {
 
       dap.adapters.nlua = function(callback, config)
         callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
+      end
+
+      if not dap.adapters["pwa-chrome"] then
+        require("dap").adapters["pwa-chrome"] = {
+          type = "server",
+          host = "127.0.0.1",
+          port = "${port}",
+          executable = {
+            command = "node",
+            args = {
+              require("mason-registry").get_package("js-debug-adapter"):get_install_path()
+                .. "/js-debug/src/dapDebugServer.js",
+              "${port}",
+            },
+          },
+        }
       end
 
       if not dap.adapters["pwa-node"] then
