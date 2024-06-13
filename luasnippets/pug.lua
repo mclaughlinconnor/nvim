@@ -24,22 +24,20 @@ return {
     }),
   }),
 
-  s({ trig = "tmpl", wordTrig = false }, {
+  s({ trig = "tmpl", wordTrig = true }, fmta([[ng-template(<>)]], { i(1) })),
+
+  s({ trig = "tmpln", wordTrig = false }, {
     t([[ng-template(#tpl]]),
     i(1, "name"),
     t([[)]]),
   }),
 
-  s({ trig = "cont", wordTrig = false }, {
-    t([[ng-container(]]),
-    i(1, ""),
-    t([[)]]),
-  }),
+  s({ trig = "cont", wordTrig = true }, fmta([[ng-container(<>)]], { i(1) })),
 
   s({ trig = "for", wordTrig = false }, {
     t([[*ngFor='let ]]),
     i(1, "var name"),
-    t([[ in ]]),
+    t([[ of ]]),
     i(2, "iterator"),
     t([[']]),
   }),
@@ -65,4 +63,7 @@ return {
     )
   ),
   s({ trig = "sty", wordTrig = true }, fmta([[[style.<>]="<>"]], { i(1), i(2) })),
+  s({ trig = "tr", wordTrig = true }, fmta([[[translate]="'<>'"]], { i(1) })),
+  s({ trig = "trp", wordTrig = true }, fmta([[[tr-placeholders]="{<>}"]], { i(1) })),
+  s({ trig = "alertinfo", wordTrig = true }, fmta([[.alert.alert-info]])),
 }, {}

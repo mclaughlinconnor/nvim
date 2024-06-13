@@ -16,6 +16,13 @@ local function component_name(index, prefix)
   end, { index })
 end
 
+local function lowercase(index)
+  return f(function(args)
+    local n = args[1][1]
+    return string.lower(n)
+  end, { index })
+end
+
 local function lowercase_first(index)
   return f(function(args)
     local n = args[1][1]
@@ -226,7 +233,7 @@ return {
 
   s({ trig = "cprop" }, {
     c(1, {
-      t([[rivate]]),
+      t([[private]]),
       t([[public]]),
     }),
     c(2, {
@@ -320,7 +327,7 @@ return {
     { trig = "output", wordTrig = true },
     fmt(
       [[
-        @Output({})
+        @Output('{}')
         public readonly {}$ = new EventEmitter<{}>();
       ]],
       { i(1), same(1), i(2, "type") }
@@ -456,9 +463,135 @@ return {
     )
   ),
 
+  s(
+    { trig = "dbmodel", wordTrig = true },
+    fmta(
+      [[
+        import {model, Schema} from 'mongoose';
+        import type {MongooseDoc, MongooseModel, MongooseSchemaDef} from '../lib/mongoose/MongooseUtil';
+
+        interface <>InterfaceBase {
+        }
+
+        export interface <>Interface extends MongooseDoc<<<>InterfaceBase>> { }
+
+        const definition: MongooseSchemaDef<<<>InterfaceBase>> = {
+        };
+
+        const schema = new Schema<<<>Interface>>(definition, {
+          collection: '<>',
+          timestamps: true,
+        });
+
+        export const <>Model = model<<<>Interface, MongooseModel<<<>Interface>>>>('<>', schema);
+      ]],
+      {
+        i(1),
+        lowercase_first(1),
+        lowercase_first(1),
+        lowercase_first(1),
+        lowercase_first(1),
+        lowercase(1),
+        same(1),
+        lowercase_first(1),
+        lowercase_first(1),
+        lowercase_first(1),
+      }
+    )
+  ),
+
   s({ trig = "apa", wordTrig = true }, fmta([[await Promise.all(<>)]], { i(1) })),
   s({ trig = "pa", wordTrig = true }, fmta([[Promise.all(<>)]], { i(1) })),
   s({ trig = "la", wordTrig = true }, fmta([[let <> = await <>;]], { i(1), i(2) })),
   s({ trig = "ca", wordTrig = true }, fmta([[const <> = await <>;]], { i(1), i(2) })),
-  s({ trig = "ov", wordTrig = true }, fmta([[Object.values(<>)]], { i(1)})),
+  s({ trig = "ov", wordTrig = true }, fmta([[Object.values(<>)]], { i(1) })),
+
+  s(
+    { trig = "controller", wordTrig = true },
+    fmta(
+      [[
+        import type {Request, Response} from '../../definitions/sails';
+        import {<>Model} from '../../models/<>';
+
+        export async function destroy(req: Request, res: Response) {
+          return await <>Model
+            .deleteOne({_id: req.params.id})
+            .then(res.ok)
+            .catch(res.negotiate);
+        }
+
+        export async function find(_req: Request, res: Response) {
+          return await <>Model
+            .find({})
+            .then(res.ok)
+            .catch(res.negotiate);
+        }
+
+        export async function findOne(req: Request, res: Response) {
+          return await <>Model
+            .find({_id: req.params.id})
+            .then(res.ok)
+            .catch(res.negotiate);
+        }
+
+        export async function update(req: Request, res: Response) {
+          return await <>Model
+            .updateOne({_id: req.params.id}, req.body)
+            .then(res.ok)
+            .catch(res.negotiate);
+        }
+      ]],
+      { i(1), same(1), same(1), same(1), same(1), same(1) }
+    )
+  ),
+
+  s(
+    { trig = "endpoints", wordTrig = true },
+    fmta(
+      [[
+        'DELETE /api/v1/<>/:id': {
+          controller: '<>Controller',
+          action: 'destroy'
+        },
+
+        'GET /api/v1/<>': {
+          controller: '<>Controller',
+          action: 'find'
+        },
+
+        'GET /api/v1/<>/:id': {
+          controller: '<>Controller',
+          action: 'findOne',
+        },
+
+        'POST /api/v1/<>/:id': {
+          controller: '<>Controller',
+          action: 'update',
+        },
+      ]],
+      { lowercase(1), i(1), lowercase(1), same(1), lowercase(1), same(1), lowercase(1), same(1) }
+    )
+  ),
+
+  s(
+    { trig = ".alert", wordTrig = true },
+    fmta(
+      [[
+        .subscribe({
+          error: () =>> {
+            this.alertSvc.alertError({key: '<>Failure', <>});
+          },
+          next: () =>> {
+            this.alertSvc.alertSuccess({
+              key: '<>Success',
+              <>,
+            });
+          },
+        });
+      ]],
+      { i(1), c(2, {t([[ns]]), sn(nil, {t([[ns: ]]), i(1)})}), same(1), same(2)}
+    )
+  ),
+
+
 }, {}
