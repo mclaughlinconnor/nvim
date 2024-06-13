@@ -21,6 +21,10 @@ local function on_attach(client, bufnr)
     vim.lsp.inlay_hint.enable(true)
   end
 
+  vim.keymap.set("n", "<space>gd", function()
+    vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+  end)
+
   -- lsp specific mappings
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
