@@ -258,7 +258,7 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    commit = "694aaec65733e2d54d393abf80e526f86726c988",
+    commit = "dddd0945c0f31a0abd843425927a1712d2db2e10",
     config = function()
       local lsp_status = require("lsp-status")
 
