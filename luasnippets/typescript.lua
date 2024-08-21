@@ -1,3 +1,5 @@
+local events =  require("luasnip.util.events")
+
 local function same(index)
   return f(function(args)
     return args[1]
@@ -217,6 +219,23 @@ return {
     i(3, "prop"),
     t([[: ]]),
     i(4, "type"),
+  },
+  {
+    callbacks = {
+      [-1] = {
+        [events.pre_expand] = function()
+          vim.lsp.buf.execute_command({
+            command = "ts_inspector/addImport",
+            arguments = {
+              vim.uri_from_bufnr(0),
+              "@angular/core",
+              {},
+              {"Inject"},
+            },
+          })
+        end
+      }
+    }
   }),
 
   s({ trig = "cinj" }, {
@@ -229,6 +248,23 @@ return {
     t([[ = inject(]]),
     i(3, "injection token"),
     t([[);]]),
+  },
+  {
+    callbacks = {
+      [-1] = {
+        [events.pre_expand] = function()
+          vim.lsp.buf.execute_command({
+            command = "ts_inspector/addImport",
+            arguments = {
+              vim.uri_from_bufnr(0),
+              "@angular/core",
+              {},
+              {"inject"},
+            },
+          })
+        end
+      }
+    }
   }),
 
   s({ trig = "cprop" }, {
@@ -261,6 +297,23 @@ return {
     }),
     t([[readonly ]]),
     t([[cdr: ChangeDetectorRef]]),
+  },
+  {
+    callbacks = {
+      [-1] = {
+        [events.pre_expand] = function()
+          vim.lsp.buf.execute_command({
+            command = "ts_inspector/addImport",
+            arguments = {
+              vim.uri_from_bufnr(0),
+              "@angular/core",
+              {},
+              {"ChangeDetectorRef"},
+            },
+          })
+        end
+      }
+    }
   }),
 
   s({ trig = "cfb" }, {
@@ -321,6 +374,23 @@ return {
     t([[: ]]),
     i(3, "type"),
     t([[;]]),
+  },
+  {
+    callbacks = {
+      [-1] = {
+        [events.pre_expand] = function()
+          vim.lsp.buf.execute_command({
+            command = "ts_inspector/addImport",
+            arguments = {
+              vim.uri_from_bufnr(0),
+              "@angular/core",
+                {},
+              {"Input"},
+            },
+          })
+        end
+      }
+    }
   }),
 
   s(
@@ -331,7 +401,24 @@ return {
         public readonly {}$ = new EventEmitter<{}>();
       ]],
       { i(1), same(1), i(2, "type") }
-    )
+    ),
+    {
+      callbacks = {
+        [-1] = {
+          [events.pre_expand] = function()
+            vim.lsp.buf.execute_command({
+              command = "ts_inspector/addImport",
+              arguments = {
+                vim.uri_from_bufnr(0),
+                "@angular/core",
+                {},
+                {"EventEmitter", "Output"},
+              },
+            })
+          end
+        }
+      }
+    }
   ),
 
   s(
