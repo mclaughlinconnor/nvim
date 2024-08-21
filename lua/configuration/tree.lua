@@ -28,6 +28,33 @@ end
 
 return {
   {
+    "stevearc/oil.nvim",
+    commit = "65c53dbe4f2140236590a7568a5f22a77d16be39",
+    opts = {
+      default_file_explorer = true,
+      keymaps = {
+        ["g?"] = "actions.show_help",
+        ["<CR>"] = "actions.select",
+        ["<C-s>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
+        ["<C-h>"] = { "actions.select", opts = { horizontal = true }, desc = "Open the entry in a horizontal split" },
+        ["<C-t>"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
+        ["<C-p>"] = "actions.preview",
+        ["<C-c>"] = "actions.close",
+        ["<C-l>"] = "actions.refresh",
+        ["-"] = "actions.parent",
+        ["h"] = "actions.parent",
+        ["_"] = "actions.open_cwd",
+        ["`"] = "actions.cd",
+        ["~"] = { "actions.cd", opts = { scope = "tab" }, desc = ":tcd to the current oil directory" },
+        ["gs"] = "actions.change_sort",
+        ["gx"] = "actions.open_external",
+        ["zg"] = "actions.toggle_hidden",
+        ["gy"] = "actions.yank_entry",
+        ["g\\"] = "actions.toggle_trash",
+      },
+    },
+  },
+  {
     "tamago324/lir.nvim",
     commit = "969e95bd07ec315b5efc53af69c881278c2b74fa",
     config = function(_, opts)
