@@ -87,6 +87,23 @@ local function angularls_config(workspace_dir)
   }
 end
 
+local client = vim.lsp.start_client({
+  cmd = { "/Users/connorveryconnect.com/Downloads/ts_inspector/ts_inspector" },
+  on_attach = on_attach,
+  name = "ts_inspector",
+})
+
+if not client then
+  vim.notify("Client didn't start")
+else
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "typescript", "pug" },
+    callback = function()
+      vim.lsp.buf_attach_client(0, client)
+    end,
+  })
+end
+
 return {
   {
     "williamboman/mason.nvim",
@@ -104,14 +121,17 @@ return {
       "ibhagwan/fzf-lua",
       "neovim/nvim-lspconfig",
       "nvim-cmp",
-      {
-        "pmizio/typescript-tools.nvim",
-        commit = "7911a0aa27e472bff986f1d3ce38ebad3b635b28",
-        requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-      },
+      {"yioneko/nvim-vtsls", commit = "45c6dfea9f83a126e9bfc5dd63430562b3f8af16"},
+      -- {
+      --   "pmizio/typescript-tools.nvim",
+      --   commit = "7911a0aa27e472bff986f1d3ce38ebad3b635b28",
+      --   requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+      -- },
     },
     config = function()
       local lsp_status = require("lsp-status")
+
+      require("lspconfig.configs").vtsls = require("vtsls").lspconfig
 
       require("mason-lspconfig").setup_handlers({
         -- handle all servers without specific handlers
@@ -145,30 +165,43 @@ return {
           })
         end,
         ["tsserver"] = function()
-          require("typescript-tools").setup({
-            code_lens = "off", -- need to patch a newer version of angularls to support them
+          require("lspconfig").vtsls.setup({
             on_attach = on_attach,
             capabilities = lsp_status.capabilities,
             settings = {
               complete_function_calls = true,
-              expose_as_code_action = "all",
-              tsserver_file_preferences = {
-                importModuleSpecifierPreference = "relative",
-                includeCompletionsForImportStatements = true,
-                includeCompletionsForModuleExports = true,
-                includeCompletionsWithSnippetText = true,
-                includeInlayEnumMemberValueHints = true, -- enum {ONE /* = 0 */, TWO /* = 1 */,}
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayFunctionParameterTypeHints = false, -- no need for `.then(r /* ResultInterface[] */ => handleResult(r))`
-                includeInlayParameterNameHints = "literals", -- only show inlay hints for literal values being passed
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayVariableTypeHints = true,
-                includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-                quotePreference = "single",
-              },
-              tsserver_format_options = {
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
+              typescript = {
+                referencesCodeLens = { enabled = false },
+                implementationsCodeLens = { enabled = false },
+                format = {
+                  insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
+                },
+                inlayHints = {
+                  enumMemberValues = { enabled = true },
+                  functionLikeReturnTypes = { enabled = true },
+                  parameterNames = {
+                    enabled = "literals",
+                    suppressWhenArgumentMatchesName = true,
+                  },
+                  parameterTypes = { enabled = false },
+                  propertyDeclarationTypes = {
+                    enabled = true,
+                    suppressWhenArgumentMatchesName = true,
+                  },
+                  variableTypes = { enabled = true },
+                },
+                suggest = {
+                  classMemberSnippets = { enabled = true },
+                  objectLiteralMethodSnippets = { enabled = true },
+                  completeFunctionCalls = true,
+                  includeAutomaticOptionalChainCompletions = true,
+                  includeCompletionsWithSnippetText = true,
+                  includeCompletionsForImportStatements = true,
+                },
+                preferences = {
+                  importModuleSpecifier = "relative",
+                  quoteStyle = "single",
+                },
               },
             },
           })
@@ -212,6 +245,15 @@ return {
           })
         end,
       })
+
+      vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+        -- delay update diagnostics
+        update_in_insert = true,
+      })
+
+      vim.lsp.handlers["textDocument/diagnostic"] = vim.lsp.with(vim.lsp.diagnostic.on_diagnostic, {
+        update_in_insert = false,
+      })
     end,
   },
   {
@@ -231,51 +273,51 @@ return {
     "neovim/nvim-lspconfig",
     commit = "dddd0945c0f31a0abd843425927a1712d2db2e10",
     config = function()
-      local lsp_status = require("lsp-status")
+      -- local lsp_status = require("lsp-status")
 
-      require("lspconfig")["angularls"].setup({
-        on_attach = on_attach,
-        capabilities = lsp_status.capabilities,
-        filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "pug" },
-        cmd = angularls_config(vim.loop.fs_realpath(".")),
-        on_new_config = function(new_config, new_root_dir)
-          new_config.cmd = angularls_config(new_root_dir)
-        end,
-      })
+      -- require("lspconfig")["angularls"].setup({
+      --   on_attach = on_attach,
+      --   capabilities = lsp_status.capabilities,
+      --   filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "pug" },
+      --   cmd = angularls_config(vim.loop.fs_realpath(".")),
+      --   on_new_config = function(new_config, new_root_dir)
+      --     new_config.cmd = angularls_config(new_root_dir)
+      --   end,
+      -- })
     end,
   },
-  {
-    "mfussenegger/nvim-lint",
-    commit = "f20f35756e74b91c0b4340d01fee22422bdffefa",
-    config = function()
-      local lint = require("lint")
-
-      require("lint").linters_by_ft = {
-        scss = { "stylelint" },
-        css = { "stylelint" },
-        less = { "stylelint" },
-      }
-      local stylelint = require("lint").linters.stylelint
-      stylelint.args = {
-        "-f",
-        "json",
-        "--config",
-        function()
-          return vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/stylelint.config.js"
-        end,
-        "--stdin",
-        "--stdin-filename",
-        function()
-          return vim.fn.expand("%:p")
-        end,
-      }
-
-      vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "InsertLeave", "TextChanged" }, {
-        group = vim.api.nvim_create_augroup("lint", { clear = true }),
-        callback = function()
-          lint.try_lint()
-        end,
-      })
-    end,
-  },
+  -- {
+  --   "mfussenegger/nvim-lint",
+  --   commit = "f20f35756e74b91c0b4340d01fee22422bdffefa",
+  --   config = function()
+  --     local lint = require("lint")
+  --
+  --     require("lint").linters_by_ft = {
+  --       scss = { "stylelint" },
+  --       css = { "stylelint" },
+  --       less = { "stylelint" },
+  --     }
+  --     local stylelint = require("lint").linters.stylelint
+  --     stylelint.args = {
+  --       "-f",
+  --       "json",
+  --       "--config",
+  --       function()
+  --         return vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/stylelint.config.js"
+  --       end,
+  --       "--stdin",
+  --       "--stdin-filename",
+  --       function()
+  --         return vim.fn.expand("%:p")
+  --       end,
+  --     }
+  --
+  --     vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "InsertLeave", "TextChanged" }, {
+  --       group = vim.api.nvim_create_augroup("lint", { clear = true }),
+  --       callback = function()
+  --         lint.try_lint()
+  --       end,
+  --     })
+  --   end,
+  -- },
 }
