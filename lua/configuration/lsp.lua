@@ -41,7 +41,14 @@ local function on_attach(client, bufnr)
   vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
   vim.keymap.set("n", "<space>ca", fzf.lsp_code_actions, bufopts)
   vim.keymap.set("n", "gr", fzf.lsp_references, bufopts)
-  vim.keymap.set("n", "g0", fzf.lsp_code_actions, bufopts)
+  vim.keymap.set("n", "g0",
+    function()
+      vim.lsp.buf.code_action({ context = {
+        diagnostics = vim.lsp.diagnostic.get_line_diagnostics(bufnr),
+        only = { "source", "refactor", "quickfix" },
+      } })
+    end,
+    bufopts)
   vim.keymap.set("v", "g0", fzf.lsp_code_actions, bufopts)
   vim.keymap.set("n", "<space>f", function()
     vim.lsp.buf.format({ async = true })
