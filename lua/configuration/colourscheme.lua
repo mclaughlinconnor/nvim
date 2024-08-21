@@ -20,11 +20,13 @@ return {
       end, {})
 
       vim.api.nvim_create_user_command("FlashBang", function()
-        setColour("delek")
+        setColour("rose-pine-dawn")
       end, {})
-      local c = require("nord.colors").palette
       vim.cmd([[highlight debugPC guibg=#000000]])
     end,
+    dependencies = {
+      {"rose-pine/neovim"},
+    },
   },
   {
     "lukas-reineke/indent-blankline.nvim",
