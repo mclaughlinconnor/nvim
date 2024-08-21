@@ -97,42 +97,6 @@ return {
     end,
   },
   {
-    -- Hacky: should come before lspconfig so ast-grep's actions come first
-    "jose-elias-alvarez/null-ls.nvim",
-    commit = "0010ea927ab7c09ef0ce9bf28c2b573fc302f5a7",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = function()
-      local null_ls = require("null-ls")
-
-      return {
-        on_attach = on_attach,
-        debug = true,
-        sources = {
-          null_ls.builtins.formatting.latexindent.with({
-            filetypes = { "tex", "latex" },
-          }),
-          null_ls.builtins.formatting.fixjson,
-          null_ls.builtins.diagnostics.luacheck,
-          null_ls.builtins.diagnostics.shellcheck,
-          null_ls.builtins.diagnostics.stylelint.with({
-            extra_args = {
-              "--config",
-              ---@diagnostic disable-next-line: param-type-mismatch
-              vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/stylelint.config.js",
-            },
-          }),
-          null_ls.builtins.diagnostics.todo_comments,
-          null_ls.builtins.diagnostics.trail_space,
-          null_ls.builtins.formatting.trim_whitespace,
-          null_ls.builtins.formatting.stylua.with({
-            extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
-          }),
-          null_ls.builtins.formatting.clang_format,
-        },
-      }
-    end,
-  },
-  {
     "williamboman/mason-lspconfig.nvim",
     commit = "4eb8e15e3c0757303d4c6dea64d2981fc679e990",
     dependencies = {
