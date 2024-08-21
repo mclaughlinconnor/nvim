@@ -199,7 +199,7 @@ return {
   },
   {
     "NeogitOrg/neogit",
-    commit = "3d58bf1d548f6fafdaab8ce4d75e25c438aee92c",
+    commit = "2b74a777b963dfdeeabfabf84d5ba611666adab4",
     keys = {
       {
         "gh",
@@ -241,6 +241,12 @@ return {
         "<leader>dO",
         function()
           vim.cmd.Close()
+        end,
+      },
+      {
+        "<leader>rG",
+        function()
+          vim.cmd("DiffviewOpen HEAD~1...HEAD --imply-local")
         end,
       },
       {
