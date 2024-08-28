@@ -236,6 +236,10 @@ return {
             cwd = "${workspaceFolder}",
           },
         }
+
+        vim.keymap.set("n", "<leader><leader>dc", require("fzf-lua").dap_commands)
+        vim.keymap.set("n", "<leader><leader>db", require("fzf-lua").dap_breakpoints)
+        vim.keymap.set("n", "<leader><leader>df", require("fzf-lua").dap_frames)
       end
     end,
     keys = {
@@ -254,13 +258,6 @@ return {
         desc = "Terminate DAP session",
       },
       {
-        "<leader>dd",
-        function()
-          require("dap").disconnect()
-        end,
-        desc = "Disconnect from DAP sesion",
-      },
-      {
         "<leader>dc",
         function()
           require("dap").continue()
@@ -268,7 +265,7 @@ return {
         desc = "Continue DAP session",
       },
       {
-        "<leader>dR",
+        "<leader>dC",
         function()
           require("dap").run_to_cursor()
         end,
@@ -294,13 +291,6 @@ return {
           require("dap").set_breakpoint(vim.fn.input({ prompt = "[Condition] > " }))
         end,
         desc = "Toggle conditional DAP breakpoint",
-      },
-      {
-        "<leader>dr",
-        function()
-          require("dap").repl.toggle()
-        end,
-        desc = "Toggle DAP REPL",
       },
       {
         "<leader>dr",
