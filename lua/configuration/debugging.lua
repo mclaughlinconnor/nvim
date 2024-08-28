@@ -2,7 +2,7 @@ return {
   { "stevearc/profile.nvim", commit = "0ee32b7aba31d84b0ca76aaff2ffcb11f8f5449f" },
   {
     "theHamsta/nvim-dap-virtual-text",
-    commit = "57f1dbd0458dd84a286b27768c142e1567f3ce3b",
+    commit = "484995d573c0f0563f6a66ebdd6c67b649489615",
     opts = {
       all_references = true,
       display_callback = function(variable, _, _, _, options)
@@ -23,7 +23,7 @@ return {
   },
   {
     "rcarriga/nvim-dap-ui",
-    commit = "34160a7ce6072ef332f350ae1d4a6a501daf0159",
+    commit = "1c351e4e417d4691da12948b6ecf966936a56d28",
     config = function()
       require("dapui").setup()
       local dap_float = vim.api.nvim_create_augroup("dap_float", { clear = true })
@@ -39,9 +39,9 @@ return {
   },
   {
     "microsoft/vscode-js-debug",
-    commit = "8fa24a71b84043a3c7065e4c64e1a9541ec518b2",
+    commit = "ab03c689011747026b38a13468cd6b5b1e43f0d3",
     lazy = true,
-    build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+    build = "npm install --legacy-peer-deps --no-save && npx gulp vsDebugServerBundle && mv dist out",
   },
   {
     "leoluz/nvim-dap-go",
@@ -59,8 +59,8 @@ return {
   },
   {
     "mfussenegger/nvim-dap",
-    commit = "13ce59d4852be2bb3cd4967947985cb0ceaff460",
-    dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap", "mxsdev/nvim-dap-vscode-js" },
+    commit = "281a2e4cd1e7a17cea7ecb1745d84a8ab1249925",
+    dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap", "microsoft/vscode-js-debug", "mxsdev/nvim-dap-vscode-js" },
     config = function()
       local dap = require("dap")
       -- dap.set_log_level('TRACE')
@@ -131,10 +131,13 @@ return {
               "!**/node_modules/**",
             },
             runtimeArgs = {
-              "run-script",
-              "debug",
+              "--nolazy",
+              "--inspect=9229",
+              "-r",
+              "source-map-support/register",
+              ".src/app.js",
             },
-            runtimeExecutable = "npm",
+            runtimeExecutable = "node",
             skipFiles = {
               "<node_internals>/**",
             },
@@ -295,9 +298,16 @@ return {
       {
         "<leader>dr",
         function()
-          require("dap").repl.toggle()
+          require("dap").restart_frame()
         end,
-        desc = "Toggle DAP REPL",
+        desc = "Try to restart the frame. Use pause to recover from failure",
+      },
+      {
+        "<leader>dR",
+        function()
+          require("dap").pause()
+        end,
+        desc = "Pause thread. Most often used to recover from failed stack restart",
       },
       {
         "<leader>dE",
