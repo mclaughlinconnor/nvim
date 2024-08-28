@@ -9,14 +9,16 @@ end
 return {
   {
     "gbprod/nord.nvim",
-    commit = "9896e4634b1ba99e7a532a568b3b66e3344ad0df",
+    commit = "70fc2425b50396e5f1230200b59527d8440a24df",
     lazy = false,
     priority = 1000, -- load first
     config = function()
       vim.cmd.colorscheme("nord")
+      vim.cmd([[highlight SignColumn guifg=#FFFFFF]])
 
       vim.api.nvim_create_user_command("LightsOut", function()
         setColour("nord")
+        vim.cmd([[highlight SignColumn guifg=#FFFFFF]])
       end, {})
 
       vim.api.nvim_create_user_command("FlashBang", function()
