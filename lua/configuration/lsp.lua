@@ -153,6 +153,13 @@ return {
             on_attach = on_attach,
           })
         end,
+        ["cssls"] = function()
+          local capabilities = lsp_status.capabilities
+          capabilities.textDocument.completion.completionItem.snippetSupport = true
+          require("lspconfig")["cssls"].setup({
+            capabilities = capabilities,
+          })
+        end,
         ["clangd"] = function()
           require("lspconfig")["clangd"].setup({
             capabilities = lsp_status.capabilities,
