@@ -5,13 +5,15 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
+-- vim.lsp.set_log_level(vim.log.levels.TRACE)
+
 -- do this only on attached buffers
 local function on_attach(client, bufnr)
   local fzf = require("fzf-lua")
   require("lsp-status").on_attach(client)
 
-  if client.name == "tsserver" then
-    client.server_capabilities.document_formatting = false
+  if client.name == "tsserver" or client.name == "vtsls" then
+    client.server_capabilities.documentFormattingProvider = false
   end
 
   if client.server_capabilities.inlayHintProvider then
@@ -175,17 +177,19 @@ return {
             },
           })
         end,
-        ["tsserver"] = function()
+        ["vtsls"] = function()
           require("lspconfig").vtsls.setup({
             on_attach = on_attach,
             capabilities = lsp_status.capabilities,
             settings = {
               complete_function_calls = true,
               typescript = {
+                enableMoveToFileCodeAction = true,
                 referencesCodeLens = { enabled = false },
                 implementationsCodeLens = { enabled = false },
                 format = {
-                  insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
+                  enable = false,
+                  insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false, -- needed for imports to be formatted properly
                 },
                 inlayHints = {
                   enumMemberValues = { enabled = true },
@@ -209,7 +213,11 @@ return {
                   includeCompletionsWithSnippetText = true,
                   includeCompletionsForImportStatements = true,
                 },
+                tsserver = {
+                  enableRegionDiagnostics = true,
+                },
                 preferences = {
+                preferTypeOnlyAutoImports = true,
                   importModuleSpecifier = "relative",
                   quoteStyle = "single",
                 },
