@@ -46,7 +46,17 @@ local function on_attach(client, bufnr)
     function()
       vim.lsp.buf.code_action({ context = {
         diagnostics = vim.lsp.diagnostic.get_line_diagnostics(bufnr),
-        only = { "source", "refactor", "quickfix" },
+        only = {
+          -- "", -- Empty -- Adding this makes some of tsservers actions disappear
+          "quickfix", -- QuickFix
+          "refactor", -- Refactor
+          "refactor.extract", -- RefactorExtract
+          "refactor.inline", -- RefactorInline
+          "refactor.rewrite", -- RefactorRewrite
+          "source", -- Source
+          "source.organizeImports", -- SourceOrganizeImports
+          "source.fixAll", -- SourceFixAll
+        },
       } })
     end,
     bufopts)
