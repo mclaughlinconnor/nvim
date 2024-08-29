@@ -1,5 +1,23 @@
 local events =  require("luasnip.util.events")
 
+local injectCallbacks = {
+  callbacks = {
+    [-1] = {
+      [events.pre_expand] = function()
+        vim.lsp.buf.execute_command({
+          command = "ts_inspector/addImport",
+          arguments = {
+            vim.uri_from_bufnr(0),
+            "@angular/core",
+            {},
+            {"inject"},
+          },
+        })
+      end
+    }
+  }
+}
+
 local function same(index)
   return f(function(args)
     return args[1]
@@ -155,7 +173,7 @@ return {
       sn(nil, { t([[{]]), i(1), t([[}]]) }),
     }),
     -- i(2),
-    t([[)]]),
+    t([[);]]),
   }),
 
   treesitter_postfix({
@@ -209,36 +227,6 @@ return {
   }),
 
   s({ trig = "inj" }, {
-    t([[@Inject(]]),
-    i(1, "injection token"),
-    t([[) ]]),
-    c(2, {
-      t([[public readonly ]]),
-      t(),
-    }),
-    i(3, "prop"),
-    t([[: ]]),
-    i(4, "type"),
-  },
-  {
-    callbacks = {
-      [-1] = {
-        [events.pre_expand] = function()
-          vim.lsp.buf.execute_command({
-            command = "ts_inspector/addImport",
-            arguments = {
-              vim.uri_from_bufnr(0),
-              "@angular/core",
-              {},
-              {"Inject"},
-            },
-          })
-        end
-      }
-    }
-  }),
-
-  s({ trig = "cinj" }, {
     c(1, {
       t([[private ]]),
       t([[public ]]),
@@ -249,25 +237,10 @@ return {
     i(3, "injection token"),
     t([[);]]),
   },
-  {
-    callbacks = {
-      [-1] = {
-        [events.pre_expand] = function()
-          vim.lsp.buf.execute_command({
-            command = "ts_inspector/addImport",
-            arguments = {
-              vim.uri_from_bufnr(0),
-              "@angular/core",
-              {},
-              {"inject"},
-            },
-          })
-        end
-      }
-    }
-  }),
+  injectCallbacks
+  ),
 
-  s({ trig = "cprop" }, {
+  s({ trig = "prop" }, {
     c(1, {
       t([[private]]),
       t([[public]]),
@@ -279,84 +252,63 @@ return {
     i(3, "prop"),
     t([[: ]]),
     i(4, "type"),
+    t([[;]]),
   }),
 
-  s({ trig = "croute" }, {
-    c(1, {
-      t([[private ]]),
-      t([[public ]]),
-    }),
+  s({ trig = "injroute" }, {
+    c(1, { t([[private ]]), t([[public ]]) }),
     t([[readonly ]]),
-    t([[routing: RoutingService]]),
-  }),
-
-  s({ trig = "ccdr" }, {
-    c(1, {
-      t([[private ]]),
-      t([[public ]]),
-    }),
-    t([[readonly ]]),
-    t([[cdr: ChangeDetectorRef]]),
+    t([[routing = inject(RoutingService);]]),
   },
-  {
-    callbacks = {
-      [-1] = {
-        [events.pre_expand] = function()
-          vim.lsp.buf.execute_command({
-            command = "ts_inspector/addImport",
-            arguments = {
-              vim.uri_from_bufnr(0),
-              "@angular/core",
-              {},
-              {"ChangeDetectorRef"},
-            },
-          })
-        end
-      }
-    }
-  }),
+  injectCallbacks
+  ),
 
-  s({ trig = "cfb" }, {
-    c(1, {
-      t([[private ]]),
-      t([[public ]]),
-    }),
+  s({ trig = "injcdr" }, {
+    c(1, { t([[private ]]), t([[public ]]) }),
     t([[readonly ]]),
-    c(
-      2,
-      { t([[fb: UnTypedFormBuilder]]), sn(nil, { t([[fb: TypedFormBuilder<]]), i(1, "form builder type"), t([[>]]) }) }
-    ),
-  }),
+    t([[cdr = inject(ChangeDetectorRef);]]),
+  },
+  injectCallbacks
+  ),
 
-  s({ trig = "cures" }, {
-    c(1, {
-      t([[private ]]),
-      t([[public ]]),
-    }),
+  s({ trig = "injfb" }, {
+    c(1, { t([[private ]]), t([[public ]]) }),
     t([[readonly ]]),
-    t([[uRes: UserResource]]),
-  }),
+    c(2, { t([[fb = inject(UnTypedFormBuilder)]]), t([[fb = inject(TypedFormBuilder)]]) }),
+    t([[;]]),
+  },
+  injectCallbacks
+  ),
 
-  s({ trig = "cgres" }, {
-    c(1, {
-      t([[private ]]),
-      t([[public ]]),
-    }),
+  s({ trig = "injures" }, {
+    c(1, { t([[private ]]), t([[public ]]) }),
     t([[readonly ]]),
-    t([[grRes: GroupResource]]),
-  }),
+    t([[uRes = inject(UserResource);]]),
+  },
+  injectCallbacks
+  ),
 
-  s({ trig = "cres" }, {
+  s({ trig = "injgres" }, {
+    c(1, { t([[private ]]), t([[public ]]) }),
+    t([[readonly ]]),
+    t([[grRes = inject(GroupResource);]]),
+  },
+  injectCallbacks
+  ),
+
+  s({ trig = "injres" }, {
     c(1, {
       t([[private ]]),
       t([[public ]]),
     }),
     t([[readonly ]]),
     i(2, "shorthand"),
-    t([[Res: ]]),
+    t([[Res = inject(]]),
     i(3, "name"),
-    t([[Resource]]),
-  }),
+    t([[Resource);]]),
+  },
+  injectCallbacks
+  ),
 
   s({ trig = "oninit" }, {
     t({ [[/** @inheritdoc */]], [[public ngOnInit(): void {]], "  " }),
@@ -429,37 +381,15 @@ return {
 
         @Component({
           changeDetection: ChangeDetectionStrategy.OnPush,
+          imports: [
+            GlobalModule,
+          ],
           selector: '<>',
+          standalone: true,
           templateUrl: './<>.component.pug'
         })
 
         export class <>Component {
-          constructor() { }
-
-          <>
-        }
-      ]],
-      { component_name(1, true), component_name(1), i(1), i(2) }
-    )
-  ),
-
-  s(
-    { trig = "compi", wordTrig = true },
-    fmta(
-      [[
-        import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-
-        @Component({
-          changeDetection: ChangeDetectionStrategy.OnPush,
-          selector: '<>',
-          templateUrl: './<>.component.pug'
-        })
-
-        export class <>Component implements OnInit {
-          constructor() { }
-
-          ngOnInit() { }
-
           <>
         }
       ]],
@@ -551,7 +481,7 @@ return {
   ),
 
   s(
-    { trig = "dbmodel", wordTrig = true },
+    { trig = "model", wordTrig = true },
     fmta(
       [[
         import {model, Schema} from 'mongoose';
@@ -587,7 +517,7 @@ return {
     )
   ),
 
-  s({ trig = "apa", wordTrig = true }, fmta([[await Promise.all(<>)]], { i(1) })),
+  s({ trig = "apa", wordTrig = true }, fmta([[await Promise.all(<>);]], { i(1) })),
   s({ trig = "pa", wordTrig = true }, fmta([[Promise.all(<>)]], { i(1) })),
   s({ trig = "la", wordTrig = true }, fmta([[let <> = await <>;]], { i(1), i(2) })),
   s({ trig = "ca", wordTrig = true }, fmta([[const <> = await <>;]], { i(1), i(2) })),
@@ -664,21 +594,75 @@ return {
     { trig = ".alert", wordTrig = true },
     fmta(
       [[
-        .subscribe({
-          error: () =>> {
-            this.alertSvc.alertError({key: '<>Failure', <>});
-          },
-          next: () =>> {
-            this.alertSvc.alertSuccess({
-              key: '<>Success',
-              <>,
-            });
-          },
-        });
+        .pipe(
+          tap({
+            error: err =>> {
+              this.alertSvc.negotiate(err, {defaultMessage: {key: '<>Failure', <>}});
+            },
+            next: () =>> {
+              this.alertSvc.alertSuccess({key: '<>Success', <>});
+            },
+          })
+        )
+        .subscribe(finaliseObserver(() =>> {
+          this.cdr.markForCheck();
+        }));
       ]],
       { i(1), c(2, {t([[ns]]), sn(nil, {t([[ns: ]]), i(1)})}), same(1), same(2)}
-    )
+    ),
+    {
+      callbacks = {
+        [-1] = {
+          [events.pre_expand] = function()
+            vim.lsp.buf.execute_command({
+              command = "ts_inspector/addImport",
+              arguments = {
+                vim.uri_from_bufnr(0),
+                "@aloreljs/rxutils",
+                {},
+                {"finaliseObserver"},
+              },
+            })
+          end
+        }
+      }
+    }
   ),
 
+  s(
+    { trig = "vref", wordTrig = true },
+    fmta(
+      [[
+        import type {TgResourceResponse, WithResponseClass} from '@veryconnect/tg-resource';
+        import {TgResourceVirtualRef} from '@veryconnect/tg-resource';
+        import type {TgResourceDoc} from '../../tg-resource/tg-resource-util-types';
 
+        interface Overrides {
+        }
+
+        export type <>Frontend = TgResourceDoc<<Omit<<<>InterfaceBase, keyof Overrides>>>> & Overrides;
+
+        interface <>VirtualRefResponse extends <>Frontend {
+        }
+
+        interface <>VirtualRefResponse
+          extends TgResourceResponse<<<>Frontend, TgResourceVirtualRef<<<>Frontend>>>> {
+        }
+
+        const <>VirtualRef = TgResourceVirtualRef
+          .inline<<<>Frontend, WithResponseClass<<<>VirtualRefResponse>>>>({
+            name: '<>VirtualRef',
+            // references: {
+            //  user: TgResourceName.USER,
+            // },
+            // fieldSerialisers: {
+            //   created_time: DateSerialiser,
+            // },
+          });
+
+        export {<>VirtualRefResponse, <>VirtualRef};
+      ]],
+      { i(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1) }
+    )
+  ),
 }, {}
