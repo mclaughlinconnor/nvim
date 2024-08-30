@@ -1,7 +1,7 @@
 return {
   {
-    "hrsh7th/nvim-cmp",
-    commit = "0b751f6beef40fd47375eaf53d3057e0bfa317e4",
+    "yioneko/nvim-cmp",
+    commit = "9033adcc879843b343299eeb7b3522ce82be2aa6",
     dependencies = {
       { "FelipeLema/cmp-async-path", commit = "d8229a93d7b71f22c66ca35ac9e6c6cd850ec61d" },
       { "L3MON4D3/LuaSnip" }, -- configured elsewhere
@@ -37,6 +37,10 @@ return {
         },
         completion = {
           keyword_length = 0,
+        },
+        performance = {
+          debounce = 0, -- default is 60ms
+          throttle = 0, -- default is 30ms
         },
         window = {
           completion = cmp.config.window.bordered(),
