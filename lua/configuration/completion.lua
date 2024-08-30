@@ -14,7 +14,7 @@ return {
       { "hrsh7th/cmp-cmdline", commit = "8ee981b4a91f536f52add291594e89fb6645e451" },
       { "hrsh7th/cmp-nvim-lsp", commit = "44b16d11215dce86f253ce0c30949813c0a90765" },
       { "hrsh7th/cmp-omni", commit = "4ef610bbd85a5ee4e97e09450c0daecbdc60de86" },
-      { "https://codeberg.org/FelipeLema/cmp-async-path", commit = "91ff86cd9c29299a64f968ebb45846c485725f23" },
+      { "https://codeberg.org/FelipeLema/cmp-async-path", commit = "03fac5dfd6f7880be2c059d58bebe007f0d6d8ee" },
       { "ray-x/cmp-treesitter", commit = "b8bc760dfcc624edd5454f0982b63786a822eed9" },
       { "rcarriga/cmp-dap", commit = "d16f14a210cd28988b97ca8339d504533b7e09a4" },
       { "saadparwaiz1/cmp_luasnip", commit = "05a9ab28b53f71d1aece421ef32fee2cb857a843" },
@@ -42,6 +42,11 @@ return {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         },
+        matching = {
+          disallow_fuzzy_matching = false,
+          disallow_fullfuzzy_matching = false,
+          disallow_partial_fuzzy_matching = false,
+        },
         formatting = {
           fields = {
             cmp.ItemField.Abbr,
@@ -68,11 +73,19 @@ return {
             return vim_item
           end,
         },
-        sorting = {
+          sorting = {
+          priority_weight = 2,
           comparators = {
-            function(...)
-              return require("cmp_buffer"):compare_locality(...)
-            end,
+            cmp.config.compare.offset,
+            cmp.config.compare.exact,
+            -- cmp.config.compare.scopes,
+            cmp.config.compare.score,
+            cmp.config.compare.recently_used,
+            cmp.config.compare.locality,
+            cmp.config.compare.kind,
+            -- cmp.config.compare.sort_text,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
           },
         },
 
@@ -99,30 +112,15 @@ return {
           end,
         }),
         sources = cmp.config.sources({
-          { name = "luasnip" },
-          { name = "luasnip_choice" },
-          { name = "nvim_lsp" },
-        }, {
-          { name = "calc" },
+          { name = "luasnip_choice", priority_weight = 10 },
+          { name = "luasnip", priority_weight = 10 },
+          { name = "nvim_lsp", priority_weight = 10 },
           { name = "async_path" },
+          { name = "spell", option = { enable_in_context = function() return require("cmp.config.context").in_treesitter_capture("spell") end } },
           { name = "ctags" },
           { name = "treesitter" },
-          {
-            name = "spell",
-            option = {
-              enable_in_context = function()
-                return require("cmp.config.context").in_treesitter_capture("spell")
-              end,
-            },
-          },
-          {
-            name = "buffer",
-            option = {
-              get_bufnrs = function()
-                return vim.api.nvim_list_bufs()
-              end,
-            },
-          },
+          { name = "calc" },
+          { name = "buffer", priority_weight = -10, option = { get_bufnrs = function() return vim.api.nvim_list_bufs() end } },
         }),
       })
 
