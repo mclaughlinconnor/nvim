@@ -298,52 +298,5 @@ return {
   {
     "neovim/nvim-lspconfig",
     commit = "dddd0945c0f31a0abd843425927a1712d2db2e10",
-    config = function()
-      -- local lsp_status = require("lsp-status")
-
-      -- require("lspconfig")["angularls"].setup({
-      --   on_attach = on_attach,
-      --   capabilities = lsp_status.capabilities,
-      --   filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "pug" },
-      --   cmd = angularls_config(vim.loop.fs_realpath(".")),
-      --   on_new_config = function(new_config, new_root_dir)
-      --     new_config.cmd = angularls_config(new_root_dir)
-      --   end,
-      -- })
-    end,
   },
-  -- {
-  --   "mfussenegger/nvim-lint",
-  --   commit = "f20f35756e74b91c0b4340d01fee22422bdffefa",
-  --   config = function()
-  --     local lint = require("lint")
-  --
-  --     require("lint").linters_by_ft = {
-  --       scss = { "stylelint" },
-  --       css = { "stylelint" },
-  --       less = { "stylelint" },
-  --     }
-  --     local stylelint = require("lint").linters.stylelint
-  --     stylelint.args = {
-  --       "-f",
-  --       "json",
-  --       "--config",
-  --       function()
-  --         return vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/stylelint.config.js"
-  --       end,
-  --       "--stdin",
-  --       "--stdin-filename",
-  --       function()
-  --         return vim.fn.expand("%:p")
-  --       end,
-  --     }
-  --
-  --     vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "InsertLeave", "TextChanged" }, {
-  --       group = vim.api.nvim_create_augroup("lint", { clear = true }),
-  --       callback = function()
-  --         lint.try_lint()
-  --       end,
-  --     })
-  --   end,
-  -- },
 }
