@@ -25,4 +25,5 @@ return {
     },
   },
   { "tpope/vim-abolish", commit = "dcbfe065297d31823561ba787f51056c147aa682" },
+  {"tpope/vim-repeat", commit = "65846025c15494983dafe5e3b46c8f88ab2e9635"},
 }
