@@ -386,7 +386,7 @@ return {
           ],
           selector: '<>',
           standalone: true,
-          templateUrl: './<>.component.pug'
+          templateUrl: './<>.component.pug',
         })
 
         export class <>Component {
