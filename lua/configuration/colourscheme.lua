@@ -4,6 +4,16 @@ local setColour = function(colour)
   vim.cmd([[
     set guicursor=n-v-c-sm:block-Cursor,i-ci-ve:ver25-Cursor,r-cr-o:hor20-Cursor
   ]])
+
+  vim.cmd([[
+    highlight debugPC guibg=#000000
+    highlight lualine_c_insert guifg=#FFFFFF
+    highlight lualine_c_normal guifg=#FFFFFF
+    highlight lualine_c_visual guifg=#FFFFFF
+    highlight lualine_c_command guifg=#FFFFFF
+    highlight lualine_c_replace guifg=#FFFFFF
+    highlight lualine_c_inactive guifg=#FFFFFF
+  ]])
 end
 
 return {
@@ -22,9 +32,8 @@ return {
       end, {})
 
       vim.api.nvim_create_user_command("FlashBang", function()
-        setColour("rose-pine-dawn")
+        setColour("delek")
       end, {})
-      vim.cmd([[highlight debugPC guibg=#000000]])
     end,
     dependencies = {
       {"rose-pine/neovim"},
