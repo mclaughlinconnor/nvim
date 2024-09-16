@@ -4,7 +4,7 @@ return {
     "theHamsta/nvim-dap-virtual-text",
     commit = "484995d573c0f0563f6a66ebdd6c67b649489615",
     opts = {
-      all_references = true,
+      all_references = false,
       display_callback = function(variable, _, _, _, options)
         local value = variable.value
         if string.len(value) > 10 then
