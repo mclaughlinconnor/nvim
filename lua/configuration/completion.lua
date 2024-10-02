@@ -54,12 +54,21 @@ return {
         formatting = {
           fields = {
             cmp.ItemField.Abbr,
-            cmp.ItemField.Kind,
             cmp.ItemField.Menu,
+            cmp.ItemField.Kind,
           },
           format = function(entry, vim_item)
-            -- Source
-            vim_item.menu = ({
+            if entry.completion_item.labelDetails ~= nil then
+              local details = entry.completion_item.labelDetails
+              if details.detail then
+                vim_item.abbr = vim_item.abbr ..entry.completion_item.labelDetails.detail
+              end
+              if details.description then
+                vim_item.menu = entry.completion_item.labelDetails.description
+              end
+            end
+
+            vim_item.kind = ({
               buffer = "[B]",
               calc = "[C]",
               cmdline_history = "[CH]",
