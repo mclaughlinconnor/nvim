@@ -5,8 +5,6 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
--- vim.lsp.set_log_level(vim.log.levels.TRACE)
-
 -- do this only on attached buffers
 local function on_attach(client, bufnr)
   local fzf = require("fzf-lua")
