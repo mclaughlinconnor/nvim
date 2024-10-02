@@ -1,3 +1,5 @@
+-- https://github.com/microsoft/vscode-recipes/blob/main/debugging-mocha-tests/README.md
+
 return {
   {
     "nvim-neotest/neotest",
