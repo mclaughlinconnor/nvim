@@ -44,7 +44,8 @@ return {
 
   s({ trig = "cls", wordTrig = true }, fmta([[[class]="<>"]], { i(1) })),
   s({ trig = "ngcls", wordTrig = true }, fmta([[[ngClass]="{<>: <>}"]], { i(1), i(2) })),
-  s({ trig = "cname", wordTrig = true }, fmta([[[formControlName]="<>"]], { i(1) })), -- could definitely get for controls from the component
+  s({ trig = "fc", wordTrig = true }, fmta([[[formControl]="<>"]], { i(1) })), -- could definitely get for controls from the component
+  s({ trig = "fcn", wordTrig = true }, fmta([[[formControlName]="<>"]], { i(1) })), -- could definitely get for controls from the component
   s({ trig = "fg", wordTrig = true }, fmta([[[formGroup]="<>"]], { i(1) })),
   s({ trig = "fgname", wordTrig = true }, fmta([[[formGroupName]="<>"]], { i(1) })),
   s({ trig = "model", wordTrig = true }, fmta([[[ngModel]="<>"]], { i(1) })),
