@@ -21,7 +21,8 @@ return {
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",
-      "mclaughlinconnor/diffview.nvim",
+      -- "mclaughlinconnor/diffview.nvim",
+      {dir = "/Users/connorveryconnect.com/Downloads/diffview.nvim"},
       "stevearc/dressing.nvim", -- Recommended but not required. Better UI for pickers.
       "nvim-tree/nvim-web-devicons", -- Recommended but not required. Icons in discussion tree.
     },
@@ -224,8 +225,9 @@ return {
     requires = "nvim-lua/plenary.nvim",
   },
   {
-    "mclaughlinconnor/diffview.nvim",
-    commit = "44a5b386b21a6704d28a027ca819a837b1968df8",
+    dir = "/Users/connorveryconnect.com/Downloads/diffview.nvim",
+    -- "mclaughlinconnor/diffview.nvim",
+    -- commit = "44a5b386b21a6704d28a027ca819a837b1968df8",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "camspiers/luarocks",
@@ -262,40 +264,43 @@ return {
         end,
       },
     },
-    opts = {
-      enhanced_diff_hl = true, -- See |diffview-config-enhanced_diff_hl|
-      use_icons = false,
-      default_args = {
-        DiffviewOpen = { "--imply-local" },
-      },
-      keymaps = {
+    opts = function()
+      return {
+        enhanced_diff_hl = true, -- See |diffview-config-enhanced_diff_hl|
+        use_icons = false,
+        default_args = {
+          DiffviewOpen = { "--imply-local" },
+        },
+        keymaps = {
+          view = {
+          --   -- ["q"] = q,
+            ["<esc>"] = noop,
+            { "n", "<leader>cm",  require("diffview.actions").try_magic_merge(), { desc = "Attempt to automatically merge all conflicts" } },
+          },
+          file_panel = {
+            ["q"] = q,
+            ["<esc>"] = noop,
+          },
+        },
         view = {
-          ["q"] = q,
-          ["<esc>"] = noop,
+          -- Configure the layout and behavior of different types of views.
+          -- Available layouts:
+          --  'diff1_plain'
+          --    |'diff2_horizontal'
+          --    |'diff2_vertical'
+          --    |'diff3_horizontal'
+          --    |'diff3_vertical'
+          --    |'diff3_mixed'
+          --    |'diff4_mixed'
+          -- For more info, see |diffview-config-view.x.layout|.
+          merge_tool = {
+            -- Config for conflicted files in diff views during a merge or rebase.
+            layout = "diff3_base",
+            disable_diagnostics = true, -- Temporarily disable diagnostics for conflict buffers while in the view.
+          },
         },
-        file_panel = {
-          ["q"] = q,
-          ["<esc>"] = noop,
-        },
-      },
-      view = {
-        -- Configure the layout and behavior of different types of views.
-        -- Available layouts:
-        --  'diff1_plain'
-        --    |'diff2_horizontal'
-        --    |'diff2_vertical'
-        --    |'diff3_horizontal'
-        --    |'diff3_vertical'
-        --    |'diff3_mixed'
-        --    |'diff4_mixed'
-        -- For more info, see |diffview-config-view.x.layout|.
-        merge_tool = {
-          -- Config for conflicted files in diff views during a merge or rebase.
-          layout = "diff3_horizontal",
-          disable_diagnostics = true, -- Temporarily disable diagnostics for conflict buffers while in the view.
-        },
-      },
-    },
+    }
+    end,
   },
   { "AndrewRadev/linediff.vim", commit = "ddae71ef5f94775d101c1c70032ebe8799f32745" },
 }
