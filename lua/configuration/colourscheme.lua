@@ -23,7 +23,7 @@ return {
     lazy = false,
     priority = 1000, -- load first
     config = function()
-      vim.cmd.colorscheme("nord")
+      setColour("nord")
       vim.cmd([[highlight SignColumn guifg=#FFFFFF]])
 
       vim.api.nvim_create_user_command("LightsOut", function()
