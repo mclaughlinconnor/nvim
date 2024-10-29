@@ -31,8 +31,20 @@ local function on_attach(client, bufnr)
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
   vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
   vim.keymap.set("n", "gli", fzf.lsp_implementations, bufopts)
-  vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set("n", "<C-K>", vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set(
+    "i",
+    "<C-k>",
+    function()
+      local ls = require("luasnip")
+      if ls and ls.jumpable(1) then
+        ls.jump(-1)
+      else
+        vim.lsp.buf.signature_help()
+      end
+    end,
+    bufopts
+  )
   vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, bufopts)
   vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
   vim.keymap.set("n", "<space>wl", function()

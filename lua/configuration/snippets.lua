@@ -40,6 +40,7 @@ return {
         mode = "i",
       },
       {
+        -- see lsp config
         "<C-k>",
         function()
           require("luasnip").jump(-1)
