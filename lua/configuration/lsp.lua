@@ -98,21 +98,132 @@ local function angularls_config(workspace_dir)
   }
 end
 
-local client = vim.lsp.start_client({
-  cmd = { "/Users/connorveryconnect.com/Downloads/ts_inspector/ts_inspector" },
+local ijInspector = vim.lsp.start_client({
+  cmd = vim.lsp.rpc.connect('127.0.0.1', 2517),
+  root_dir = vim.fn.getcwd(),
+  -- Update below too
+  filetypes = { "typescript", "javascript", "html", "scss", "sass", "css", "less", "pug", "java", "kotlin" },
   on_attach = on_attach,
-  name = "ts_inspector",
+  name = "ij_inspector",
 })
 
-if not client then
-  vim.notify("Client didn't start")
+if not ijInspector then
+  vim.notify("ijInspector couldn't attach")
 else
   vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "typescript", "pug" },
+    -- Update above too
+    pattern = { "typescript", "javascript", "html", "scss", "sass", "css", "less", "pug", "java", "kotlin"},
     callback = function()
-      vim.lsp.buf_attach_client(0, client)
+      vim.lsp.buf_attach_client(0, ijInspector)
     end,
   })
+end
+
+
+-- Stolen from https://github.com/MariaSolOs/dotfiles/blob/6eeaff6701d6470f1b8432f6a800679faac59367/.config/nvim/lua/lsp.lua#L259
+local md_namespace = vim.api.nvim_create_namespace 'mariasolos/lsp_float'
+local function add_inline_highlights(buf)
+    for l, line in ipairs(vim.api.nvim_buf_get_lines(buf, 0, -1, false)) do
+        for pattern, hl_group in pairs {
+            ['@%S+'] = '@parameter',
+            ['^%s*(Parameters:)'] = '@text.title',
+            ['^%s*(Return:)'] = '@text.title',
+            ['^%s*(See also:)'] = '@text.title',
+            ['{%S-}'] = '@parameter',
+            ['|%S-|'] = '@text.reference',
+        } do
+            local from = 1 ---@type integer?
+            while from do
+                local to
+                from, to = line:find(pattern, from)
+                if from then
+                    vim.api.nvim_buf_set_extmark(buf, md_namespace, l - 1, from - 1, {
+                        end_col = to,
+                        hl_group = hl_group,
+                    })
+                end
+                from = to and to + 1 or nil
+            end
+        end
+    end
+end
+
+--- HACK: Override `vim.lsp.util.stylize_markdown` to use Treesitter.
+---@param bufnr integer
+---@param contents string[]
+---@param opts table
+---@return string[]
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.util._stylize_markdown = function(bufnr, contents, opts)
+  contents = vim.tbl_map(function(line)
+    local escapes = {
+      ['&gt;'] = '>',
+      ['&lt;'] = '<',
+      ['&quot;'] = '"',
+      ['&apos;'] = "'",
+      ['&ensp;'] = ' ',
+      ['&emsp;'] = ' ',
+      ['&nbsp;'] = ' ',
+      ['&#32;'] = ' ',
+      ['&amp;'] = '&',
+    }
+    return (string.gsub(line, '&[^ ;]+;', escapes))
+  end, contents)
+  contents = vim.lsp.util._normalize_markdown(contents, {
+    width = vim.lsp.util._make_floating_popup_size(contents, opts),
+  })
+  vim.bo[bufnr].filetype = 'markdown'
+  vim.treesitter.start(bufnr)
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, contents)
+
+  add_inline_highlights(bufnr)
+
+  return contents
+end
+-- End theft
+
+local stylize_markdown = vim.lsp.util.stylize_markdown
+vim.lsp.util.stylize_markdown = function(bufnr, contents, opts)
+  contents = vim.tbl_map(function(line)
+    local escapes = {
+      ['&gt;'] = '>',
+      ['&lt;'] = '<',
+      ['&quot;'] = '"',
+      ['&apos;'] = "'",
+      ['&ensp;'] = ' ',
+      ['&emsp;'] = ' ',
+      ['&nbsp;'] = ' ',
+      ['&#32;'] = ' ',
+      ['&amp;'] = '&',
+    }
+    return (string.gsub(line, '&[^ ;]+;', escapes))
+  end, contents)
+ 
+  stylize_markdown(bufnr, contents, opts)
+end
+
+local uri_to_bufnr = vim.uri_to_bufnr
+vim.uri_to_bufnr = function(uri, opts)
+  -- Call the original function to get the buffer number
+  local bufnr = uri_to_bufnr(uri, opts)
+  
+  -- Check if this is a URI you want to intercept
+  if uri:match(".*%.class") then
+    -- Set your custom content
+    local lines = {"// This file is a compiled Java class file. It should be decompiled. It is not."}
+    for _ = 0, 2000 do
+      table.insert(lines, "                                                                                                                                                                                                         ")
+    end
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+    
+    -- Set the buffer as unmodified
+    vim.api.nvim_buf_set_option(bufnr, 'modified', false)
+    
+    -- Optionally, set the buffer type to nofile if you don't want it associated with a file
+    -- vim.api.nvim_buf_set_option(bufnr, 'buftype', 'nofile')
+  end
+  
+  return bufnr
 end
 
 return {
