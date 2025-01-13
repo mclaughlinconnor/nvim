@@ -2,7 +2,7 @@ return {
   { "stevearc/profile.nvim", commit = "0ee32b7aba31d84b0ca76aaff2ffcb11f8f5449f" },
   {
     "theHamsta/nvim-dap-virtual-text",
-    commit = "484995d573c0f0563f6a66ebdd6c67b649489615",
+    commit = "df66808cd78b5a97576bbaeee95ed5ca385a9750",
     opts = {
       all_references = false,
       display_callback = function(variable, _, _, _, options)
@@ -23,7 +23,7 @@ return {
   },
   {
     "rcarriga/nvim-dap-ui",
-    commit = "1c351e4e417d4691da12948b6ecf966936a56d28",
+    commit = "727c032a8f63899baccb42a1c26f27687e62fc5e",
     config = function()
       require("dapui").setup()
       local dap_float = vim.api.nvim_create_augroup("dap_float", { clear = true })
@@ -39,7 +39,7 @@ return {
   },
   {
     "microsoft/vscode-js-debug",
-    commit = "ab03c689011747026b38a13468cd6b5b1e43f0d3",
+    commit = "299d29f2a7b535115305068dfb531a7f37a05e44",
     lazy = true,
     build = "npm install --legacy-peer-deps --no-save && npx gulp vsDebugServerBundle && mv dist out",
   },
@@ -73,7 +73,7 @@ return {
   },
   {
     "mfussenegger/nvim-dap",
-    commit = "281a2e4cd1e7a17cea7ecb1745d84a8ab1249925",
+    commit = "99807078c5089ed30e0547aa4b52c5867933f426",
     dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap", "microsoft/vscode-js-debug", "mxsdev/nvim-dap-vscode-js" },
     config = function()
       local dap = require("dap")
