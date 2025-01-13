@@ -34,6 +34,13 @@ return {
 
   s({ trig = "cont", wordTrig = true }, fmta([[ng-container(<>)]], { i(1) })),
 
+  s({ trig = "tfor", wordTrig = false }, {
+    t([[ngFor, [ngForOf]=']]),
+    i(1, "iterator"),
+    t([[', let-]]),
+    i(2, "var name"),
+  }),
+
   s({ trig = "for", wordTrig = false }, {
     t([[*ngFor='let ]]),
     i(1, "var name"),
