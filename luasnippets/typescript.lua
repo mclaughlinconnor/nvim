@@ -531,6 +531,8 @@ return {
   s({ trig = "la", wordTrig = true }, fmta([[let <> = await <>;]], { i(1), i(2) })),
   s({ trig = "ca", wordTrig = true }, fmta([[const <> = await <>;]], { i(1), i(2) })),
   s({ trig = "ov", wordTrig = true }, fmta([[Object.values(<>)]], { i(1) })),
+  s({ trig = "ok", wordTrig = true }, fmta([[Object.keys(<>)]], { i(1) })),
+  s({ trig = "oe", wordTrig = true }, fmta([[Object.entries(<>)]], { i(1) })),
 
   s(
     { trig = "controller", wordTrig = true },
@@ -674,4 +676,40 @@ return {
       { i(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1) }
     )
   ),
+
+  s(
+    { trig = "lookupcond", wordTrig = true },
+    fmta(
+      [[
+        {$lookup: {
+          as: '<>',
+          from: <>Model.collection.name,
+          let: {<>Id: '$_id'},
+          pipeline: [{$match: {
+            $expr: {
+              $and: [
+                {$eq: ['$<>', '$$<>Id']},
+                {<>},
+              ],
+            },
+          }}],
+        }},
+      ]],
+      { i(1), i(2), i(3), i(4), same(3), i(5)}
+    )
+  ),
+
+  s(
+    { trig = "endpointfunc", wordTrig = true },
+    fmta(
+      [[
+        export async function <>(req: Request, res: Response): Promise<<void>> {
+          <>
+        }
+      ]],
+      { i(1), i(2) }
+    )
+  ),
+
+  s({ trig = "sala", wordTrig = true }, fmta([[sails.config.sala.]], {})),
 }, {}
