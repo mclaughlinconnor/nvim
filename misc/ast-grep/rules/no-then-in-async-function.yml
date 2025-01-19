@@ -1,0 +1,21 @@
+id: no-then-in-async-function
+message: Use await in async functions
+severity: error
+language: typescript
+rule:
+  any:
+    - pattern: $_.then()
+    - pattern: $_.then($A)
+    - pattern: $_.then($A, $B)
+  inside:
+    any:
+      - kind: method_definition
+      - kind: function_declaration
+      - kind: arrow_function
+    stopBy: end
+    has: 
+      regex: 'async'
+constraints:
+  A:
+    not:
+      regex: 'MongooseUtil.throwIfNotFound'

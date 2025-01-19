@@ -3,8 +3,8 @@ customLanguages:
     libraryPath: ./parsers/pug.so
     extensions: [pug]
 ruleDirs:
-- ./rules
+  - ./rules
 testConfigs:
-- testDir: ./rule-tests
+  - testDir: ./rule-tests
 utilDirs:
-- ./utils
+  - ./utils

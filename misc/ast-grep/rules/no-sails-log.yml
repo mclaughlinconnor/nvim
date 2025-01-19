@@ -1,0 +1,6 @@
+id: no-sails-log
+message: Use NamespacedLogger where possible
+severity: error
+language: typescript
+rule:
+  pattern: sails.log

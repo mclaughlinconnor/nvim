@@ -1,0 +1,6 @@
+id: no-memoise-all
+message: Are ya sure you want the .all?
+severity: warning
+language: typescript
+rule:
+  pattern: "@Memoise.all($$$)"

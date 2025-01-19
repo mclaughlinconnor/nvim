@@ -1,0 +1,10 @@
+id: needless-moment
+message: Moment isn't needed here
+severity: error
+language: typescript
+rule:
+  any:
+    - pattern: moment.utc().toDate()
+    - pattern: moment.now().toDate()
+
+

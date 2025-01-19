@@ -1,0 +1,11 @@
+id: no-object-id-from-request
+message: You may be creating new IDs here
+severity: error
+language: typescript
+rule:
+  any:
+    - pattern: new Types.ObjectId($A)
+    - pattern: Types.ObjectId($A)
+constraints:
+  A:
+    regex: '^req.*'

@@ -1,0 +1,12 @@
+id: no-await-in-promise-all
+language: typescript
+rule:
+  pattern: await $A
+  all:
+    - inside:
+        pattern: Promise.all($_)
+        stopBy:
+          not: { any: [{kind: array}, {kind: arguments}] }
+    - inside:
+        kind: array
+fix: $A

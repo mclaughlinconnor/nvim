@@ -371,12 +371,8 @@ return {
         end,
         ["ast_grep"] = function()
           require("lspconfig")["ast_grep"].setup({
-            cmd = { "sg", "lsp" },
+            cmd = { "sg", "lsp", "--config", vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/misc/ast-grep/sgconfig.yml" },
             filetypes = { "typescript", "pug" },
-            single_file_support = true,
-            root_dir = function()
-              return vim.fn.fnamemodify(vim.fn.expand("$MYVIMRC"), ":h") .. "/misc/ast-grep"
-            end,
           })
         end,
       })

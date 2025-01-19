@@ -1,0 +1,6 @@
+id: suspect-detectChanges
+message: Synchronous change detection
+severity: info
+language: typescript
+rule:
+  pattern: $$$.detectChanges()

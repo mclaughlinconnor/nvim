@@ -17,4 +17,4 @@ rule:
             regex: "\\)"
           has:
             kind: attribute_name
-            regex: "\\*ngIf"
+            regex: "\\*.*"
