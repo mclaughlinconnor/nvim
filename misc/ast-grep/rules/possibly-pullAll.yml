@@ -1,0 +1,9 @@
+id: possibly-pullAll
+message: pullAll if there is no condition
+severity: info
+language: typescript
+rule:
+  pattern:
+    context: "{$pull: $VALUE}"
+    selector: property_identifier
+

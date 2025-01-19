@@ -1,0 +1,7 @@
+id: no-non-constructor-object-id
+message: Use the constructor style
+severity: warning
+language: typescript
+rule:
+  any:
+    - pattern: new Types.ObjectId($A)

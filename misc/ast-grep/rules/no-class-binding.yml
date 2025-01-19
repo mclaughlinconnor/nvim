@@ -1,0 +1,7 @@
+id: no-class-binding
+message: Should use [ngClass] or [class.class] syntax
+severity: warning # error, warning, info, hint
+language: pug
+rule:
+  kind: attribute_name
+  regex: \[class\]
