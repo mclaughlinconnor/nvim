@@ -28,6 +28,8 @@ return {
         multiprocess = true,
         path_shorten = false,
         rg_glob = true,
+            rg_opts = "--sort-files --column --line-number --no-heading " ..
+              "--color=always --smart-case -g '!{package-lock.json}'",
       }) end },
       {
         "<leader>G",
@@ -41,6 +43,29 @@ return {
             multiprocess = true,
             path_shorten = false,
             rg_glob = true,
+            -- file_ignore_patterns = { "^/package%-lock%.json$" },
+            -- rg_opts = "--glob '!package-lock.json' "
+            rg_opts = "--sort-files --column --line-number --no-heading " ..
+              "--color=always --smart-case -g '!{package-lock.json}'",
+          })
+        end,
+      },
+      {
+        "\\<leader>G",
+        function()
+          require("fzf-lua").live_grep({
+            -- live_grep_native with rg_glob enabled
+            query = vim.fn.expand("<cword>"),
+            file_icons = false,
+            formatter = false,
+            git_icons = false,
+            multiprocess = true,
+            path_shorten = false,
+            rg_glob = true,
+            -- file_ignore_patterns = { "^/package%-lock%.json$" },
+            -- rg_opts = "--glob '!package-lock.json' "
+            rg_opts = "--sort-files --column --hidden --line-number --no-heading " ..
+              "--color=always --smart-case -g '!{package-lock.json,.git}'",
           })
         end,
       },
