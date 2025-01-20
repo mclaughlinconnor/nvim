@@ -110,6 +110,28 @@ local function angularls_config(workspace_dir)
   }
 end
 
+local tsInspector = vim.lsp.start_client({
+  cmd = {"/Users/connorveryconnect.com/Downloads/ts_inspector/ts_inspector"},
+  root_dir = vim.fn.getcwd(),
+  -- Update below too
+  on_attach = on_attach,
+  filetypes = { "typescript", "pug" },
+  name="ts_inspector"
+})
+
+if not tsInspector then
+  vim.notify("tsInspector couldn't attach")
+else
+  vim.api.nvim_create_autocmd("FileType", {
+    -- Update above too
+    pattern = { "typescript", "pug" },
+    callback = function()
+      vim.lsp.buf_attach_client(0, tsInspector)
+    end,
+  })
+end
+
+
 local ijInspector = vim.lsp.start_client({
   cmd = vim.lsp.rpc.connect('127.0.0.1', 2517),
   root_dir = vim.fn.getcwd(),
@@ -392,10 +414,16 @@ return {
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
         -- delay update diagnostics
         update_in_insert = true,
+        float = {
+          border = "rounded",
+        },
       })
 
       vim.lsp.handlers["textDocument/diagnostic"] = vim.lsp.with(vim.lsp.diagnostic.on_diagnostic, {
-        update_in_insert = false,
+        update_in_insert = true,
+        float = {
+          border = "rounded",
+        },
       })
     end,
   },
