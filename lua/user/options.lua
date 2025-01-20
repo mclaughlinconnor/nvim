@@ -109,3 +109,5 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
 
 vim.o.grepprg = 'rg --vimgrep --hidden'
 vim.o.grepformat = vim.o.grepformat .. ',' .. '%f:%l:%c:%m'
+
+vim.keymap.set("t", "<leader><Esc>", [[<C-\><C-n>]], opts)
