@@ -20,9 +20,10 @@ return {
   {
     "gbprod/nord.nvim",
     commit = "70fc2425b50396e5f1230200b59527d8440a24df",
-    lazy = false,
-    priority = 1000, -- load first
+    -- event = "",
     config = function()
+      -- setColour("delek")
+
       setColour("nord")
       vim.cmd([[highlight SignColumn guifg=#FFFFFF]])
 
@@ -33,11 +34,19 @@ return {
 
       vim.api.nvim_create_user_command("FlashBang", function()
         setColour("delek")
+        vim.cmd([[highlight NormalFloat guibg=LightGray guifg=Black]])
+        vim.cmd([[highlight DiagnosticInfo guifg=Blue]])
+        vim.cmd([[highlight DiagnosticHint guifg=Grey]])
+
+        vim.cmd([[highlight DiagnosticFloatingInfo guifg=Blue]])
+        vim.cmd([[highlight DiagnosticFloatingHint guifg=Grey]])
+        vim.cmd([[highlight DiagnosticFloatingWarn guifg=Orange]])
+        vim.cmd([[highlight DiagnosticFloatingError guifg=Red]])
       end, {})
     end,
     dependencies = {
-      {"rose-pine/neovim"},
-    },
+      "nvim-lualine/lualine.nvim" -- highlight customisations need to come after the highlights have been loaded
+    }
   },
   {
     "lukas-reineke/indent-blankline.nvim",
