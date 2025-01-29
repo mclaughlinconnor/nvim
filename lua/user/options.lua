@@ -48,19 +48,6 @@ augroup END
 
 local opts = { noremap = true, silent = true }
 
-local typeScriptIndentOnPaste = vim.api.nvim_create_augroup("TypeScriptIndentOnPaste", {})
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-  callback = function()
-    vim.api.nvim_buf_set_keymap(0, "n", "p", "p`[v`]=", opts)
-    vim.api.nvim_buf_set_keymap(0, "n", "P", "P`[v`]=", opts)
-
-    vim.api.nvim_buf_set_keymap(0, "v", "p", "p`[v`]=", opts)
-    vim.api.nvim_buf_set_keymap(0, "v", "P", "P`[v`]=", opts)
-  end,
-  group = typeScriptIndentOnPaste,
-  pattern = "*.ts",
-})
-
 vim.keymap.set("n", "<esc>", "<cmd>noh<cr>", opts)
 
 vim.keymap.set("n", "n", "nzz", opts)
