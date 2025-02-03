@@ -72,6 +72,7 @@ return {
   ),
   s({ trig = "sty", wordTrig = true }, fmta([[[style.<>]="<>"]], { i(1), i(2) })),
   s({ trig = "tr", wordTrig = true }, fmta([[[translate]="'<>'"]], { i(1) })),
+  s({ trig = "trn", wordTrig = true }, fmta([[[tr-namespace]="'<>'"]], { i(1) })),
   s({ trig = "trp", wordTrig = true }, fmta([[[tr-placeholders]="{<>}"]], { i(1) })),
   s({ trig = "alertinfo", wordTrig = true }, fmta([[.alert.alert-info]], {})),
 }, {}
