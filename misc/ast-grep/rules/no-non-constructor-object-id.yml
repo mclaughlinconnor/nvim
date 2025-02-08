@@ -3,5 +3,9 @@ message: Use the constructor style
 severity: warning
 language: typescript
 rule:
-  any:
-    - pattern: new Types.ObjectId($A)
+  all:
+    - any:
+      - pattern: Types.ObjectId($A)
+      - pattern: Types.ObjectId()
+    - not:
+        regex: "^new "
