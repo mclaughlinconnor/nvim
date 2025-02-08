@@ -8,4 +8,8 @@ rule:
     - pattern: Types.ObjectId($A)
 constraints:
   A:
-    regex: '^req.*'
+    all:
+      - regex: '^req.*'
+      - not:
+          regex: '^req.params'
+
