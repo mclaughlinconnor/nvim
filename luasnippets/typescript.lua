@@ -211,6 +211,18 @@ return {
     )
   ),
 
+  s(
+    { trig = "ifor" },
+    fmt(
+      [[
+        for (let {} = 0; {} < {}; ++{}) {{
+          {}
+        }}
+      ]],
+      { i(1, "i"), same(1), i(2, "iter"), same(1), i(0) }
+    )
+  ),
+
   s({ trig = "ro", wordTrig = false }, {
     c(1, {
       t([[(]]),
