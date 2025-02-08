@@ -27,7 +27,6 @@ end
 local function component_name(index, prefix)
   return f(function(args)
     local n = args[1][1]
-    print(n)
     if prefix then
       return { "tg-" .. (n):gsub(" ", "-"):gsub("([a-z])([A-Z])", "%1-%2"):lower() }
     else
@@ -131,7 +130,7 @@ return {
   ts_postfix_expr(".log", [[console.log(%s);]]),
   ts_postfix_expr(".pp", [[console.log(JSON.stringify(%s, undefined, 2));]]),
   ts_postfix_expr(".await", [[await (%s);]]),
-  ts_postfix_expr(".return", [[return (%s);]]),
+  ts_postfix_expr(".ret", [[return (%s);]]),
 
   s(
     "cons",
@@ -142,8 +141,8 @@ return {
         }
       ]],
       {
-        i(1, "params"),
-        i(2, "body"),
+        i(1),
+        i(2),
       }
     )
   ),
@@ -388,7 +387,6 @@ return {
           standalone: true,
           templateUrl: './<>.component.pug',
         })
-
         export class <>Component {
           <>
         }
@@ -469,7 +467,6 @@ return {
         @Pipe({
           name: '<>'
         })
-
         export class <>Pipe implements PipeTransform {
           transform(value: <>): <> {
             <>

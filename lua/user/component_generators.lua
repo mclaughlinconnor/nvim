@@ -8,13 +8,14 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    GlobalModule,
+  ],
   selector: 'tg-%s',
+  standalone: true,
   templateUrl: './%s.component.pug',
 })
-export class %s {
-
-  public constructor() {}
-
+export class %sComponent {
 }
 ]],
     selector,
