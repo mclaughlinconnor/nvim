@@ -229,7 +229,7 @@ end
 return {
   {
     "williamboman/mason.nvim",
-    commit = "751b1fcbf3d3b783fcf8d48865264a9bcd8f9b10",
+    commit = "fc98833b6da5de5a9c5b1446ac541577059555be",
     config = function()
       -- Seems to be required
       require("mason").setup()
@@ -237,7 +237,7 @@ return {
   },
   {
     "williamboman/mason-lspconfig.nvim",
-    commit = "4eb8e15e3c0757303d4c6dea64d2981fc679e990",
+    commit = "1a31f824b9cd5bc6f342fc29e9a53b60d74af245",
     dependencies = {
       "williamboman/mason.nvim",
       "ibhagwan/fzf-lua",
@@ -402,6 +402,6 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    commit = "dddd0945c0f31a0abd843425927a1712d2db2e10",
+    commit = "7af2c37192deae28d1305ae9e68544f7fb5408e1",
   },
 }
