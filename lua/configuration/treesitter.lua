@@ -78,7 +78,7 @@ return {
         autopairs = {
           enable = true,
         },
-        indent = { enable = false, disable = { "python", "css" } },
+        indent = { enable = true, disable = { "css" } },
         query_linter = {
           enable = true,
           use_virtual_text = true,

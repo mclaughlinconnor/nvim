@@ -24,6 +24,9 @@
 (array
   (call_expression) @indent.begin)
 
+(await_expression
+  (call_expression) @indent.begin)
+
 (binary_expression
   (call_expression) @indent.begin)
 
@@ -40,7 +43,7 @@
 
 (variable_declarator
   value: (_) @_value
-  (#not-has-type? @_value arrow_function call_expression function)) @indent.begin
+  (#not-has-type? @_value arrow_function function)) @indent.begin
 
 (arguments
   ")" @indent.end)
