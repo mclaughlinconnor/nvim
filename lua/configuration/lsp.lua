@@ -5,6 +5,13 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
+
+vim.diagnostic.config({
+  float = {
+    border = "rounded"
+  }
+})
+
 -- do this only on attached buffers
 local function on_attach(client, bufnr)
   local fzf = require("fzf-lua")
@@ -14,9 +21,10 @@ local function on_attach(client, bufnr)
     client.server_capabilities.documentFormattingProvider = false
   end
 
+  -- vim.notify("inlayHintProvider" .. vim.inspect(client.server_capabilities))
   if client.server_capabilities.inlayHintProvider then
     vim.keymap.set("n", "<space>gi", function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(0))
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({bufnr = 0}))
     end)
     vim.lsp.inlay_hint.enable(true)
   end
@@ -411,19 +419,38 @@ return {
         end,
       })
 
+      local border = {
+        {"╭", "FloatBorder"},
+        {"─", "FloatBorder"},
+        {"╮", "FloatBorder"},
+        {"│", "FloatBorder"},
+        {"╯", "FloatBorder"},
+        {"─", "FloatBorder"},
+        {"╰", "FloatBorder"},
+        {"│", "FloatBorder"},
+      }
+
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
         -- delay update diagnostics
         update_in_insert = true,
         float = {
-          border = "rounded",
+          border = border,
         },
       })
 
       vim.lsp.handlers["textDocument/diagnostic"] = vim.lsp.with(vim.lsp.diagnostic.on_diagnostic, {
         update_in_insert = true,
         float = {
-          border = "rounded",
+          border = border
         },
+      })
+
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = border
+      })
+
+      vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+        border = border,
       })
     end,
   },
