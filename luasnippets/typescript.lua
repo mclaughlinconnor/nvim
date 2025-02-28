@@ -526,6 +526,7 @@ return {
     )
   ),
 
+  s({ trig = "tnf", wordTrig = true }, fmta([[.then(MongooseUtil.throwIfNotFound())]], {})),
   s({ trig = "apa", wordTrig = true }, fmta([[await Promise.all(<>);]], { i(1) })),
   s({ trig = "pa", wordTrig = true }, fmta([[Promise.all(<>)]], { i(1) })),
   s({ trig = "la", wordTrig = true }, fmta([[let <> = await <>;]], { i(1), i(2) })),
