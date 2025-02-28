@@ -1,0 +1,9 @@
+id: no-pug-id
+message: Don't use IDs
+severity: error # error, warning, info, hint
+language: pug
+rule:
+  kind: id
+  inside:
+    kind: tag
+

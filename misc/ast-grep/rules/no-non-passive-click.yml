@@ -1,0 +1,11 @@
+id: no-non-passive-click
+message: Potentially passive
+severity: info # error, warning, info, hint
+language: pug
+rule:
+  kind: attribute_name
+  any:
+    - regex: "\\(blur\\)"
+    - regex: "\\(click\\)"
+    - regex: "\\(scroll\\)"
+
