@@ -125,11 +125,12 @@ return {
           end,
         }),
         sources = cmp.config.sources({
-          { name = "nvim_lsp", priority_weight = 10 },
-          { name = "luasnip_choice", priority_weight = 10 },
+          { name = "nvim_lsp", priority_weight = 1000 },
+          { name = "calc" },
+          { name = "async_path" },
+        }, {
           { name = "luasnip" },
           { name = "async_path" },
-          { name = "calc" },
           { name = "spell", option = { enable_in_context = function() return require("cmp.config.context").in_treesitter_capture("spell") end } },
           { name = "ctags", priority_weight = -1000 },
           { name = "treesitter", priority_weight = -1000 },
