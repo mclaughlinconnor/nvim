@@ -1,0 +1,8 @@
+id: no-innerHtml
+message: No innerHtml
+severity: info # error, warning, info, hint
+language: pug
+rule:
+  kind: attribute_name
+  regex: "^innerHtml$"
+

@@ -6,14 +6,16 @@ rule:
   all:
     - any:
       - regex: "^\\{\\{[^{}]*?\\|tr\\}\\}$" # {{key|tr}}
-      - regex: "^\\{\\{[^{}]*?\\|tr:'\\w+'\\}\\}$" # {{key|tr:'namespace'}}
-      - regex: "^\\{\\{[^{}]*?\\|tr:\"\\w+\"\\}\\}$" # {{key|tr:"namespace"}}
+      - regex: "^\\{\\{[^{}]*?\\|tr:'(\\w|-)+'\\}\\}$" # {{key|tr:'namespace'}}
+      - regex: "^\\{\\{[^{}]*?\\|tr:\"(\\w|-)+\"\\}\\}$" # {{key|tr:"namespace"}}
       - regex: "^\\{\\{[^{}]*?\\|tr\\|applyTrPlaceholders:\\{.*?\\}\\}\\}$" # {{key|tr|applyTrPlaceholders:{one: 'One', two: 'Two'}}}
-      - regex: "^\\{\\{[^{}]*?\\|tr:'\\w+'\\|applyTrPlaceholders:\\{.*?\\}\\}\\}$" # {{key|tr:'namespace'|applyTrPlaceholders:{one: 'One', two: 'Two'}}}
-      - regex: "^\\{\\{[^{}]*?\\|tr:\"\\w+\"\\|applyTrPlaceholders:\\{.*?\\}\\}\\}$" # {{key|tr:"namespace"|applyTrPlaceholders:{one: 'One', two: 'Two'}}}
+      - regex: "^\\{\\{[^{}]*?\\|tr:'(\\w|-)+'\\|applyTrPlaceholders:\\{.*?\\}\\}\\}$" # {{key|tr:'namespace'|applyTrPlaceholders:{one: 'One', two: 'Two'}}}
+      - regex: "^\\{\\{[^{}]*?\\|tr:\"(\\w|-)+\"\\|applyTrPlaceholders:\\{.*?\\}\\}\\}$" # {{key|tr:"namespace"|applyTrPlaceholders:{one: 'One', two: 'Two'}}}
     - pattern: $A
     - kind: content
     - inside:
         kind: tag
 # utils: Extract repeated rule as local utility here.
 # note: Add detailed explanation for the rule.
+      #
+      # ^{{[^{}]*?|tr:'\w+'}}$

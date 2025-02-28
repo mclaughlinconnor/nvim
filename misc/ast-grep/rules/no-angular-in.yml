@@ -1,0 +1,7 @@
+id: no-angular-in
+message: Do you want `of`
+severity: error # error, warning, info, hint
+language: pug
+rule:
+  regex: " in " # possibly good enough?
+  kind: quoted_attribute_value

@@ -15,6 +15,11 @@ rule:
     stopBy: end
     has: 
       regex: 'async'
+      precedes:
+        any:
+          - regex: 'function'
+          - kind: property_identifier
+          - kind: formal_parameters
 constraints:
   A:
     not:
