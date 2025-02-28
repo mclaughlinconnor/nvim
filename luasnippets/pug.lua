@@ -11,6 +11,7 @@ return {
     t([[ | json }}]]),
   }),
 
+  s({ trig = "tif", wordTrig = true }, fmta([[[ngIf]="<>"]], { i(1) })),
   s({ trig = "if", wordTrig = false }, {
     t([[*ngIf=']]),
     i(1, "prop"),
