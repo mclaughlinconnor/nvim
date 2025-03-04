@@ -1,0 +1,9 @@
+# Does not detect ng-container without any ()
+id: no-useless-container-template
+message: Useless template/container
+severity: error # error, warning, info, hint
+language: pug
+rule:
+  any:
+    - pattern: ng-container()
+    - pattern: ng-template()
