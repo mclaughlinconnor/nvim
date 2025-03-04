@@ -12,7 +12,9 @@ rule:
       - kind: method_definition
       - kind: function_declaration
       - kind: arrow_function
-    stopBy: end
+    stopBy:
+      kind: call_expression
+      pattern: Promise.all($$$)
     has: 
       regex: 'async'
       precedes:
