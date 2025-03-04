@@ -471,4 +471,20 @@ return {
     "neovim/nvim-lspconfig",
     commit = "7af2c37192deae28d1305ae9e68544f7fb5408e1",
   },
+  {
+    "mfussenegger/nvim-lint",
+    commit = "6e9dd545a1af204c4022a8fcd99727ea41ffdcc8",
+    config = function ()
+      require("lint").linters_by_ft = {
+        typescript = {"eslint_d"},
+      }
+
+      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+        callback = function()
+
+          require("lint").try_lint()
+        end,
+      })
+    end
+  },
 }
