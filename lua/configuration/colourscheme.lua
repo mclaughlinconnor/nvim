@@ -13,6 +13,12 @@ local setColour = function(colour)
     highlight lualine_c_command guifg=#FFFFFF
     highlight lualine_c_replace guifg=#FFFFFF
     highlight lualine_c_inactive guifg=#FFFFFF
+
+    highlight DiagnosticUnderlineHint gui=none
+    highlight DiagnosticUnderlineInfo gui=none
+
+    highlight DiagnosticUnderlineWarn gui=underline
+    highlight DiagnosticUnderlineError gui=underline
   ]])
 end
 
