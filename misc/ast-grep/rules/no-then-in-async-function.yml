@@ -14,7 +14,9 @@ rule:
       - kind: arrow_function
     stopBy:
       kind: call_expression
-      pattern: Promise.all($$$)
+      any:
+        - pattern: Promise.all($$$)
+        - pattern: Bluebird.props($$$)
     has: 
       regex: 'async'
       precedes:
