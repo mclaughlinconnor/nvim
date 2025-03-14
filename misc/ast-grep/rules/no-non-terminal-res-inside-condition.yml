@@ -1,0 +1,28 @@
+id: no-non-terminal-res-inside-condition
+message: Potentially suspicious non-terminal response inside condition
+severity: hint
+language: typescript
+rule:
+  all:
+    - pattern: res.$A($$$B)
+    - kind: call_expression
+    - not:
+        inside:
+          kind: return_statement
+          stopBy: end
+    - inside:
+        kind: if_statement
+        stopBy: end
+fix: return res.$A($$$B)
+constraints:
+  A:
+    any:
+      - regex: badRequest
+      - regex: conflict
+      - regex: forbidden
+      - regex: invalidGocardlessToken
+      - regex: methodNotAllowed
+      - regex: notFound
+      - regex: serverError
+      - regex: serviceUnavailable
+      - regex: unauthorized
