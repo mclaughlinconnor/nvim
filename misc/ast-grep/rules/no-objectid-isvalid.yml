@@ -1,0 +1,8 @@
+# https://veryconnect.slack.com/archives/C06P0LDDW/p1662371467166489
+id: no-objectid-isvalid
+message: isValid has surprising behaviour
+severity: error
+language: typescript
+rule:
+  pattern: Types.ObjectId.isValid($A)
+fix: ModelRefUtil.isObjectIdString($A)
