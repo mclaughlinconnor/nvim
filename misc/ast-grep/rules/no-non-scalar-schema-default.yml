@@ -1,0 +1,25 @@
+id: no-non-scalar-schema-default
+message: Never use non-scalar Mongoose defaults
+severity: error
+language: typescript
+rule:
+  pattern: "$DEFAULT"
+  any:
+    - pattern:
+        context: "{default: {}}"
+        selector: object
+    - pattern:
+        context: "{default: []}"
+        selector: array
+  all:
+    - inside:
+        pattern: "const $VAR: MongooseSchemaDef<$TVAR> = {$$$SCHEMA}"
+        stopBy: end
+    - inside:
+        kind: pair
+        stopBy:
+          kind: arrow_function
+        has:
+          field: key
+          regex: 'default'
+
