@@ -713,4 +713,5 @@ return {
   ),
 
   s({ trig = "sala", wordTrig = true }, fmta([[sails.config.sala.]], {})),
+  s({ trig = "mfc", wordTrig = true }, fmta([[this.cdr.markForCheck();]], {})),
 }, {}
