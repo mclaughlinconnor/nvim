@@ -29,16 +29,38 @@ return {
     -- event = "",
     config = function()
       -- setColour("delek")
+      vim.cmd([[
+        function! s:SetDiffHighlights() 
+          if &background == "dark" 
+            highlight DiffAdd gui=bold guifg=none guibg=#2e4b2e 
+            highlight DiffDelete gui=bold guifg=none guibg=#4c1e15 
+            highlight DiffChange gui=bold guifg=none guibg=#45565c 
+            highlight DiffText gui=bold guifg=none guibg=#996d74 
+          else 
+            highlight DiffAdd gui=bold guifg=none guibg=lightgreen
+            highlight DiffDelete gui=bold guifg=none guibg=lightred 
+            highlight DiffChange gui=bold guifg=none guibg=lightblue 
+            highlight DiffText gui=bold guifg=none guibg=lightcyan 
+          endif 
+        endfunction
+
+        augroup diffcolors 
+          autocmd! 
+          autocmd Colorscheme * call s:SetDiffHighlights() 
+        augroup END
+      ]])
 
       setColour("nord")
       vim.cmd([[highlight SignColumn guifg=#FFFFFF]])
 
       vim.api.nvim_create_user_command("LightsOut", function()
+        vim.o.background = "dark"
         setColour("nord")
         vim.cmd([[highlight SignColumn guifg=#FFFFFF]])
       end, {})
 
       vim.api.nvim_create_user_command("FlashBang", function()
+        vim.o.background = "light"
         setColour("delek")
         vim.cmd([[highlight NormalFloat guibg=LightGray guifg=Black]])
         vim.cmd([[highlight DiagnosticInfo guifg=Blue]])
