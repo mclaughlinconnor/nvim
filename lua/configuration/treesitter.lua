@@ -66,7 +66,7 @@ return {
           enable = true,
           disable = function(lang) -- Disable in large C++ buffers
             -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
-            if lang == "latex" or lang == "css" or lang == "yaml" or lang == "haxe" then
+            if lang == "latex" or lang == "css" or lang == "haxe" then
               return true
             end
 
