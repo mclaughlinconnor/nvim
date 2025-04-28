@@ -23,6 +23,7 @@ constraints:
       - regex: invalidGocardlessToken
       - regex: methodNotAllowed
       - regex: notFound
+      - regex: ok
       - regex: serverError
       - regex: serviceUnavailable
       - regex: unauthorized
