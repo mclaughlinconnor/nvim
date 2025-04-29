@@ -1,0 +1,55 @@
+id: no-mix-template-reactive
+message: Don't use template driven validation on reactive forms
+severity: error # error, warning, info, hint
+language: pug
+rule:
+  kind: attributes
+  all:
+    - any:
+      - has:
+          kind: attribute
+          has: 
+            kind: attribute_name
+            regex: '\[formControlName\]'
+      - has:
+          kind: attribute
+          has: 
+            kind: attribute_name
+            regex: '\[formControl\]'
+    # All of Angular's validators
+    - any:
+      - has: 
+          kind: attribute
+          has: 
+            kind: attribute_name
+            regex: '\[email\]'
+      - has: 
+          kind: attribute
+          has: 
+            kind: attribute_name
+            regex: '\[maxlength\]'
+      - has: 
+          kind: attribute
+          has: 
+            kind: attribute_name
+            regex: '\[max\]'
+      - has: 
+          kind: attribute
+          has: 
+            kind: attribute_name
+            regex: '\[minlength\]'
+      - has: 
+          kind: attribute
+          has: 
+            kind: attribute_name
+            regex: '\[min\]'
+      - has: 
+          kind: attribute
+          has: 
+            kind: attribute_name
+            regex: '\[pattern\]'
+      - has: 
+          kind: attribute
+          has: 
+            kind: attribute_name
+            regex: '\[required\]'
