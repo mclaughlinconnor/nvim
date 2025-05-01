@@ -71,7 +71,7 @@ local function compile_handlebars(mode, jsonContent, pugBufnr, htmlBufnr, compil
   job.stdin:close()
 end
 
-local function open_buffer(name, split)
+local function open_buffer(name, split, filetype)
   if split == "vertical" then
     vim.cmd.vsplit()
   elseif split == "horizontal" then
@@ -82,6 +82,7 @@ local function open_buffer(name, split)
   local bufnr = vim.api.nvim_create_buf(true, true)
   vim.api.nvim_win_set_buf(win, bufnr)
   vim.api.nvim_buf_set_name(bufnr, name)
+  vim.opt.filetype = filetype
 
   return bufnr
 end
@@ -95,13 +96,14 @@ end
 
 local function init()
   vim.cmd.tabnew()
-  local pugBufnr = open_buffer(pugBuffer, false)
-  local jsonBufnr = open_buffer(jsonBuffer, "horizontal")
+  local pugBufnr = open_buffer(pugBuffer, false, "pug")
+  local jsonBufnr = open_buffer(jsonBuffer, "horizontal", "json")
+  vim.api.nvim_buf_set_lines(jsonBufnr, 0, -1, false, {"{}"})
 
   focusBuffer(pugBufnr)
-  local htmlBufnr = open_buffer(htmlBuffer, "vertical")
+  local htmlBufnr = open_buffer(htmlBuffer, "vertical", "html")
   focusBuffer(jsonBufnr)
-  local compiledBufnr = open_buffer(compiledBuffer, "vertical")
+  local compiledBufnr = open_buffer(compiledBuffer, "vertical", "html")
 
   vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
     buffer = pugBufnr,
@@ -127,6 +129,8 @@ local function init()
     end,
     group = vim.api.nvim_create_augroup("CompiledHandlebars", {}),
   })
+
+  focusBuffer(pugBufnr)
 end
 
 vim.keymap.set("n", "<leader>vh", function()
