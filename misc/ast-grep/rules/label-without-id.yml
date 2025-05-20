@@ -1,0 +1,26 @@
+id: label-without-id
+message: Control-less label
+severity: error # error, warning, info, hint
+language: pug
+rule:
+  kind: tag
+  all:
+    - has:
+        kind: tag_name
+        regex: label
+    - not:
+        has:
+          kind: attributes
+          has:
+            kind: attribute
+            has:
+              kind: attribute_name
+              regex: '\[for\]'
+    - not:
+        has:
+          kind: children
+          has:
+            kind: tag
+            has:
+              kind: tag_name
+              regex: input
