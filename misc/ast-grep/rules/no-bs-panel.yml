@@ -4,5 +4,5 @@ severity: error # error, warning, info, hint
 language: pug
 rule:
   kind: class
-  regex: "^.panel$"
+  regex: \.panel
 
