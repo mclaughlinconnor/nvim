@@ -1,0 +1,16 @@
+id: no-useless-type-button
+message: Type is already set by GlobalModule
+severity: error # error, warning, info, hint
+language: pug
+rule:
+  kind: attribute
+  any: 
+    - regex: type='button'
+    - regex: "\\[type\\]='button'"
+  inside:
+    kind: attributes
+    inside:
+      kind: tag
+      has:
+        kind: tag_name
+        regex: button
