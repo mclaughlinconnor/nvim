@@ -1,0 +1,18 @@
+id: no-useless-div
+message: Div is the default tag
+severity: error # error, warning, info, hint
+language: pug
+rule:
+  kind: tag_name
+  regex: div
+  inside:
+    kind: tag
+    all:
+      - not:
+          has:
+            kind: attributes
+      - any:
+          - has:
+              kind: class
+          - has:
+              kind: id
