@@ -1,0 +1,7 @@
+id: no-btn-xs
+message: Don't use btn-xs in new code
+severity: error
+language: pug
+rule:
+  kind: class
+  regex: \.btn-xs
