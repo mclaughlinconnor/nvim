@@ -1,0 +1,8 @@
+id: no-classes-after-attributes
+message: Don't put classes after attributes
+severity: error
+language: pug
+rule:
+  kind: class
+  follows:
+    kind: attributes
