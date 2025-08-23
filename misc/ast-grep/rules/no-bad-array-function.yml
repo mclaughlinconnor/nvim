@@ -1,0 +1,15 @@
+id: no-bad-array-function
+message: Bad array function
+severity: error
+language: typescript
+rule:
+  any:
+    - pattern: $A.map($$$).filter($$$)
+    - pattern: $A.filter($$$).map($$$)
+
+    - pattern: $A.map($$$).reduce($$$)
+    - pattern: $A.filter($$$).reduce($$$)
+
+    - pattern: $A.filter($$$).filter($$$)
+    - pattern: $A.map($$$).map($$$)
+    - pattern: $A.reduce($$$).reduce($$$)
