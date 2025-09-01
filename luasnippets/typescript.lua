@@ -35,6 +35,13 @@ local function component_name(index, prefix)
   end, { index })
 end
 
+local function shouting_snake_case(index)
+  return f(function(args)
+    local n = args[1][1]
+    return { (n):gsub(" ", "_"):gsub("([a-z])([A-Z])", "%1_%2"):upper() }
+  end, { index })
+end
+
 local function lowercase(index)
   return f(function(args)
     local n = args[1][1]
@@ -496,7 +503,7 @@ return {
         import {model, Schema} from 'mongoose';
         import type {MongooseDoc, MongooseModel, MongooseSchemaDef} from '../lib/mongoose/MongooseUtil';
 
-        interface <>InterfaceBase {
+        export interface <>InterfaceBase {
         }
 
         export interface <>Interface extends MongooseDoc<<<>InterfaceBase>> { }
@@ -540,65 +547,100 @@ return {
     fmta(
       [[
         import type {Request, Response} from '../../definitions/sails';
-        import {<>Model} from '../../models/<>';
+        import {<>Model} from '../models/<>';
 
         export async function destroy(req: Request, res: Response) {
-          return await <>Model
-            .deleteOne({_id: req.params.id})
-            .then(res.ok)
-            .catch(res.negotiate);
+          await <>Model.deleteOne({_id: req.params.id});
+
+          res.noContent();
         }
 
         export async function find(_req: Request, res: Response) {
-          return await <>Model
-            .find({})
-            .then(res.ok)
-            .catch(res.negotiate);
+          const <> = await <>Model.find({})
+
+          res.ok(<>);
         }
 
         export async function findOne(req: Request, res: Response) {
-          return await <>Model
-            .find({_id: req.params.id})
-            .then(res.ok)
-            .catch(res.negotiate);
+          const <> = await <>Model.find({_id: req.params.id})
+
+          res.ok(<>);
         }
 
         export async function update(req: Request, res: Response) {
-          return await <>Model
-            .updateOne({_id: req.params.id}, req.body)
-            .then(res.ok)
-            .catch(res.negotiate);
+          const <> = await <>Model.updateOne({_id: req.params.id}, req.body);
+
+          res.ok(<>)
         }
+
       ]],
-      { i(1), same(1), same(1), same(1), same(1), same(1) }
+      {
+        i(1),
+        lowercase(1),
+
+        same(1),
+
+        lowercase(1),
+        same(1),
+        lowercase(1),
+
+        lowercase(1),
+        same(1),
+        lowercase(1),
+
+        lowercase(1),
+        same(1),
+        lowercase(1),
+      }
     )
   ),
 
   s(
-    { trig = "endpoints", wordTrig = true },
+    { trig = "routes", wordTrig = true },
     fmta(
       [[
-        'DELETE /api/v1/<>/:id': {
-          controller: '<>Controller',
-          action: 'destroy'
-        },
+        import {RoutesConfig} from '../../definitions/sails';
 
-        'GET /api/v1/<>': {
-          controller: '<>Controller',
-          action: 'find'
-        },
+        export const routes: RoutesConfig = {
+          'DELETE /api/v1/<>/:id': {
+            controller: '<>Controller',
+            action: 'destroy'
+          },
 
-        'GET /api/v1/<>/:id': {
-          controller: '<>Controller',
-          action: 'findOne',
-        },
+          'GET /api/v1/<>': {
+            controller: '<>Controller',
+            action: 'find'
+          },
 
-        'POST /api/v1/<>/:id': {
-          controller: '<>Controller',
-          action: 'update',
-        },
+          'GET /api/v1/<>/:id': {
+            controller: '<>Controller',
+            action: 'findOne',
+          },
+
+          'POST /api/v1/<>/:id': {
+            controller: '<>Controller',
+            action: 'update',
+          },
+        };
       ]],
       { lowercase(1), i(1), lowercase(1), same(1), lowercase(1), same(1), lowercase(1), same(1) }
+    )
+  ),
+
+  s(
+    { trig = "policies", wordTrig = true },
+    fmta(
+      [[
+        import {Policy} from '../../api/util/Policy';
+        import type {PoliciesConfig} from '../../definitions/sails';
+
+        export const policies: PoliciesConfig = {
+          <>Controller: {
+            '*': [Policy.IS_ADMINISTRATOR],
+          },
+        };
+      ]],
+      { i(1) }
     )
   ),
 
@@ -675,6 +717,41 @@ return {
         export {<>VirtualRefResponse, <>VirtualRef};
       ]],
       { i(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1) }
+    )
+  ),
+
+  s(
+    { trig = "resource", wordTrig = true },
+    fmta(
+      [[
+        import {Injectable} from '@angular/core';
+        import type {TgResourceResponse, WithResponseClass} from '@veryconnect/tg-resource';
+        import {TgResource} from '@veryconnect/tg-resource';
+
+        export type <>Frontend = MongooseAddedFields & Override<<<>InterfaceBase, {
+        }>>;
+
+        interface <>Response extends TgResourceResponse<<<>Frontend>>, <>Frontend {
+        }
+
+        type TypeInfo = Override<<WithResponseClass<<<>Response>>, {}>>;
+
+        @Injectable({providedIn: 'root'})
+        class <>Resource extends TgResource<<<>Frontend, TypeInfo>> {
+
+          public constructor() {
+            super({
+              baseUrl: `${FrontendStaticConf.API_PREFIX}<>`,
+              fieldSerialisers: {},
+              name: TgResourceName.<>,
+              references: {},
+            });
+          }
+        }
+
+        export {<>Resource, <>Response};
+      ]],
+      { i(1), same(1), same(1), same(1), same(1), same(1), same(1), same(1), i(2), shouting_snake_case(1), same(1), same(1)}
     )
   ),
 
