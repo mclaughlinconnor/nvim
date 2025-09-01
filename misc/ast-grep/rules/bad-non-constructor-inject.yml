@@ -1,0 +1,18 @@
+id: bad-non-constructor-inject
+message: inject() must not be used outside of a constructor
+severity: error
+language: typescript
+rule:
+  kind: call_expression
+  pattern: inject($$$A)
+  inside:
+    kind: method_definition
+    stopBy:
+      kind: method_definition
+    not:
+      has:
+        kind: property_identifier
+        stopBy: end
+        field: name
+        regex: constructor
+
