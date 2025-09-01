@@ -1,0 +1,12 @@
+id: no-any-type-predicate
+message: Should use `unknown` type
+severity: error
+language: typescript
+fix:
+  template: "function $A($B: unknown): $B is $C {\n$$$BODY\n}"
+rule:
+  pattern: |
+    function $A($B: any): $B is $C {
+      $$$BODY
+    }
+
