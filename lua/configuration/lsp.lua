@@ -5,6 +5,11 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
+vim.g.copilot_node_command = "/Users/connorveryconnect.com/.nvm/versions/node/v20.19.2/bin/node"
+vim.g.copilot_command = "/Users/connorveryconnect.com/vc/repos/vscode-inline-completion/server/out/server.js"
+
+vim.lsp.log.set_level("TRACE")
+vim.o.winborder = 'bold'
 
 vim.diagnostic.config({
   float = {
@@ -21,13 +26,46 @@ local function on_attach(client, bufnr)
     client.server_capabilities.documentFormattingProvider = false
   end
 
-  -- vim.notify("inlayHintProvider" .. vim.inspect(client.server_capabilities))
-  if client.server_capabilities.inlayHintProvider then
-    vim.keymap.set("n", "<space>gi", function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({bufnr = 0}))
-    end)
-    vim.lsp.inlay_hint.enable(true)
+  if client.name == "ast_grep" then
+    client.server_capabilities.codeActionProvider = false
+    client.server_capabilities.hoverProvider = false
   end
+
+  if client.name == "vcIc" then
+    vim.api.nvim_create_autocmd({ "TextChangedI" }, {
+      callback = function()
+        vim.lsp.inline_completion.get()
+      end,
+      group = vim.api.nvim_create_augroup("InlineCompletion", {}),
+    })
+
+    vim.keymap.set(
+      "i",
+      "<Tab>",
+      function() 
+        local namespace_id = vim.api.nvim_get_namespaces()["nvim.lsp.inline_completion"]
+        local extmarks = vim.api.nvim_buf_get_extmarks(0, namespace_id, 0, -1, {})
+        if (not next(extmarks)) then
+          return '<Tab>'
+        end
+
+        vim.lsp.inline_completion.get()
+        return
+      end,
+      bufopts
+    )
+
+
+
+  end
+
+  -- vim.notify("inlayHintProvider" .. vim.inspect(client.server_capabilities))
+  -- if client.server_capabilities.inlayHintProvider then
+  --   vim.keymap.set("n", "<space>gi", function()
+  --     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({bufnr = 0}))
+  --   end)
+  --   vim.lsp.inlay_hint.enable(false)
+  -- end
 
   vim.keymap.set("n", "<space>gd", function()
     vim.diagnostic.enable(not vim.diagnostic.is_enabled())
@@ -67,7 +105,7 @@ local function on_attach(client, bufnr)
       vim.lsp.buf.code_action({ context = {
         diagnostics = vim.lsp.diagnostic.get_line_diagnostics(bufnr),
         only = {
-          -- "", -- Empty -- Adding this makes some of tsservers actions disappear
+          "", -- Empty -- Adding this makes some of tsservers actions disappear
           "quickfix", -- QuickFix
           "refactor", -- Refactor
           "refactor.extract", -- RefactorExtract
@@ -118,8 +156,29 @@ local function angularls_config(workspace_dir)
   }
 end
 
+-- local vcIc = vim.lsp.start_client({
+--   cmd = {"/Users/connorveryconnect.com/.nvm/versions/node/v20.19.2/bin/node", "--inspect", "/Users/connorveryconnect.com/vc/repos/vscode-inline-completion/server/out/server.js", "--inspect-brk", "--stdio"},
+--   root_dir = vim.fn.getcwd(),
+--   -- Update below too
+--   on_attach = on_attach,
+--   filetypes = { "typescript", "pug" },
+--   name="vcIc"
+-- })
+--
+-- if not vcIc then
+--   vim.notify("vcIc couldn't attach")
+-- else
+--   vim.api.nvim_create_autocmd("FileType", {
+--     -- Update above too
+--     pattern = { "typescript", "pug" },
+--     callback = function()
+--       vim.lsp.buf_attach_client(0, vcIc)
+--     end,
+--   })
+-- end
+
 local tsInspector = vim.lsp.start_client({
-  cmd = {"/Users/connorveryconnect.com/Downloads/ts_inspector/ts_inspector"},
+  cmd = {"/Users/connorveryconnect.com/vc/repos/ts_inspector/ts_inspector"},
   root_dir = vim.fn.getcwd(),
   -- Update below too
   on_attach = on_attach,
@@ -138,7 +197,6 @@ else
     end,
   })
 end
-
 
 local ijInspector = vim.lsp.start_client({
   cmd = vim.lsp.rpc.connect('127.0.0.1', 2517),
@@ -470,6 +528,10 @@ return {
   {
     "neovim/nvim-lspconfig",
     commit = "7af2c37192deae28d1305ae9e68544f7fb5408e1",
+  },
+  {
+    "github/copilot.vim",
+    commit = "f3d66c148aa60ad04c0a21d3e0a776459de09eb2",
   },
   {
     "mfussenegger/nvim-lint",
