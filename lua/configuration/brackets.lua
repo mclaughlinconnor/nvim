@@ -8,7 +8,7 @@ return {
   },
   {
     "windwp/nvim-autopairs",
-    commit = "0f04d78619cce9a5af4f355968040f7d675854a1",
+    commit = "23320e75953ac82e559c610bec5a90d9c6dfa743",
     config = true,
   },
 }

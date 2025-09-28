@@ -29,7 +29,7 @@ end
 return {
   {
     "stevearc/oil.nvim",
-    commit = "65c53dbe4f2140236590a7568a5f22a77d16be39",
+    commit = "bbad9a76b2617ce1221d49619e4e4b659b3c61fc",
     opts = {
       default_file_explorer = true,
       keymaps = {

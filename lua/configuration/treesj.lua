@@ -1,7 +1,7 @@
 return {
   {
     "Wansmer/treesj",
-    commit = "1d6e89f4790aa04eaae38fa9460a3ee191961c96",
+    commit = "3b4a2bc42738a63de17e7485d4cc5e49970ddbcc",
     opts = function()
       local utils = require("treesj.langs.utils")
 
@@ -19,6 +19,9 @@ return {
               join = { separator = ";", last_separator = true, space_in_brackets = false },
             }),
             object = utils.set_preset_for_dict({
+              join = { space_in_brackets = false },
+            }),
+            named_imports = utils.set_preset_for_dict({
               join = { space_in_brackets = false },
             }),
             array = utils.set_preset_for_dict({

@@ -1,7 +1,7 @@
 return {
   {
-    "yioneko/nvim-cmp",
-    commit = "9033adcc879843b343299eeb7b3522ce82be2aa6",
+    "hrsh7th/nvim-cmp",
+    commit = "b5311ab3ed9c846b585c0c15b7559be131ec4be9",
     dependencies = {
       { "FelipeLema/cmp-async-path", commit = "d8229a93d7b71f22c66ca35ac9e6c6cd850ec61d" },
       { "L3MON4D3/LuaSnip" }, -- configured elsewhere

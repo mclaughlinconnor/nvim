@@ -4,7 +4,7 @@ return {
   {
     "L3MON4D3/LuaSnip",
     build = "make install_jsregexp",
-    commit = "118263867197a111717b5f13d954cd1ab8124387",
+    commit = "66b5c2707e624dcd2cd3605676c64a2efe47e9d1",
     lazy = false,
     keys = {
       {

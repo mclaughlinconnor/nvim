@@ -21,12 +21,6 @@
 (arguments
   (call_expression) @indent.begin)
 
-(array
-  (call_expression) @indent.begin)
-
-(await_expression
-  (call_expression) @indent.begin)
-
 (binary_expression
   (call_expression) @indent.begin)
 
@@ -35,15 +29,15 @@
 
 (arrow_function
   body: (_) @_body
-  (#not-has-type? @_body statement_block)) @indent.begin
+  (#not-kind-eq? @_body "statement_block")) @indent.begin
 
 (assignment_expression
   right: (_) @_right
-  (#not-has-type? @_right arrow_function function)) @indent.begin
+  (#not-kind-eq? @_right "arrow_function" "function")) @indent.begin
 
 (variable_declarator
   value: (_) @_value
-  (#not-has-type? @_value arrow_function function)) @indent.begin
+  (#not-kind-eq? @_value "arrow_function" "call_expression" "function")) @indent.begin
 
 (arguments
   ")" @indent.end)
@@ -55,6 +49,8 @@
   "}" @indent.end)
 
 [
+  (arguments
+    (object))
   ")"
   "}"
   "]"
@@ -63,10 +59,11 @@
 (statement_block
   "{" @indent.branch)
 
-(parenthesized_expression
-  ("("
-    (_)
-    ")" @indent.end))
+((parenthesized_expression
+  "("
+  (_)
+  ")" @indent.end) @_outer
+  (#not-has-parent? @_outer if_statement))
 
 [
   "}"
@@ -80,4 +77,12 @@
   (ERROR)
 ] @indent.auto
 
+(if_statement
+  consequence: (_) @indent.dedent
+  (#not-kind-eq? @indent.dedent statement_block)) @indent.begin
 
+(array
+  (call_expression) @indent.begin)
+
+(await_expression
+  (call_expression) @indent.begin)
