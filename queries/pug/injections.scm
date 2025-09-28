@@ -42,7 +42,7 @@
    (#lua-match? @_name "^%*.*"))
   (quoted_attribute_value
    (attribute_value) @injection.content)
-  (#set! injection.language "angular"))
+  (#set! injection.language "angular_expr"))
 
 (escaped_string_interpolation
   ((interpolation_content) @injection.content

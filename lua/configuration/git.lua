@@ -15,158 +15,158 @@ local q = function()
 end
 
 return {
-  {
-    "harrisoncramer/gitlab.nvim",
-    commit = "c0c67486d17d4f73f62b50c13c77aaed2e9f17f0",
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      -- "mclaughlinconnor/diffview.nvim",
-      {dir = "/Users/connorveryconnect.com/Downloads/diffview.nvim"},
-      "stevearc/dressing.nvim", -- Recommended but not required. Better UI for pickers.
-      "nvim-tree/nvim-web-devicons", -- Recommended but not required. Icons in discussion tree.
-    },
-    enabled = true,
-    build = function()
-      require("gitlab.server").build(true)
-    end, -- Builds the Go binary
-    keys = {
-      {
-        "glr",
-        function()
-          require("gitlab").review()
-        end,
-      },
-      {
-        "gls",
-        function()
-          require("gitlab").summary()
-        end,
-      },
-      {
-        "glA",
-        function()
-          require("gitlab").approve()
-        end,
-      },
-      {
-        "glR",
-        function()
-          require("gitlab").revoke()
-        end,
-      },
-      {
-        "glc",
-        function()
-          require("gitlab").create_comment()
-        end,
-      },
-      {
-        "glc",
-        function()
-          require("gitlab").create_multiline_comment()
-        end,
-      },
-      {
-        "glC",
-        function()
-          require("gitlab").create_comment_suggestion()
-        end,
-      },
-      {
-        "glO",
-        function()
-          require("gitlab").create_mr()
-        end,
-      },
-      {
-        "glm",
-        function()
-          require("gitlab").move_to_discussion_tree_from_diagnostic()
-        end,
-      },
-      {
-        "gln",
-        function()
-          require("gitlab").create_note()
-        end,
-      },
-      {
-        "gld",
-        function()
-          require("gitlab").toggle_discussions()
-        end,
-      },
-      {
-        "glaa",
-        function()
-          require("gitlab").add_assignee()
-        end,
-      },
-      {
-        "glad",
-        function()
-          require("gitlab").delete_assignee()
-        end,
-      },
-      {
-        "glla",
-        function()
-          require("gitlab").add_label()
-        end,
-      },
-      {
-        "glld",
-        function()
-          require("gitlab").delete_label()
-        end,
-      },
-      {
-        "glra",
-        function()
-          require("gitlab").add_reviewer()
-        end,
-      },
-      {
-        "glrd",
-        function()
-          require("gitlab").delete_reviewer()
-        end,
-      },
-      {
-        "glp",
-        function()
-          require("gitlab").pipeline()
-        end,
-      },
-      {
-        "glo",
-        function()
-          require("gitlab").open_in_browser()
-        end,
-      },
-      {
-        "glM",
-        function()
-          require("gitlab").merge()
-        end,
-      },
-    },
-    config = function()
-      require("gitlab").setup({
-        reviewer_settings = {
-          diffview = {
-            imply_local = true, -- Use --imply_local with diffview
-          },
-        },
-        config_path = vim.fn.expand("$HOME"),
-      })
-    end,
-  },
+  -- {
+  --   "harrisoncramer/gitlab.nvim",
+  --   commit = "c0c67486d17d4f73f62b50c13c77aaed2e9f17f0",
+  --   dependencies = {
+  --     "MunifTanjim/nui.nvim",
+  --     "nvim-lua/plenary.nvim",
+  --     -- "mclaughlinconnor/diffview.nvim",
+  --     {dir = "/Users/connorveryconnect.com/Downloads/diffview.nvim"},
+  --     "stevearc/dressing.nvim", -- Recommended but not required. Better UI for pickers.
+  --     "nvim-tree/nvim-web-devicons", -- Recommended but not required. Icons in discussion tree.
+  --   },
+  --   enabled = true,
+  --   build = function()
+  --     require("gitlab.server").build(true)
+  --   end, -- Builds the Go binary
+  --   keys = {
+  --     {
+  --       "glr",
+  --       function()
+  --         require("gitlab").review()
+  --       end,
+  --     },
+  --     {
+  --       "gls",
+  --       function()
+  --         require("gitlab").summary()
+  --       end,
+  --     },
+  --     {
+  --       "glA",
+  --       function()
+  --         require("gitlab").approve()
+  --       end,
+  --     },
+  --     {
+  --       "glR",
+  --       function()
+  --         require("gitlab").revoke()
+  --       end,
+  --     },
+  --     {
+  --       "glc",
+  --       function()
+  --         require("gitlab").create_comment()
+  --       end,
+  --     },
+  --     {
+  --       "glc",
+  --       function()
+  --         require("gitlab").create_multiline_comment()
+  --       end,
+  --     },
+  --     {
+  --       "glC",
+  --       function()
+  --         require("gitlab").create_comment_suggestion()
+  --       end,
+  --     },
+  --     {
+  --       "glO",
+  --       function()
+  --         require("gitlab").create_mr()
+  --       end,
+  --     },
+  --     {
+  --       "glm",
+  --       function()
+  --         require("gitlab").move_to_discussion_tree_from_diagnostic()
+  --       end,
+  --     },
+  --     {
+  --       "gln",
+  --       function()
+  --         require("gitlab").create_note()
+  --       end,
+  --     },
+  --     {
+  --       "gld",
+  --       function()
+  --         require("gitlab").toggle_discussions()
+  --       end,
+  --     },
+  --     {
+  --       "glaa",
+  --       function()
+  --         require("gitlab").add_assignee()
+  --       end,
+  --     },
+  --     {
+  --       "glad",
+  --       function()
+  --         require("gitlab").delete_assignee()
+  --       end,
+  --     },
+  --     {
+  --       "glla",
+  --       function()
+  --         require("gitlab").add_label()
+  --       end,
+  --     },
+  --     {
+  --       "glld",
+  --       function()
+  --         require("gitlab").delete_label()
+  --       end,
+  --     },
+  --     {
+  --       "glra",
+  --       function()
+  --         require("gitlab").add_reviewer()
+  --       end,
+  --     },
+  --     {
+  --       "glrd",
+  --       function()
+  --         require("gitlab").delete_reviewer()
+  --       end,
+  --     },
+  --     {
+  --       "glp",
+  --       function()
+  --         require("gitlab").pipeline()
+  --       end,
+  --     },
+  --     {
+  --       "glo",
+  --       function()
+  --         require("gitlab").open_in_browser()
+  --       end,
+  --     },
+  --     {
+  --       "glM",
+  --       function()
+  --         require("gitlab").merge()
+  --       end,
+  --     },
+  --   },
+  --   config = function()
+  --     require("gitlab").setup({
+  --       reviewer_settings = {
+  --         diffview = {
+  --           imply_local = true, -- Use --imply_local with diffview
+  --         },
+  --       },
+  --       config_path = vim.fn.expand("$HOME"),
+  --     })
+  --   end,
+  -- },
   {
     -- pretty sure I'm woefully underutilising this plugin
     "lewis6991/gitsigns.nvim",
-    commit = "6ef8c54fb526bf3a0bc4efb0b2fe8e6d9a7daed2",
+    commit = "7bbc674278f22376850576dfdddf43bbc17e62b5",
     opts = {
       current_line_blame = true,
       current_line_blame_opts = {
@@ -179,15 +179,10 @@ return {
   },
   {
     "kdheepak/lazygit.nvim",
-    commit = "de35012036d43bca03628d40d083f7c02a4cda3f",
+    commit = "4839ab642962cc76bb1bf278427dc4c59be15072",
     init = function()
       vim.g.lazygit_floating_window_scaling_factor = 1
     end,
-  },
-  {
-    "kdheepak/lazygit.nvim",
-    commit = "de35012036d43bca03628d40d083f7c02a4cda3f",
-
     keys = {
       {
         "gH",
@@ -200,7 +195,7 @@ return {
   },
   {
     "NeogitOrg/neogit",
-    commit = "12f78aaabb37b4946254dd5e47cf7b552904937a",
+    commit = "59725524d25f9a8a9474f113d60db52bad8504d0",
     keys = {
       {
         "gh",
@@ -303,5 +298,5 @@ return {
     end,
   },
   { "AndrewRadev/linediff.vim", commit = "ddae71ef5f94775d101c1c70032ebe8799f32745" },
-  { "rickhowe/diffchar.vim", commit = "ccf4c238a71d834ad1e21834f08be274bc0f05a3" },
+  { "rickhowe/diffchar.vim", commit = "9eca051f72fe8b163651bdca09ebe57a3e2eed68" },
 }

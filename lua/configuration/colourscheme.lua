@@ -25,7 +25,7 @@ end
 return {
   {
     "gbprod/nord.nvim",
-    commit = "70fc2425b50396e5f1230200b59527d8440a24df",
+    commit = "57fb474a1d628bdf9d1e7964719464ed5675d7c7",
     -- event = "",
     config = function()
       -- setColour("delek")
@@ -78,7 +78,7 @@ return {
   },
   {
     "lukas-reineke/indent-blankline.nvim",
-    commit = "dbd90bb689ff10d21fee6792eb8928f0584b5860",
+    commit = "005b56001b2cb30bfa61b7986bc50657816ba4ba",
     config = function(_, opts)
       require("ibl").setup(opts)
       local indent_lines = vim.api.nvim_create_augroup("indent_lines", {})

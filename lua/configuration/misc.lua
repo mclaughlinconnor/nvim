@@ -1,7 +1,7 @@
 return {
   {
     "dmmulroy/tsc.nvim",
-    commit = "06734767eee606ebaa0a4645e0fd801c64e6aa7a",
+    commit = "8c1b4ec6a48d038a79ced8674cb15e7db6dd8ef0",
     opts = {},
   },
   {
@@ -13,7 +13,7 @@ return {
       },
     },
   },
-  { "nvim-lua/plenary.nvim", commit = "55d9fe89e33efd26f532ef20223e5f9430c8b0c0" },
+  { "nvim-lua/plenary.nvim", commit = "857c5ac632080dba10aae49dba902ce3abf91b35" },
   -- ~/.local/share/nvim/lazy/luarocks/.rocks/bin/luarocks install lrexlib-pcre2 PCRE2_DIR="/opt/homebrew/opt/pcre2" PCRE2_INCDIR="/opt/homebrew/opt/pcre2/include"
   {
     "camspiers/luarocks",

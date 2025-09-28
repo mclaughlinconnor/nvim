@@ -1,7 +1,7 @@
 return {
   {
     "mbbill/undotree",
-    commit = "36ff7abb6b60980338344982ad4cdf03f7961ecd",
+    commit = "15d91b0afe04ea9ba5cd53e30190d1602af9a925",
     keys = {
       { "<leader>tr", "<cmd>UndotreeToggle<cr>" },
     },

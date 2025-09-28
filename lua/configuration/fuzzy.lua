@@ -6,7 +6,7 @@ end
 return {
   {
     "ibhagwan/fzf-lua",
-    commit = "9226c5a2291ef623ef157e0e1ffea034ffc8b8de",
+    commit = "f8805989fc8f164ea3fab37bdec963add9576964",
     keys = {
       { "<leader>b", function() require("fzf-lua").buffers() end },
       { "<leader>B", function() require("fzf-lua").oldfiles() end },
@@ -216,8 +216,10 @@ return {
           },
         },
 
-        global_git_icons = false,
-        global_file_icons = false,
+        defaults = {
+          git_icons = false,
+          file_icons = false,
+        },
 
         manpages = { previewer = "man_native" },
         helptags = { previewer = "help_native" },
