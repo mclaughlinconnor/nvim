@@ -7,7 +7,7 @@ rule:
   all:
     - has:
         kind: tag_name
-        regex: label
+        regex: ^label$
     - not:
         has:
           kind: attributes
