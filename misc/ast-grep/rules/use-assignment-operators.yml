@@ -4,14 +4,43 @@ severity: info
 language: TypeScript
 rule:
   all:
-    - kind: assignment_expression
+    - all:
+      - kind: assignment_expression
+      - has:
+          field: left
+          pattern: $LEFT
     - has:
         kind: binary_expression
         all:
-          - has:
-              kind: identifier
-              pattern: $A
-          - has:
-              field: operator
-              regex: "&&|\\|\\||\\+|-|\\*|/"
+        - any:
+            - pattern: $LEFT + $B
+            - pattern: $B + $LEFT
+            - pattern: $LEFT - $B
+            - pattern: $B - $LEFT
+            - pattern: $LEFT * $B
+            - pattern: $B * $LEFT
+            - pattern: $LEFT / $B
+            - pattern: $B / $LEFT
+            - pattern: $LEFT % $B
+            - pattern: $B % $LEFT
+            - pattern: $LEFT ** $B
+            - pattern: $B ** $LEFT
+            - pattern: $LEFT << $B
+            - pattern: $B << $LEFT
+            - pattern: $LEFT >> $B
+            - pattern: $B >> $LEFT
+            - pattern: $LEFT >>> $B
+            - pattern: $B >>> $LEFT
+            - pattern: $LEFT & $B
+            - pattern: $B & $LEFT
+            - pattern: $LEFT ^ $B
+            - pattern: $B ^ $LEFT
+            - pattern: $LEFT | $B
+            - pattern: $B | $LEFT
+            - pattern: $LEFT && $B
+            - pattern: $B && $LEFT
+            - pattern: $LEFT || $B
+            - pattern: $B || $LEFT
+            - pattern: $LEFT ?? $B
+            - pattern: $B ?? $LEFT
 
