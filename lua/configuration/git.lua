@@ -227,6 +227,7 @@ return {
       "nvim-lua/plenary.nvim",
       "camspiers/luarocks",
     },
+    lazy = false,
     keys = {
       {
         "<leader>do",
