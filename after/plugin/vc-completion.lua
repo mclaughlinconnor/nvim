@@ -42,5 +42,17 @@ function source:execute(completion_item, callback)
   callback(completion_item)
 end
 
+---Return trigger characters for triggering completion (optional).
+function source:get_trigger_characters()
+  return { '"', '\'' }
+end
+
+---Return the keyword pattern for triggering completion (optional).
+---If this is omitted, nvim-cmp will use a default keyword pattern. See |cmp-config.completion.keyword_pattern|.
+---@return string
+function source:get_keyword_pattern()
+  return [[\(\w\|\.\)\+]]
+end
+
 ---Register your source to nvim-cmp.
 require("cmp").register_source("routes", source)
