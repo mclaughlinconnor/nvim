@@ -4,12 +4,18 @@ severity: hint
 language: typescript
 rule:
   all:
-    - pattern: res.$A($$$B)
-    - kind: call_expression
+    - any:
+      - pattern: res.$A($$$B);
+      - pattern: res.$A($$$B)
+    - kind: expression_statement # not call_expression so that the return_statement isn't one level above
     - not:
-        inside:
-          kind: return_statement
-          stopBy: end
+        any:
+          - inside:
+              kind: return_statement
+              stopBy: end
+          - precedes:
+              kind: return_statement
+              stopBy: neighbor
     - inside:
         kind: if_statement
         stopBy: end
