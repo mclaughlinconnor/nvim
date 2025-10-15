@@ -103,4 +103,8 @@ vim.o.grepformat = vim.o.grepformat .. ',' .. '%f:%l:%c:%m'
 
 vim.keymap.set("t", "<leader><Esc>", [[<C-\><C-n>]], opts)
 
-vim.keymap.set("n", "\\s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+
+vim.keymap.set('i', '<C-d>', '<C-k>', {desc = 'digraph'})
+vim.keymap.set('c', '<C-d>', '<C-k>', {desc = 'digraph'})
+
