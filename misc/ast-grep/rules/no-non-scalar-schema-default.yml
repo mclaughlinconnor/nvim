@@ -11,6 +11,9 @@ rule:
     - pattern:
         context: "{default: []}"
         selector: array
+    - pattern:
+        context: "{default: [$$$A]}"
+        selector: array
   all:
     - inside:
         pattern: "const $VAR: MongooseSchemaDef<$TVAR> = {$$$SCHEMA}"
