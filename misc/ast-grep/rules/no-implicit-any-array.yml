@@ -1,0 +1,9 @@
+id: no-implicit-any-array
+message: No implicit any array
+severity: error
+language: typescript
+rule:
+  any:
+    - pattern: const $A = [];
+    - pattern: let $A = [];
+
