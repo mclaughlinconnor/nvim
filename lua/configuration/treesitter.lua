@@ -58,6 +58,25 @@ return {
         filetype = "haxe",
       }
 
+      parser_config.typescript = {
+        install_info = {
+          url = "https://github.com/mclaughlinconnor/tree-sitter-typescript",
+          files = { "src/parser.c" },
+          revision = "788c6f1f4f54ada3dd14ccf2da716edca1eb7e5e",
+        },
+        maintainers = { "@mclaughlinconnor" },
+      }
+
+      parser_config.typescript = {
+        install_info = {
+          url = "https://github.com/mclaughlinconnor/tree-sitter-typescript",
+          files = { "src/parser.c", "src/scanner.c" },
+          location = "typescript",
+          generate_requires_npm = true,
+        },
+        maintainers = { "@mclaughlinconnor" },
+      }
+
       configs.setup({
         ensure_installed = "all", -- one of "all" or a list of languages
         -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
