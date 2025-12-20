@@ -66,7 +66,7 @@ return {
           enable = true,
           disable = function(lang) -- Disable in large C++ buffers
             -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
-            if lang == "latex" or lang == "css" or lang == "yaml" or lang == "haxe" then
+            if lang == "latex" or lang == "css" or lang == "yaml" or lang == "haxe" or lang == "htmldjango" then
               return true
             end
 
@@ -78,7 +78,7 @@ return {
         autopairs = {
           enable = true,
         },
-        indent = { enable = true, disable = { "python", "css" } },
+        indent = { enable = true, disable = { "python", "css", "htmldjango" } },
         query_linter = {
           enable = true,
           use_virtual_text = true,

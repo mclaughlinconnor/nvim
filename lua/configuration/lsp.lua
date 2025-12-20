@@ -262,6 +262,47 @@ return {
             on_attach = on_attach,
           })
         end,
+        ["basedpyright"] = function()
+          require("lspconfig")["basedpyright"].setup({
+            settings = {
+              basedpyright = {
+                analysis = {
+                  diagnosticSeverityOverrides = {
+                    reportUnusedCallResult = "none",
+                    reportExplicitAny = "none",
+                  },
+                  autoSearchPaths = true,
+                  useLibraryCodeForTypes = true,
+                  diagnosticMode = 'openFilesOnly',
+                },
+              },
+            },
+          })
+        end,
+        ["emmet_language_server"] = function()
+          require("lspconfig")["emmet_language_server"].setup({
+            filetypes = { 'htmldjango', 'html', 'htmldjango.jinja' },
+          })
+        end,
+        ["html"] = function()
+          require("lspconfig")["html"].setup({
+            filetypes = { 'htmldjango', 'html', 'htmldjango.jinja' },
+          })
+        end,
+        ["jinja_lsp"] = function()
+          require("lspconfig")["jinja_lsp"].setup({
+            filetypes = { 'htmldjango', 'html', 'htmldjango.jinja' },
+            root_dir = function(fname)
+              return vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
+            end,
+            single_file_support = true,
+            init_options = {
+              templates = './src/templates',
+              backend = { './src' },
+              lang = "python"
+            },
+          })
+        end,
         ["cssls"] = function()
           local capabilities = lsp_status.capabilities
           capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -403,5 +444,9 @@ return {
   {
     "neovim/nvim-lspconfig",
     commit = "7af2c37192deae28d1305ae9e68544f7fb5408e1",
+  },
+  {
+    "HiPhish/jinja.vim",
+    commit = "06fcfeeb20c6c76d6fee021b250c8780c38e2925",
   },
 }

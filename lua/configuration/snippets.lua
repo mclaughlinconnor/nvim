@@ -109,6 +109,10 @@ return {
       require("luasnip.loaders.from_lua").load({ paths = { vim.fn.getcwd() .. "/.luasnippets/" } })
 
       ls.filetype_extend("latex", { "tex" })
+      ls.filetype_extend("htmldjango.jinja", { "jinja" })
+      ls.filetype_extend("htmldjango", { "jinja" })
+      ls.filetype_extend("jinja", { "jinja" })
+      -- ls.filetype_extend("html", { "jinja" })
       vim.api.nvim_create_user_command("LuaSnipEdit", require("luasnip.loaders").edit_snippet_files, {})
     end,
     opts = function()
@@ -135,9 +139,18 @@ return {
             },
           },
         },
-        ft_func = require("luasnip.extras.filetype_functions").from_pos_or_filetype,
+        ft_func = function()
+          if (vim.bo.filetype == "htmldjango.jinja") then
+            return {"htmldjango", "jinja", "html", "html_tags", "all"}
+          end
+
+          return require("luasnip.extras.filetype_functions").from_pos_or_filetype()
+        end,
         load_ft_func = require("luasnip.extras.filetype_functions").extend_load_ft({
           markdown = { "lua", "json" },
+          jinja = { "jinja" },
+          ["htmldjango.jinja"] = { "jinja" },
+          htmldjango = { "jinja" },
         }),
         snip_env = {
           s = ls.s,

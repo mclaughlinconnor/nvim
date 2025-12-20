@@ -8,6 +8,19 @@ return {
       local ft = require("Comment.ft")
       ft.set("pug", "//- %s")
       ft.set("haxe", "// %s")
+
+      local origCalculate = ft.calculate
+      ft.calculate = function(ctx)
+        if vim.bo.filetype == "htmldjango.jinja" then
+          return ft.get(vim.bo.filetype, ctx.ctype)
+        end
+
+        return origCalculate(ctx)
+      end
+
+      ft.set('htmldjango', {'{# %s #}'})
+      ft.set('jinja', {'{# %s #}'})
+      ft.set('htmldjango.jinja', {'{# %s #}'})
     end,
   },
 }
