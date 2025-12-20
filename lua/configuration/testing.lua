@@ -7,7 +7,7 @@ return {
       { "mclaughlinconnor/neotest-mocha", commit = "deefd4119df8707d10a50ec3d31628ce6e64d40c" },
       { "jbyuki/one-small-step-for-vimkind", commit = "94b06d81209627d0098c4c5a14714e42a792bf0b" },
     },
-    commit = "d424d262d01bccc1e0b038c9a7220a755afd2a1f",
+    commit = "deadfb1af5ce458742671ad3a013acb9a6b41178",
     opts = function()
       local vc_config = {
         adapters = {

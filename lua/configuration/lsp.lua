@@ -156,7 +156,7 @@ local function angularls_config(workspace_dir)
   }
 end
 
--- local vcIc = vim.lsp.start_client({
+-- local vcIc = vim.lsp.start({
 --   cmd = {"/Users/connorveryconnect.com/.nvm/versions/node/v20.19.2/bin/node", "--inspect", "/Users/connorveryconnect.com/vc/repos/vscode-inline-completion/server/out/server.js", "--inspect-brk", "--stdio"},
 --   root_dir = vim.fn.getcwd(),
 --   -- Update below too
@@ -177,7 +177,7 @@ end
 --   })
 -- end
 
-local tsInspector = vim.lsp.start_client({
+local tsInspector = vim.lsp.start({
   cmd = {"/home/connor/Development/ts_inspector/ts_inspector"},
   root_dir = vim.fn.getcwd(),
   -- Update below too
@@ -198,7 +198,7 @@ else
   })
 end
 
-local ijInspector = vim.lsp.start_client({
+local ijInspector = vim.lsp.start({
   cmd = vim.lsp.rpc.connect('127.0.0.1', 2517),
   root_dir = vim.fn.getcwd(),
   -- Update below too
