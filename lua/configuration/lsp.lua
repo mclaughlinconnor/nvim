@@ -178,7 +178,7 @@ end
 -- end
 
 local tsInspector = vim.lsp.start_client({
-  cmd = {"/Users/connorveryconnect.com/vc/repos/ts_inspector/ts_inspector"},
+  cmd = {"/home/connor/Development/ts_inspector/ts_inspector"},
   root_dir = vim.fn.getcwd(),
   -- Update below too
   on_attach = on_attach,
