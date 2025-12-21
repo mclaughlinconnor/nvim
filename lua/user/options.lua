@@ -29,13 +29,29 @@ local options = {
   termguicolors = true, -- use full colour
 }
 
-vim.opt.diffopt:append({ "indent-heuristic", "algorithm:histogram", "linematch:60", "iwhite", "iblank" })
-
 vim.cmd("set isfname-=:")
 
 vim.opt.shortmess:append("c") -- don't need extra verbose autocomplete
 vim.cmd("set whichwrap+=<,>,[,],h,l") -- movements can wrap over lines
 vim.g.mapleader = ","
+
+local opts = { noremap = true, silent = true }
+
+vim.opt.diffopt = {
+  "algorithm:histogram",
+  "closeoff",
+  "filler",
+  "iblank",
+  "indent-heuristic",
+  "inline:char",
+  "internal",
+  "iwhite",
+  -- "linematch:60",
+}
+
+vim.cmd([[set diffanchors='a]])
+vim.keymap.set("n", "<leader>da", function() vim.cmd("set diffopt+=anchor") end, opts)
+vim.keymap.set("n", "<leader>dA", function() vim.cmd("set diffopt-=anchor") end, opts)
 
 for k, v in pairs(options) do
   vim.opt[k] = v
@@ -47,8 +63,6 @@ autocmd!
 au TextYankPost * silent! lua vim.highlight.on_yank({higroup="IncSearch", timeout=50})
 augroup END
 ]])
-
-local opts = { noremap = true, silent = true }
 
 vim.keymap.set("n", "<esc>", "<cmd>noh<cr>", opts)
 
