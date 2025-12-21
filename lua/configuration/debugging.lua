@@ -23,6 +23,7 @@ return {
   },
   {
     "rcarriga/nvim-dap-ui",
+    dependencies = { "nvim-neotest/nvim-nio" },
     commit = "cf91d5e2d07c72903d052f5207511bf7ecdb7122",
     config = function()
       require("dapui").setup()

@@ -17,7 +17,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    commit = "4eb12d7a1f82b6c8db9929bf2c4b38dc3177dd82", -- 0.10
+    commit = "8cdffc6d334731ce3703b6d870a5a34fd878208a", -- 0.10
     config = function()
       vim.api.nvim_create_autocmd('User', {
         pattern = 'TSUpdate',
@@ -98,7 +98,7 @@ return {
         require'nvim-treesitter'.setup({
           ensure_installed = "all", -- one of "all" or a list of languages
           -- vimtex needs vim highlighting. the ts highlighting is nasty anyway
-          ignore_install = { "phpdoc", "ipkg" }, -- List of parsers to ignore installing
+          ignore_install = { "phpdoc", "ipkg", "gdshader", "rnoweb" }, -- List of parsers to ignore installing
           highlight = {
             enable = true,
             disable = function(lang) -- Disable in large C++ buffers
