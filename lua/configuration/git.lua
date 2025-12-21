@@ -298,5 +298,4 @@ return {
     end,
   },
   { "AndrewRadev/linediff.vim", commit = "ddae71ef5f94775d101c1c70032ebe8799f32745" },
-  { "rickhowe/diffchar.vim", commit = "9eca051f72fe8b163651bdca09ebe57a3e2eed68" },
 }
