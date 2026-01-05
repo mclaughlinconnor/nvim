@@ -220,7 +220,8 @@ return {
     requires = "nvim-lua/plenary.nvim",
   },
   {
-    "mclaughlinconnor/diffview.nvim",
+    dir = "/Users/connorveryconnect.com/Downloads/diffview.nvim",
+    -- "mclaughlinconnor/diffview.nvim",
     -- commit = "44a5b386b21a6704d28a027ca819a837b1968df8",
     dependencies = {
       "nvim-lua/plenary.nvim",
