@@ -1,6 +1,6 @@
 return {
   cmd = function(dispatchers, config)
-    return vim.lsp.rpc.start({ "/home/connor/.local/share/nvim/mason/bin/tsgo", '--lsp', '--stdio' }, dispatchers)
+    return vim.lsp.rpc.start({ "node", "/Users/connorveryconnect.com/.local/share/nvim/mason/packages/tsgo/node_modules/@typescript/native-preview/lib/tsgo.js", '--lsp', '--stdio' }, dispatchers)
   end,
   filetypes = {'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'},
   root_dir = function(bufnr, on_dir)

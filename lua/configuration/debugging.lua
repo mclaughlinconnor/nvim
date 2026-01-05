@@ -78,7 +78,7 @@ return {
     dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap", "microsoft/vscode-js-debug", "mxsdev/nvim-dap-vscode-js" },
     config = function()
       local dap = require("dap")
-      local dapDebugServer = vim.fn.expand("$MASON/packages/js-debug-adapter/js-debug/src/dapDebugServer.js")
+      local dapDebugServer = vim.fn.expand("/Users/connorveryconnect.com/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js")
 
       dap.configurations["lua"] = {
         {
