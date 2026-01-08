@@ -78,7 +78,7 @@ return {
     dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap", "microsoft/vscode-js-debug", "mxsdev/nvim-dap-vscode-js" },
     config = function()
       local dap = require("dap")
-      -- dap.set_log_level('TRACE')
+      local dapDebugServer = vim.fn.expand("$MASON/packages/js-debug-adapter/js-debug/src/dapDebugServer.js")
 
       dap.configurations["lua"] = {
         {
@@ -99,10 +99,7 @@ return {
           port = "${port}",
           executable = {
             command = "node",
-            args = {
-              vim.fn.expand("$MASON/share/js-debug-adapter/js-debug/src/dapDebugServer.js"),
-              "${port}",
-            },
+            args = { dapDebugServer, "${port}" },
           },
         }
       end
@@ -114,10 +111,7 @@ return {
           port = "${port}",
           executable = {
             command = "node",
-            args = {
-              vim.fn.expand("$MASON/share/js-debug-adapter/js-debug/src/dapDebugServer.js"),
-              "${port}",
-            },
+            args = { dapDebugServer, "${port}" },
           },
         }
       end
