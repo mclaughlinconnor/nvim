@@ -37,4 +37,4 @@ require("lazy").setup(
   }
 )
 
-vim.lsp.enable({'ij_inspector', 'ts_inspector'})
+vim.lsp.enable({ 'ij_inspector', 'ts_inspector', 'tsgo' })
