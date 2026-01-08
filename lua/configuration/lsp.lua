@@ -230,74 +230,66 @@ vim.uri_to_bufnr = function(uri, opts)
   return bufnr
 end
 
+vim.lsp.config('*', { on_attach = on_attach })
+
+local border = {
+  {"╭", "FloatBorder"},
+  {"─", "FloatBorder"},
+  {"╮", "FloatBorder"},
+  {"│", "FloatBorder"},
+  {"╯", "FloatBorder"},
+  {"─", "FloatBorder"},
+  {"╰", "FloatBorder"},
+  {"│", "FloatBorder"},
+}
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  -- delay update diagnostics
+  update_in_insert = true,
+  float = {
+    border = border,
+  },
+})
+
+vim.lsp.handlers["textDocument/diagnostic"] = vim.lsp.with(vim.lsp.diagnostic.on_diagnostic, {
+  update_in_insert = true,
+  float = {
+    border = border
+  },
+})
+
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = border
+})
+
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+  border = border,
+})
+
 return {
   {
-    "williamboman/mason.nvim",
-    commit = "v1.11.0",
+    "mason-org/mason.nvim",
+    commit = "v2.2.1",
     config = function()
       -- Seems to be required
       require("mason").setup()
     end,
   },
   {
-    "williamboman/mason-lspconfig.nvim",
-    commit = "v1.32.0",
+    "https://github.com/mason-org/mason-lspconfig.nvim",
+    commit = "v2.1.0",
     dependencies = {
-      "williamboman/mason.nvim",
+      "mason-org/mason.nvim",
       "ibhagwan/fzf-lua",
       "neovim/nvim-lspconfig",
       "nvim-cmp",
-      {"yioneko/nvim-vtsls", commit = "45c6dfea9f83a126e9bfc5dd63430562b3f8af16"},
-      -- {
-      --   "pmizio/typescript-tools.nvim",
-      --   commit = "7911a0aa27e472bff986f1d3ce38ebad3b635b28",
-      --   requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-      -- },
     },
     config = function()
-      require("mason-lspconfig").setup_handlers({
-        -- handle all servers without specific handlers
-        function(server_name)
-          require("lspconfig")[server_name].setup({
-            on_attach = on_attach,
-          })
-        end,
+      -- Seems to be required
+      require("mason-lspconfig").setup({
+        automatic_enable = true
       })
-
-      local border = {
-        {"╭", "FloatBorder"},
-        {"─", "FloatBorder"},
-        {"╮", "FloatBorder"},
-        {"│", "FloatBorder"},
-        {"╯", "FloatBorder"},
-        {"─", "FloatBorder"},
-        {"╰", "FloatBorder"},
-        {"│", "FloatBorder"},
-      }
-
-      vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-        -- delay update diagnostics
-        update_in_insert = true,
-        float = {
-          border = border,
-        },
-      })
-
-      vim.lsp.handlers["textDocument/diagnostic"] = vim.lsp.with(vim.lsp.diagnostic.on_diagnostic, {
-        update_in_insert = true,
-        float = {
-          border = border
-        },
-      })
-
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-        border = border
-      })
-
-      vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-        border = border,
-      })
-    end,
+    end
   },
   {
     "folke/neodev.nvim",
