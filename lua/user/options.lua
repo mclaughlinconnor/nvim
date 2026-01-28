@@ -122,3 +122,4 @@ vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left>
 vim.keymap.set('i', '<C-d>', '<C-k>', {desc = 'digraph'})
 vim.keymap.set('c', '<C-d>', '<C-k>', {desc = 'digraph'})
 
+vim.cmd([[nnoremap <leader>m :let @*=trim(execute('1messages')) \| echo 'copied' <cr>]])
