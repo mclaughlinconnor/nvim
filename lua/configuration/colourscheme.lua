@@ -6,7 +6,6 @@ local setColour = function(colour)
   ]])
 
   vim.cmd([[
-    highlight debugPC guibg=#000000
     highlight lualine_c_insert guifg=#FFFFFF
     highlight lualine_c_normal guifg=#FFFFFF
     highlight lualine_c_visual guifg=#FFFFFF
@@ -20,6 +19,12 @@ local setColour = function(colour)
     highlight DiagnosticUnderlineWarn gui=underline
     highlight DiagnosticUnderlineError gui=underline
   ]])
+
+  if vim.o.background == "light" then
+    vim.cmd([[highlight debugPC guibg=#BBDDDD]])
+  else
+    vim.cmd([[highlight debugPC guibg=#000000]])
+  end
 end
 
 return {
