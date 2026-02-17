@@ -7,7 +7,7 @@ local toggle_diff = function()
 end
 
 local bufopts = { noremap = true, silent = true }
-vim.keymap.set("n", "<leader>dt", toggle_diff, bufopts)
+vim.keymap.set("n", "<leader>td", toggle_diff, bufopts)
 
 local noop = function() end
 local q = function()
