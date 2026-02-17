@@ -1,0 +1,24 @@
+id: no-template-this
+message: '`this` is implicit in templates'
+severity: error # error, warning, info, hint
+language: pug
+rule:
+  any:
+    - all:
+        - kind: content
+        - regex: this\.
+    - all:
+        - kind: quoted_attribute_value
+        - regex: this\.
+        - inside:
+            kind: attribute
+            any:
+              - has:
+                  kind: attribute_name
+                  regex: \(\w+\)
+              - has:
+                  kind: attribute_name
+                  regex: \[\w+\]
+              - has:
+                  kind: attribute_name
+                  regex: \*\w+
