@@ -1,6 +1,7 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "0236521ea582747b58869cb72f70ccfa967d2e89" },
   "LuaSnip": { "branch": "master", "commit": "66b5c2707e624dcd2cd3605676c64a2efe47e9d1" },
+  "claudecode.nvim": { "branch": "main", "commit": "aa9a5cebebdbfa449c1c5ff229ba5d98e66bafed" },
   "cmd-parser.nvim": { "branch": "master", "commit": "6363b8bddef968c3ec51a38172af44f675f01ef3" },
   "cmp-async-path": { "branch": "main", "commit": "03fac5dfd6f7880be2c059d58bebe007f0d6d8ee" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
@@ -56,6 +57,7 @@
   "profile.nvim": { "branch": "master", "commit": "0ee32b7aba31d84b0ca76aaff2ffcb11f8f5449f" },
   "range-highlight.nvim": { "branch": "master", "commit": "f54aec737f138e52c187a8bea77b41347fd86f12" },
   "refactoring.nvim": { "branch": "master", "commit": "74b608dfee827c2372250519d433cc21cb083407" },
+  "snacks.nvim": { "branch": "main", "commit": "fe7cfe9800a182274d0f868a74b7263b8c0c020b" },
   "switch.vim": { "branch": "main", "commit": "68d269301181835788dcdcb6d5bca337fb954395" },
   "template-string.nvim": { "branch": "main", "commit": "da5f326b65fb74fd068aa1d8b55461b64c8fb23b" },
   "treesj": { "branch": "main", "commit": "3b4a2bc42738a63de17e7485d4cc5e49970ddbcc" },
