@@ -71,7 +71,7 @@ return {
       },
       { "<leader>tg", function() require("fzf-lua").live_grep_glob() end },
       { "<leader>tG", function() require("fzf-lua").lines() end },
-      { "<leader><leader>tt", function() require("fzf-lua").lsp_live_workspace_symbols() end },
+      { "<leader><leader>tt", function() require("fzf-lua").lsp_live_workspace_symbols({fzf_opts = {["--no-sort"] = true}}) end },
       { "<leader>tt", function() require("fzf-lua").tags() end },
       {
         "<leader>tT",
