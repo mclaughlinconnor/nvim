@@ -223,7 +223,7 @@ return {
 
         manpages = { previewer = "man_native" },
         helptags = { previewer = "help_native" },
-        lsp = { code_actions = { previewer = false } }, -- typescript-tools.nvim is buggy
+        lsp = { code_actions = { previewer = true } }, -- typescript-tools.nvim is buggy
         files = {
           fzf_opts = {
             ["--ansi"] = false,
