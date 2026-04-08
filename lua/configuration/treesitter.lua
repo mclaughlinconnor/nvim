@@ -50,12 +50,11 @@ return {
 
           parser_config.angular_expr = {
             install_info = {
-              url = "https://github.com/mclaughlinconnor/tree-sitter-angular",
+              url = "https://github.com/mclaughlinconnor/tree-sitter-angular-expr",
               files = { "src/parser.c" },
               revision = "main",
             },
             maintainers = { "@mclaughlinconnor" },
-            queries = "queries/angular_expr",
             tier = 1,
           }
 
@@ -294,14 +293,14 @@ return {
         local ts_repeat_move = require('nvim-treesitter-textobjects.repeatable_move')
 
         -- vim way: ; goes to the direction you were moving.
-        vim.keymap.set({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move)
-        vim.keymap.set({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_opposite)
+        -- vim.keymap.set({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move)
+        -- vim.keymap.set({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_opposite)
 
         -- Optionally, make builtin f, F, t, T also repeatable with ; and ,
-        vim.keymap.set({ 'n', 'x', 'o' }, 'f', ts_repeat_move.builtin_f_expr, { expr = true })
-        vim.keymap.set({ 'n', 'x', 'o' }, 'F', ts_repeat_move.builtin_F_expr, { expr = true })
-        vim.keymap.set({ 'n', 'x', 'o' }, 't', ts_repeat_move.builtin_t_expr, { expr = true })
-        vim.keymap.set({ 'n', 'x', 'o' }, 'T', ts_repeat_move.builtin_T_expr, { expr = true })
+        -- vim.keymap.set({ 'n', 'x', 'o' }, 'f', ts_repeat_move.builtin_f_expr, { expr = true })
+        -- vim.keymap.set({ 'n', 'x', 'o' }, 'F', ts_repeat_move.builtin_F_expr, { expr = true })
+        -- vim.keymap.set({ 'n', 'x', 'o' }, 't', ts_repeat_move.builtin_t_expr, { expr = true })
+        -- vim.keymap.set({ 'n', 'x', 'o' }, 'T', ts_repeat_move.builtin_T_expr, { expr = true })
       end,
   },
   { "nvim-treesitter/nvim-treesitter-textobjects", commit = "baa6b4ec28c8be5e4a96f9b1b6ae9db85ec422f8", dependencies = { "nvim-treesitter/nvim-treesitter" } },
