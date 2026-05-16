@@ -26,7 +26,7 @@
    (#lua-match? @_name "^%[.*%]"))
   (quoted_attribute_value
    (attribute_value) @injection.content)
-  (#set! injection.language "javascript"))
+  (#set! injection.language "angular_expr"))
 
 ; (myEvent)="handle($event)"
 (attribute
@@ -34,7 +34,7 @@
    (#lua-match? @_name "^%(.*%)"))
   (quoted_attribute_value
    (attribute_value) @injection.content)
-  (#set! injection.language "javascript"))
+  (#set! injection.language "angular_expr"))
 
 ; *ngIf="condition"
 (attribute
