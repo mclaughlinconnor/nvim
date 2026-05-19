@@ -62,7 +62,7 @@ local function compile_handlebars(mode, jsonContent, pugBufnr, htmlBufnr, compil
       end
 
       vim.schedule(function()
-        vim.api.nvim_buf_set_lines(compiledBufnr, -1, -1, false, vim.split(error, "\n"))
+        vim.api.nvim_buf_set_lines(compiledBufnr, -1, -1, false, vim.split(error or "", "\n"))
       end)
     end,
   })
