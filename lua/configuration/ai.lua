@@ -4,7 +4,17 @@ return {
   {
     "coder/claudecode.nvim",
     dependencies = { "folke/snacks.nvim" },
-    config = true,
+    opts = {
+      terminal = {
+        snacks_win_opts = {
+          wo = {
+            -- https://github.com/coder/claudecode.nvim/issues/124#issuecomment-3355557182
+            winblend = 100,
+            winhighlight = "NormalFloat:MyTransparentGroup",
+          }
+        },
+      },
+    },
     keys = {
       { "<leader>a", nil, desc = "AI/Claude Code" },
       { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
