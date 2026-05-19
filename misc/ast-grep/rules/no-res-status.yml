@@ -1,0 +1,14 @@
+id: no-res-status
+message: You probably want `res.conflict()` or similar
+severity: error
+language: typescript
+rule:
+    kind: property_identifier
+    regex: status$
+    inside:
+        kind: member_expression
+        has:
+            kind: identifier
+            regex: res
+        inside:
+            kind: call_expression
