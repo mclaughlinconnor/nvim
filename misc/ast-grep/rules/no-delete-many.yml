@@ -1,0 +1,14 @@
+id: no-delete-many
+message: Are you sure you want to delete many documents?
+severity: warning # error, warning, info, hint
+language: typescript
+rule:
+    kind: property_identifier
+    regex: ^deleteMany$
+    inside:
+        kind: member_expression
+        has:
+            kind: identifier
+            regex: Model$
+        inside:
+            kind: call_expression
