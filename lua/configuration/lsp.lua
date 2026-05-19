@@ -75,9 +75,9 @@ local function on_attach(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set("n", "gD", fzf.lsp_implementations, bufopts)
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
-  vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+  vim.keymap.set("n", "K", function() vim.lsp.buf.hover({border = border}) end, bufopts)
   vim.keymap.set("n", "gli", fzf.lsp_implementations, bufopts)
-  vim.keymap.set("n", "<C-K>", vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set("n", "<C-K>", function() vim.lsp.buf.signature_help({border = border}) end, bufopts)
   vim.keymap.set(
     "i",
     "<C-k>",
@@ -243,27 +243,12 @@ local border = {
   {"│", "FloatBorder"},
 }
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  -- delay update diagnostics
+vim.diagnostic.config({
+  -- delay update diagnostics / allow updates while in insert mode
   update_in_insert = true,
   float = {
-    border = border,
+    border = border, -- Ensure the 'border' variable is defined earlier in your config
   },
-})
-
-vim.lsp.handlers["textDocument/diagnostic"] = vim.lsp.with(vim.lsp.diagnostic.on_diagnostic, {
-  update_in_insert = true,
-  float = {
-    border = border
-  },
-})
-
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = border
-})
-
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  border = border,
 })
 
 return {
