@@ -277,6 +277,11 @@ return {
             ["<esc>"] = noop,
           },
         },
+        hooks = {
+          diff_buf_win_enter = function(_bufnr, winid, ctx)
+            vim.wo[winid].foldlevel = 0
+          end,
+        },
         view = {
           -- Configure the layout and behavior of different types of views.
           -- Available layouts:
