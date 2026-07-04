@@ -6,7 +6,7 @@ return {
   },
   {
     "stevearc/dressing.nvim",
-    commit = "8b7ae53d7f04f33be3439a441db8071c96092d19",
+    commit = "2d7c2db2507fa3c4956142ee607431ddb2828639",
     opts = {
       input = {
         insert_only = false,

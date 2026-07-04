@@ -291,7 +291,7 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    commit = "7af2c37192deae28d1305ae9e68544f7fb5408e1",
+    commit = "92ee7d42320edfbb81f3cad851314ab197fa324a",
   },
   {
     "github/copilot.vim",

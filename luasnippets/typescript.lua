@@ -1,10 +1,21 @@
 local events =  require("luasnip.util.events")
 
+local function execute_command(command, arguments)
+  local clients = vim.lsp.get_clients({name = "ts_inspector", bufnr = 0})
+  if clients[0] == nil then
+    return
+  end
+
+  local client = clients[0]
+
+  client.exec_cmd({command = command, arguments = arguments})
+end
+
 local injectCallbacks = {
   callbacks = {
     [-1] = {
       [events.pre_expand] = function()
-        vim.lsp.buf.execute_command({
+        execute_command({
           command = "ts_inspector/addImport",
           arguments = {
             vim.uri_from_bufnr(0),
@@ -349,7 +360,7 @@ return {
     callbacks = {
       [-1] = {
         [events.pre_expand] = function()
-          vim.lsp.buf.execute_command({
+          execute_command({
             command = "ts_inspector/addImport",
             arguments = {
               vim.uri_from_bufnr(0),
@@ -376,7 +387,7 @@ return {
       callbacks = {
         [-1] = {
           [events.pre_expand] = function()
-            vim.lsp.buf.execute_command({
+            execute_command({
               command = "ts_inspector/addImport",
               arguments = {
                 vim.uri_from_bufnr(0),
@@ -668,7 +679,7 @@ return {
       callbacks = {
         [-1] = {
           [events.pre_expand] = function()
-            vim.lsp.buf.execute_command({
+            execute_command({
               command = "ts_inspector/addImport",
               arguments = {
                 vim.uri_from_bufnr(0),
@@ -791,4 +802,61 @@ return {
 
   s({ trig = "sala", wordTrig = true }, fmta([[sails.config.sala.]], {})),
   s({ trig = "mfc", wordTrig = true }, fmta([[this.cdr.markForCheck();]], {})),
+
+  s(
+    { trig = "modal", wordTrig = true },
+    fmta(
+      [[
+        import {nextComplete} from '@aloreljs/rxutils';
+        import type {OnDestroy} from '@angular/core';
+        import {ChangeDetectionStrategy, Component} from '@angular/core';
+        import {FormControl, ReactiveFormsModule} from '@angular/forms';
+        import type {Subscriber} from 'rxjs';
+        import {Observable} from 'rxjs';
+
+        const ns = '<>';
+
+        @Component({
+          changeDetection: ChangeDetectionStrategy.OnPush,
+          imports: [
+            GlobalModule,
+            ReactiveFormsModule,
+            TgModalModule,
+          ],
+          selector: 'tg-<>-modal',
+          standalone: true,
+          templateUrl: './tg-<>-modal.component.pug',
+          viewProviders: [
+            {provide: DEFAULT_NAMESPACE, useValue: ns},
+          ],
+        })
+        export class <>ModalComponent implements OnDestroy {
+          public readonly subscriber: Subscriber<<string | undefined>>;
+
+          public readonly valueCtrl = new FormControl<<string>>('', {nonNullable: true});
+
+          public static open(mod: BsModalLike): Observable<<string | undefined>> {
+            return new Observable<<string | undefined>>(subscriber =>> {
+              const ref = mod.show(<>ModalComponent, {animated: true, initialState: {subscriber}});
+
+              return () =>> {
+                ref.hide();
+              };
+            });
+          }
+
+          public close(): void {
+            this.subscriber.complete();
+          }
+
+          public confirm(): void {
+            nextComplete(this.subscriber, this.valueCtrl.value.trim() || undefined);
+          }
+
+          /** @inheritDoc */
+          public ngOnDestroy(): void {
+            this.close();
+          }
+        }
+      ]], {i(1), component_name(2, false), component_name(2, false), i(2), same(2)}))
 }, {}
