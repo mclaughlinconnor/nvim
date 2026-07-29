@@ -66,9 +66,29 @@ return {
         propertyDeclarationTypes = {enabled = true},
         variableTypes = {enabled = true},
       },
+      format = {
+        convertTabsToSpaces = true,
+        indentSize = 2,
+        indentStyle = 2,
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = false,
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets = false,
+        semicolons = "insert",
+        tabSize = 2,
+      },
+      suggest = {
+        includeAutomaticOptionalChainCompletions = true,
+        classMemberSnippets = {enabled = true},
+        objectLiteralMethodSnippets = {enabled = true},
+        jsdoc = {enabled = true},
+      },
       ["native-preview"] = {
         customConfigFileName = "tsconfig.lsp.json",
-      }
+      },
+      preferences = {
+        importModuleSpecifierPreference = "relative",
+        preferTypeOnlyAutoImports = true,
+      },
+      preferGoToSourceDefinition = true,
     },
     editor = {
       codeLens = true,
