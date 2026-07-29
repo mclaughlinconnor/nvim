@@ -103,8 +103,8 @@ local function on_attach(client, bufnr)
   vim.keymap.set("n", "gr", fzf.lsp_references, bufopts)
   vim.keymap.set("n", "g0",
     function()
-      vim.lsp.buf.code_action({ context = {
-        diagnostics = vim.lsp.diagnostic.get_line_diagnostics(bufnr),
+      fzf.lsp_code_actions({ context = {
+        diagnostics = vim.diagnostic.get(bufnr, {lnum = vim.api.nvim_win_get_cursor(0)[1] - 1}),
         only = {
           "", -- Empty -- Adding this makes some of tsservers actions disappear
           "quickfix", -- QuickFix
@@ -270,12 +270,9 @@ return {
       "neovim/nvim-lspconfig",
       "nvim-cmp",
     },
-    config = function()
-      -- Seems to be required
-      require("mason-lspconfig").setup({
-        automatic_enable = true
-      })
-    end
+    opts = {
+      automatic_enable = true
+    },
   },
   {
     "folke/neodev.nvim",
