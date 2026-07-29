@@ -101,25 +101,8 @@ local function on_attach(client, bufnr)
   vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
   vim.keymap.set("n", "<space>ca", fzf.lsp_code_actions, bufopts)
   vim.keymap.set("n", "gr", fzf.lsp_references, bufopts)
-  vim.keymap.set("n", "g0",
-    function()
-      fzf.lsp_code_actions({ context = {
-        diagnostics = vim.diagnostic.get(bufnr, {lnum = vim.api.nvim_win_get_cursor(0)[1] - 1}),
-        only = {
-          "", -- Empty -- Adding this makes some of tsservers actions disappear
-          "quickfix", -- QuickFix
-          "refactor", -- Refactor
-          "refactor.extract", -- RefactorExtract
-          "refactor.inline", -- RefactorInline
-          "refactor.rewrite", -- RefactorRewrite
-          "source", -- Source
-          "source.organizeImports", -- SourceOrganizeImports
-          "source.fixAll", -- SourceFixAll
-        },
-      } })
-    end,
-    bufopts)
-  vim.keymap.set("v", "g0", fzf.lsp_code_actions, bufopts)
+  vim.keymap.set("n", "g0", function() fzf.lsp_code_actions({ context = { only = { "quickfix", "refactor", "source" } } }) end, bufopts)
+  vim.keymap.set("v", "g0", function() fzf.lsp_code_actions({ context = { only = { "quickfix", "refactor", "source" } } }) end, bufopts)
   vim.keymap.set("n", "<space>f", function()
     vim.lsp.buf.format({ async = true })
   end, bufopts)
