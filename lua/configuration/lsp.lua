@@ -5,9 +5,6 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
 
-vim.g.copilot_node_command = "/Users/connorveryconnect.com/.nvm/versions/node/v20.19.2/bin/node"
-vim.g.copilot_command = "/Users/connorveryconnect.com/vc/repos/vscode-inline-completion/server/out/server.js"
-
 vim.lsp.log.set_level("TRACE")
 vim.o.winborder = 'bold'
 
@@ -292,10 +289,6 @@ return {
   {
     "neovim/nvim-lspconfig",
     commit = "92ee7d42320edfbb81f3cad851314ab197fa324a",
-  },
-  {
-    "github/copilot.vim",
-    commit = "f3d66c148aa60ad04c0a21d3e0a776459de09eb2",
   },
   {
     "mfussenegger/nvim-lint",
