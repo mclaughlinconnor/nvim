@@ -61,12 +61,12 @@ local function on_attach(client, bufnr)
   end
 
   -- vim.notify("inlayHintProvider" .. vim.inspect(client.server_capabilities))
-  -- if client.server_capabilities.inlayHintProvider then
-  --   vim.keymap.set("n", "<space>gi", function()
-  --     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({bufnr = 0}))
-  --   end)
-  --   vim.lsp.inlay_hint.enable(false)
-  -- end
+  if client.server_capabilities.inlayHintProvider then
+    vim.keymap.set("n", "<space>gi", function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({bufnr = 0}))
+    end)
+    vim.lsp.inlay_hint.enable(false)
+  end
 
   vim.keymap.set("n", "<space>gd", function()
     vim.diagnostic.enable(not vim.diagnostic.is_enabled())
