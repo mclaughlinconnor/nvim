@@ -56,7 +56,7 @@ return {
   },
   {
     "tamago324/lir.nvim",
-    commit = "969e95bd07ec315b5efc53af69c881278c2b74fa",
+    commit = "f1291b88d3649743165cfb5d0d44a7722d4021ea",
     config = function(_, opts)
       require("lir").setup(opts)
 

@@ -29,7 +29,7 @@ function view_tcb(fname)
   end
 
   local params = {uri = fname}
-  client.request("ts_inspector/getTcb", params, handler, buf)
+  client:request("ts_inspector/getTcb", params, handler, buf)
 
   -- Need to block. Otherwise logic could run that sets the cursor to a position
   -- that's still missing.
