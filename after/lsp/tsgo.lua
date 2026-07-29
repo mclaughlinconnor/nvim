@@ -24,4 +24,55 @@ return {
     on_dir(project_root)
   end,
   name = "tsgo",
+  settings = {
+    javascript = {
+      referencesCodeLens = {
+        enabled = true,
+        showOnAllFunctions = true,
+      },
+      implementationsCodeLens = {
+        enabled = false,
+        showOnAllFunctions = false,
+        showOnInterfaceMethods = false,
+        showOnAllClassMethods = false,
+      },
+      inlayHints = {
+        functionLikeReturnTypes = {enabled = true},
+        parameterNames = {enabled = "all"},
+        parameterTypes = {enabled = true},
+        propertyDeclarationTypes = {enabled = true},
+        variableTypes = {enabled = true},
+      },
+      ["native-preview"] = {
+        customConfigFileName = "tsconfig.lsp.json",
+      }
+
+    },
+    typescript = {
+      referencesCodeLens = {
+        enabled = true,
+        showOnAllFunctions = true,
+      },
+      implementationsCodeLens = {
+        enabled = false,
+        showOnAllFunctions = false,
+        showOnInterfaceMethods = false,
+        showOnAllClassMethods = false,
+      },
+      inlayHints = {
+        functionLikeReturnTypes = {enabled = true},
+        parameterNames = {enabled = "all"},
+        parameterTypes = {enabled = true},
+        propertyDeclarationTypes = {enabled = true},
+        variableTypes = {enabled = true},
+      },
+      ["native-preview"] = {
+        customConfigFileName = "tsconfig.lsp.json",
+      }
+    },
+    editor = {
+      codeLens = true,
+      inlayHints = {enabled = true},
+    },
+  }
 }
