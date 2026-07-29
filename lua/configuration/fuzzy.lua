@@ -118,6 +118,8 @@ return {
     opts = function()
       local actions = require("fzf-lua.actions")
 
+      require("fzf-lua").register_ui_select()
+
       return {
         "default",
         winopts = {
