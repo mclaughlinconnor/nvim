@@ -19,6 +19,10 @@ local function on_attach(client, bufnr)
   local fzf = require("fzf-lua")
   require("lsp-status").on_attach(client)
 
+  if client.name == "tsgo" then
+    client.server_capabilities.workspaceSymbolProvider = false
+  end
+
   if client.name == "tsserver" or client.name == "vtsls" then
     client.server_capabilities.documentFormattingProvider = false
   end
