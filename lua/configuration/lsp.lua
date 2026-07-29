@@ -303,6 +303,7 @@ return {
     config = function ()
       require("lint").linters_by_ft = {
         typescript = {"eslint_d"},
+        pug = {"eslint_d"},
       }
 
       vim.api.nvim_create_autocmd({ "BufWritePost" }, {
