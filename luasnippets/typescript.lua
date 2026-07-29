@@ -1,14 +1,14 @@
 local events =  require("luasnip.util.events")
 
-local function execute_command(command, arguments)
+local function execute_command(command)
   local clients = vim.lsp.get_clients({name = "ts_inspector", bufnr = 0})
-  if clients[0] == nil then
+  if clients[1] == nil then
     return
   end
 
-  local client = clients[0]
+  local client = clients[1]
 
-  client.exec_cmd({command = command, arguments = arguments})
+  client:exec_cmd(command)
 end
 
 local injectCallbacks = {
