@@ -19,7 +19,7 @@ local function on_attach(client, bufnr)
   local fzf = require("fzf-lua")
   require("lsp-status").on_attach(client)
 
-  if client.name == "tsgo" then
+  if client.name == "tsc" then
     client.server_capabilities.workspaceSymbolProvider = false
   end
 

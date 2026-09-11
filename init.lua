@@ -37,4 +37,4 @@ require("lazy").setup(
   }
 )
 
-vim.lsp.enable({ 'ts_inspector', 'tsgo', 'basedpyright' })
+vim.lsp.enable({ 'ts_inspector', 'tsc', 'basedpyright' })

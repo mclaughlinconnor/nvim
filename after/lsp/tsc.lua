@@ -23,7 +23,7 @@ return {
 
     on_dir(project_root)
   end,
-  name = "tsgo",
+  name = "tsc",
   settings = {
     javascript = {
       referencesCodeLens = {
@@ -43,10 +43,7 @@ return {
         propertyDeclarationTypes = {enabled = true},
         variableTypes = {enabled = true},
       },
-      ["native-preview"] = {
-        customConfigFileName = "tsconfig.lsp.json",
-      }
-
+      customConfigFileName = "tsconfig.lsp.json",
     },
     typescript = {
       referencesCodeLens = {
@@ -81,9 +78,7 @@ return {
         objectLiteralMethodSnippets = {enabled = true},
         jsdoc = {enabled = true},
       },
-      ["native-preview"] = {
-        customConfigFileName = "tsconfig.lsp.json",
-      },
+      customConfigFileName = "tsconfig.lsp.json",
       preferences = {
         importModuleSpecifierPreference = "relative",
         preferTypeOnlyAutoImports = true,
