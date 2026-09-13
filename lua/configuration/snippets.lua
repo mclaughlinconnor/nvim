@@ -32,7 +32,7 @@ return {
         mode = "s",
       },
       {
-        "<C-k>",
+        "<C-s-k>",
         function()
           require("luasnip").jump(-1)
         end,
@@ -41,7 +41,7 @@ return {
       },
       {
         -- see lsp config
-        "<C-k>",
+        "<C-s-k>",
         function()
           require("luasnip").jump(-1)
         end,
