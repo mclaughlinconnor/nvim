@@ -166,7 +166,7 @@ return {
   {
     -- pretty sure I'm woefully underutilising this plugin
     "lewis6991/gitsigns.nvim",
-    commit = "7bbc674278f22376850576dfdddf43bbc17e62b5",
+    commit = "8d79f2410c76e62b92e51c28c82e28c1c5a3daeb",
     opts = {
       current_line_blame = true,
       current_line_blame_opts = {

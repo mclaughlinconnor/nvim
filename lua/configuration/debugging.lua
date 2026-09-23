@@ -24,7 +24,7 @@ return {
   {
     "rcarriga/nvim-dap-ui",
     dependencies = { "nvim-neotest/nvim-nio" },
-    commit = "cf91d5e2d07c72903d052f5207511bf7ecdb7122",
+    commit = "cc9dd33aade7f20bae414d0cba163bc60d4d4b43",
     config = function()
       require("dapui").setup()
       local dap_float = vim.api.nvim_create_augroup("dap_float", { clear = true })
@@ -55,14 +55,6 @@ return {
           mode = "remote",
           request = "attach",
         },
-      },
-    },
-  },
-  {
-    "leoluz/nvim-dap-go",
-    commit = "5faf165f5062187320eaf9d177c3c1f647adc22e",
-    opts = {
-      dap_configurations = {
         {
           type = "go",
           name = "Debug main.go",
@@ -73,8 +65,8 @@ return {
     },
   },
   {
-    "mfussenegger/nvim-dap",
-    commit = "cc77338e6e34c79f1c638f51ae4160dc9bfb05de",
+    "https://codeberg.org/mfussenegger/nvim-dap",
+    commit = "cfa2d58f4537aca6ca83e2de1a0d9f1491121264",
     dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap", "microsoft/vscode-js-debug", "mxsdev/nvim-dap-vscode-js" },
     config = function()
       local dap = require("dap")

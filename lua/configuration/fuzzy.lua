@@ -6,7 +6,7 @@ end
 return {
   {
     "ibhagwan/fzf-lua",
-    commit = "9d579feab4d3035627150e5e9b6e8fbf5e814ef6",
+    commit = "02bc882f208f3481aa959dbbee8ce5edad2fd8b2",
     keys = {
       { "<leader>b", function() require("fzf-lua").buffers() end },
       { "<leader>B", function() require("fzf-lua").oldfiles() end },
